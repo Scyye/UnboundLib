@@ -109,4 +109,30 @@ namespace UnboundLib.Patches
             return (from item in children where item.name == gameObjectName select item.gameObject).FirstOrDefault();
         }
     }
+
+    [Serializable]
+    [HarmonyPatch(typeof(CardInfo))]
+    internal class CardInfoFix
+    {
+
+        [HarmonyPatch("CardName", MethodType.Getter)]
+        [HarmonyPostfix]
+        internal static void CardName(ref string __result, CardInfo __instance)
+        {
+            if (__result == __instance.name && (string) __instance.GetFieldValue("cardName") != "")
+            {
+                __result = (string) __instance.GetFieldValue("cardName");
+            }
+        }
+
+        [HarmonyPatch("CardDescription", MethodType.Getter)]
+        [HarmonyPostfix]
+        internal static void CardDescription(ref string __result, CardInfo __instance)
+        {
+            if (__result == __instance.name && (string) __instance.GetFieldValue("cardDestription") != "")
+            {
+                __result = (string) __instance.GetFieldValue("cardDestription");
+            }
+        }
+    }
 }

@@ -21,7 +21,7 @@ namespace UnboundLib.Utils.UI
                 UnityEngine.Object.DontDestroyOnLoad(links);
                 // do setup like placement and adding components
                 links.transform.position = MainCam.instance.transform.GetComponent<Camera>().ScreenToWorldPoint(new Vector3(Screen.height*16f/9f, 0, 0f));
-                links.transform.position += new Vector3(0f, 0f, 100f);
+                links.transform.position = new Vector3(-16f, -20f, 0);
 
                 Link discordLink = links.transform.GetChild(0).gameObject.AddComponent<Link>();
                 discordLink._Links = "https://discord.gg/zUtsjXWeWk";

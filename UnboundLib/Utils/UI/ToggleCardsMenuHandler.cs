@@ -447,7 +447,7 @@ namespace UnboundLib.Utils.UI
                 var textComponent = textName.GetComponent<TextMeshProUGUI>();
                 if (textComponent != null)
                 {
-                    textComponent.text = cardInfo.cardName.ToUpper();
+                    textComponent.text = cardInfo.CardName.ToUpper();
                     textComponent.color = cardColor;
                 }
             }

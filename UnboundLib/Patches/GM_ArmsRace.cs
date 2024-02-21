@@ -44,6 +44,7 @@ namespace UnboundLib.Patches
 
     public class GM_ArmsRace_Patch_Start
     {
+        /*
         static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
             // Remove the default player joined and died -hooks. We'll add them back through the GameMode abstraction layer.
@@ -79,6 +80,7 @@ namespace UnboundLib.Patches
 
             return newInstructions;
         }
+        */
     }
 
     [HarmonyPatch(typeof(GM_ArmsRace), "StartGame")]

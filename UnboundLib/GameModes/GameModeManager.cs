@@ -121,6 +121,9 @@ namespace UnboundLib.GameModes
             var gameModeGo = GameObject.Find("/Game/UI/UI_MainMenu/Canvas/ListSelector/LOCAL");
             var onlineGo = GameObject.Find("/Game/UI/UI_MainMenu/Canvas/ListSelector/Online/Group");
             var contentGo = gameModeGo.transform.Find("Group/Grid/Scroll View/Viewport/Content");
+            var hostRoom = onlineGo.transform.Find("Host Room")?.gameObject;
+
+            hostRoom?.SetActive(false);
 
             // fix spacing
             contentGo.GetComponent<VerticalLayoutGroup>().spacing = 0f;

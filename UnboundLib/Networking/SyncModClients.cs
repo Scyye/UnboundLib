@@ -446,6 +446,7 @@ namespace UnboundLib.Networking
         }
         private void OnGUI()
         {
+            
             if (!inBounds || texts == Array.Empty<string>() || !(Input.mousePosition.x < Screen.width / 4f)) return;
             
             Vector2 size = guiStyleFore.CalcSize(new GUIContent(string.Join("\n",texts)));

@@ -131,7 +131,7 @@ namespace UnboundLib.Patches
                     { }
                     catch (Exception exception)
                     {
-                        UnityEngine.Debug.LogError($"{exception.GetType()}\nThrown by: {customCard.GetModName()} - {currentCard.cardName} - OnRemoveCard()");
+                        UnityEngine.Debug.LogError($"{exception.GetType()}\nThrown by: {customCard.GetModName()} - {currentCard.CardName} - OnRemoveCard()");
                         UnityEngine.Debug.LogException(exception);
                     }
                 }

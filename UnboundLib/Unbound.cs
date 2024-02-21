@@ -79,120 +79,13 @@ namespace UnboundLib
         internal static AssetBundle linkAssets;
         private static GameObject modalPrefab;
 
-        private TextMeshProUGUI text;
 
         public Unbound()
         {
-            // Add UNBOUND text to the main menu screen
-            bool firstTime = true;
-
-            On.MainMenuHandler.Awake += (orig, self) =>
-            {
-                // reapply cards and levels
-                this.ExecuteAfterFrames(5, () =>
-                {
-                    MapManager.instance.levels = LevelManager.activeLevels.ToArray();
-                    CardManager.RestoreCardToggles();
-                    ToggleCardsMenuHandler.RestoreCardToggleVisuals();
-
-                });
-
-                // create unbound text
-                StartCoroutine(AddTextWhenReady(firstTime ? 2f : 0.1f));
-
-                ModOptions.instance.CreateModOptions(firstTime);
-                Credits.Instance.CreateCreditsMenu(firstTime);
-                MainMenuLinks.AddLinks(firstTime);
-
-                var time = firstTime;
-                this.ExecuteAfterSeconds(firstTime ? 0.4f : 0, () =>
-                {
-                    var resumeButton = UIHandler.instance.transform.Find("Canvas/EscapeMenu/Main/Group/Resume").gameObject;
-                    // Create options button in escapeMenu
-                    var optionsMenu = Instantiate(MainMenuHandler.instance.transform.Find("Canvas/ListSelector/Options").gameObject, UIHandler.instance.transform.Find("Canvas/EscapeMenu/Main"));
-                    var menuBut = optionsMenu.transform.Find("Group/Back").GetComponent<Button>();
-                    menuBut.onClick = new Button.ButtonClickedEvent();
-                    menuBut.onClick.AddListener(() =>
-                    {
-                        optionsMenu.transform.Find("Group").gameObject.SetActive(false);
-                        UIHandler.instance.transform.Find("Canvas/EscapeMenu/Main/Group").gameObject.SetActive(true);
-                    });
-
-                    var optionsButton = Instantiate(resumeButton, UIHandler.instance.transform.Find("Canvas/EscapeMenu/Main/Group"));
-                    optionsButton.transform.SetSiblingIndex(2);
-                    optionsButton.GetComponentInChildren<TextMeshProUGUI>().text = "OPTIONS";
-                    optionsButton.GetComponent<Button>().onClick = new Button.ButtonClickedEvent();
-                    optionsButton.GetComponent<Button>().onClick.AddListener((() =>
-                    {
-                        optionsMenu.transform.Find("Group").gameObject.SetActive(true);
-                        UIHandler.instance.transform.Find("Canvas/EscapeMenu/Main/Group").gameObject.SetActive(false);
-                    }));
-
-                    if (time)
-                    {
-                        CardManager.FirstTimeStart();
-                    }
-                });
-
-                firstTime = false;
-
-                orig(self);
-            };
-
-            On.MainMenuHandler.Close += (orig, self) =>
-            {
-                if (text != null) Destroy(text.gameObject);
-
-                orig(self);
-            };
-
-            IEnumerator ArmsRaceStartCoroutine(On.GM_ArmsRace.orig_Start orig, GM_ArmsRace self)
-            {
-                yield return GameModeManager.TriggerHook(GameModeHooks.HookInitStart);
-                orig(self);
-                yield return GameModeManager.TriggerHook(GameModeHooks.HookInitEnd);
-            }
-
-            On.GM_ArmsRace.Start += (orig, self) =>
-            {
-                self.StartCoroutine(ArmsRaceStartCoroutine(orig, self));
-            };
-
-            IEnumerator SandboxStartCoroutine(On.GM_Test.orig_Start orig, GM_Test self)
-            {
-                yield return GameModeManager.TriggerHook(GameModeHooks.HookInitStart);
-                yield return GameModeManager.TriggerHook(GameModeHooks.HookInitEnd);
-                yield return GameModeManager.TriggerHook(GameModeHooks.HookGameStart);
-                orig(self);
-                yield return GameModeManager.TriggerHook(GameModeHooks.HookRoundStart);
-                yield return GameModeManager.TriggerHook(GameModeHooks.HookBattleStart);
-            }
-
-            On.GM_Test.Start += (orig, self) =>
-            {
-                self.StartCoroutine(SandboxStartCoroutine(orig, self));
-            };
-
             GameModeManager.AddHook(GameModeHooks.HookGameStart, handler => SyncModClients.DisableSyncModUi(SyncModClients.uiParent));
 
             // hook for closing ongoing lobbies
             GameModeManager.AddHook(GameModeHooks.HookGameStart, CloseLobby);
-
-            On.CardChoice.Start += (orig, self) =>
-            {
-                for (int i = 0; i < self.cards.Length; i++)
-                {
-                    if (!((DefaultPool) PhotonNetwork.PrefabPool).ResourceCache.ContainsKey(self.cards[i].gameObject.name))
-                        PhotonNetwork.PrefabPool.RegisterPrefab(self.cards[i].gameObject.name, self.cards[i].gameObject);
-                }
-                var children = new Transform[self.transform.childCount];
-                for (int j = 0; j < children.Length; j++)
-                {
-                    children[j] = self.transform.GetChild(j);
-                }
-                self.SetFieldValue("children", children);
-                self.cards = CardManager.activeCards.ToArray();
-            };
         }
 
         private static IEnumerator CloseLobby(IGameModeHandler gm)
@@ -203,29 +96,7 @@ namespace UnboundLib
             yield break;
         }
 
-        private IEnumerator AddTextWhenReady(float delay = 0f, float maxTimeToWait = 10f)
-        {
-            if (delay > 0f) { yield return new WaitForSecondsRealtime(delay); }
-
-            float time = maxTimeToWait;
-            while (time > 0f && MainMenuHandler.instance?.transform?.Find("Canvas/ListSelector/Main/Group") == null)
-            {
-                time -= Time.deltaTime;
-                yield return null;
-            }
-            if (MainMenuHandler.instance?.transform?.Find("Canvas/ListSelector/Main/Group") == null)
-            {
-                yield break;
-            }
-            text = MenuHandler.CreateTextAt("UNBOUND", Vector2.zero);
-            text.gameObject.AddComponent<LayoutElement>().ignoreLayout = true;
-            text.fontSize = 30;
-            text.color = (Color.yellow + Color.red) / 2;
-            text.transform.SetParent(MainMenuHandler.instance.transform.Find("Canvas/ListSelector/Main/Group"), true);
-            text.transform.SetAsFirstSibling();
-            text.rectTransform.localScale = Vector3.one;
-            text.rectTransform.localPosition = new Vector3(0, 350, text.rectTransform.localPosition.z);
-        }
+        
 
         private void Awake()
         {
