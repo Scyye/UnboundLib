@@ -139,9 +139,11 @@ namespace UnboundLib.Cards
                 newCardInfo.cardBase = customCard.GetCardBase();
                 // Apply card data
                 newCardInfo.cardStats = customCard.GetStats() ?? Array.Empty<CardInfoStat>();
+
                 newCardInfo.SetCardName(customCard.GetTitle());
-                newCard.gameObject.name = $"__{customCard.GetModName()}__{customCard.GetTitle()}".Sanitize();
                 newCardInfo.SetCardDescription(customCard.GetDescription());
+
+                newCard.gameObject.name = $"__{customCard.GetModName()}__{customCard.GetTitle()}".Sanitize();
                 newCardInfo.sourceCard = newCardInfo;
                 newCardInfo.rarity = customCard.GetRarity();
                 newCardInfo.colorTheme = customCard.GetTheme();
@@ -166,6 +168,7 @@ namespace UnboundLib.Cards
                 newCardInfo.ExecuteAfterFrames(5, () =>
                 {
                     callback?.Invoke(newCardInfo);
+                    newCardInfo.sourceCard = null;
                 });
             });
         }

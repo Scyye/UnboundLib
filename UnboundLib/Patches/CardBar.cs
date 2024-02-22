@@ -1,17 +1,18 @@
 ﻿using HarmonyLib;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace UnboundLib.Patches
 {
-    /*
-    [HarmonyPatch(typeof(CardBar), "OnHover", new Type[] { typeof(CardBarButton) })]
+    [HarmonyPatch(typeof(CardBar), nameof(CardBar.OnHover))]
     class CardBar_Patch
     {
-        static void Postfix(CardBar __instance, GameObject ___currentCard)
+        [HarmonyPatch(new Type[] { typeof(CardBarButton) })]
+        static void Postfix(CardBar __instance, CardBarButton cardButton)
         {
-            ___currentCard.SetActive(true);
+            var currentCard = (GameObject)AccessTools.Field(typeof(CardBar), "m_currentCard").GetValue(__instance);
+            currentCard.SetActive(true);
         }
     }
-    */
 }

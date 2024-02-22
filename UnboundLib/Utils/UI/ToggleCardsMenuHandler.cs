@@ -6,6 +6,7 @@ using TMPro;
 using UnboundLib.Cards;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 namespace UnboundLib.Utils.UI
@@ -82,6 +83,7 @@ namespace UnboundLib.Utils.UI
                     card.gameObject.SetActive(active);
                     if (active)
                     {
+                        card.gameObject.GetComponentInChildren<SortingGroup>().gameObject.SetActive(false);
                         UpdateVisualsCardObj(card.gameObject);
                     }
                 }

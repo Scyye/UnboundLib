@@ -79,6 +79,9 @@
     <Reference Include="PhotonUnityNetworking.Utilities">
       <HintPath>$(RoundsFolder)\Rounds_Data\Managed\PhotonUnityNetworking.Utilities.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.Localization">
+      <HintPath>$(RoundsFolder)\ROUNDS_Data\Managed\Unity.Localization.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.TextMeshPro">
       <HintPath>$(RoundsFolder)\Rounds_Data\Managed\Unity.TextMeshPro.dll</HintPath>
     </Reference>

@@ -115,8 +115,7 @@ namespace UnboundLib.Patches
     internal class CardInfoFix
     {
 
-        [HarmonyPatch("CardName", MethodType.Getter)]
-        [HarmonyPostfix]
+        [HarmonyPatch("CardDescription", MethodType.Getter)]
         internal static void CardName(ref string __result, CardInfo __instance)
         {
             if (__result == __instance.name && (string) __instance.GetFieldValue("cardName") != "")
@@ -125,8 +124,7 @@ namespace UnboundLib.Patches
             }
         }
 
-        [HarmonyPatch("CardDescription", MethodType.Getter)]
-        [HarmonyPostfix]
+        [HarmonyPatch("CardName", MethodType.Getter)]
         internal static void CardDescription(ref string __result, CardInfo __instance)
         {
             if (__result == __instance.name && (string) __instance.GetFieldValue("cardDestription") != "")
