@@ -149,6 +149,8 @@ namespace UnboundLib.Cards
                 newCardInfo.colorTheme = customCard.GetTheme();
                 newCardInfo.cardArt = customCard.GetCardArt();
 
+
+
                 // Finish initializing
                 PhotonNetwork.PrefabPool.RegisterPrefab(newCard.gameObject.name, newCard);
 

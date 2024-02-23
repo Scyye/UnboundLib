@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using UnityEngine.Localization;
 using UnityEngine;
 using HarmonyLib;
+using System.Xml.Linq;
+using UnityEngine.Localization.SmartFormat.PersistentVariables;
 
 namespace UnboundLib.Extensions
 {
@@ -15,13 +17,16 @@ namespace UnboundLib.Extensions
     {
         public static CardInfo SetCardName(this CardInfo info, string name)
         {
-            // Set "m_localizedCardName" and "m_localizedCardDescription" to the card's title and description using reflection
-            info.SetFieldValue("m_localizedCardName", name);
+            LocalizedString loc = new LocalizedString();
+            loc.SetReference("StringTableCards", name); ;
+            info.SetFieldValue("m_localizedCardName", loc);
             return info;
         }
         public static CardInfo SetCardDescription(this CardInfo info, string description)
         {
-            info.SetFieldValue("m_localizedCardDescription", description); // does that work?
+            LocalizedString loc = new LocalizedString();
+            loc.SetReference("StringTableCards", description);
+            info.SetFieldValue("m_localizedCardDescription", loc); // does that work?
             return info;
         }
     }
