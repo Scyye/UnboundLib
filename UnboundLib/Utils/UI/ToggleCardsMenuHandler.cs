@@ -503,6 +503,12 @@ namespace UnboundLib.Utils.UI
                     curveAnimation.PlayOut();
                 }
             }
+
+            try
+            {
+                Destroy(cardObject.GetComponentInChildren<ParticleSystem>().gameObject);
+            }
+            catch { }
         }
 
         internal static void RestoreCardToggleVisuals()
