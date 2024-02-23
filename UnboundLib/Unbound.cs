@@ -18,12 +18,10 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 using Steamworks;
 
-namespace UnboundLib
-{
+namespace UnboundLib {
     [BepInPlugin(ModId, ModName, Version)]
     [BepInProcess("Rounds.exe")]
-    public class Unbound : BaseUnityPlugin
-    {
+    public class Unbound : BaseUnityPlugin {
         private const string ModId = "com.willis.rounds.unbound";
         private const string ModName = "Rounds Unbound";
         public const string Version = "3.2.13";
@@ -54,13 +52,6 @@ namespace UnboundLib
         }
 
         internal static CardInfo templateCard;
-
-        [Obsolete("This should not be used anymore instead use CardManager.defaultCards")]
-        internal static CardInfo[] defaultCards => CardManager.defaultCards;
-        [Obsolete("This should not be used anymore instead use CardManager.activeCards")]
-        internal static List<CardInfo> activeCards => CardManager.activeCards.ToList();
-        [Obsolete("This should not be used anymore instead use CardManager.inactiveCards")]
-        internal static List<CardInfo> inactiveCards => CardManager.inactiveCards;
 
         public delegate void OnJoinedDelegate();
         public delegate void OnLeftDelegate();
@@ -103,10 +94,12 @@ namespace UnboundLib
         {
             if (Instance == null)
             {
+                Debug.Log("UnboundLib: Initializing");
                 Instance = this;
             }
             else if (Instance != this)
             {
+                Debug.Log("UnboundLib: Destroying duplicate instance");
                 DestroyImmediate(gameObject);
                 return;
             }
@@ -116,20 +109,31 @@ namespace UnboundLib
             var harmony = new Harmony(ModId);
             harmony.PatchAll();
 
+            Debug.Log("UnboundLib: Adding managers");
+
             // Add managers
             gameObject.AddComponent<LevelManager>();
             gameObject.AddComponent<CardManager>();
+
+            Debug.Log("UnboundLib: Adding menu handlers");
 
             // Add menu handlers
             gameObject.AddComponent<ToggleLevelMenuHandler>();
             gameObject.AddComponent<ToggleCardsMenuHandler>();
 
+            //Debug.Log("UnboundLib: Loading assets");
+
             LoadAssets();
+
+            Debug.Log("UnboundLib: Initializing game mode manager");
             GameModeManager.Init();
+
+            Debug.Log("UnboundLib: Initializing Card shit");
 
             // fetch card to use as a template for all custom cards
             templateCard = Resources.Load<GameObject>("0 Cards/0. PlainCard").GetComponent<CardInfo>();
             templateCard.allowMultiple = true;
+            
         }
 
         private void Start()
@@ -188,7 +192,6 @@ namespace UnboundLib
             {
                 StartCoroutine("BanPlayer");
             });
-            
         }
 
         IEnumerator BanPlayer()
@@ -281,7 +284,7 @@ namespace UnboundLib
 
             if (UIAssets != null)
             {
-                modalPrefab = UIAssets.LoadAsset<GameObject>("Modal");
+                //modalPrefab = UIAssets.LoadAsset<GameObject>("Modal");
                 //Instantiate(UIAssets.LoadAsset<GameObject>("Card Toggle Menu"), canvas.transform).AddComponent<CardToggleMenuHandler>();
             }
         }
