@@ -145,7 +145,7 @@ namespace UnboundLib.Cards
 
                 newCardInfo.cardBase = customCard.GetCardBase();
                 // Apply card data
-                newCardInfo.cardStats = customCard.GetStats() ?? Array.Empty<CardInfoStat>();
+                newCardInfo.SetCardStats(customCard.GetStats() ?? Array.Empty<CardInfoStat>());
 
 
                 newCardInfo.SetCardName(customCard.GetTitle(), customCard.GetTranslationData());

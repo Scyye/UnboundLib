@@ -27,7 +27,21 @@ namespace UnboundLib.Extensions
             var table = (TableReference) ("StringTableCards");
             var locStr = new LocalizedString("StringTableCards", reference);
             Unbound.Instance.StartCoroutine(TableRefHelper.InjectTableData(table, reference, description, tableRef));
-            info.SetFieldValue("m_localizedCardDescription", locStr); // does that work?
+            info.SetFieldValue("m_localizedCardDescription", locStr); 
+            return info;
+        }
+        public static CardInfo SetCardStats(this CardInfo info, CardInfoStat[] cardStats, TableRefHelper tableRef = null)
+        {
+            int i = 0;
+            foreach (CardInfoStat stat in cardStats)
+            {
+                var reference = (TableEntryReference) ($"STAT({i++})_" + info.name);
+                var table = (TableReference) ("StringTableCards");
+                var locStr = new LocalizedString("StringTableCards", reference);
+                Unbound.Instance.StartCoroutine(TableRefHelper.InjectTableData(table, reference, stat.stat, tableRef));
+                stat.SetFieldValue("m_localizedStat", locStr); 
+            }
+            info.cardStats = cardStats;
             return info;
         }
     }
