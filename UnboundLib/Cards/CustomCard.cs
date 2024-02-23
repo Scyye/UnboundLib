@@ -59,6 +59,11 @@ namespace UnboundLib.Cards
             Callback();
         }
 
+        public virtual TableRefHelper GetTranslationData()
+        {
+            return null;
+        }
+
         protected abstract string GetTitle();
         protected abstract string GetDescription();
         protected abstract CardInfoStat[] GetStats();
@@ -136,14 +141,16 @@ namespace UnboundLib.Cards
                 // Add custom ability handler
                 var customCard = newCard.AddComponent<T>();
                 customCard.isPrefab = true;
+                newCard.gameObject.name = $"__{customCard.GetModName()}__{customCard.GetTitle()}".Sanitize();
+
                 newCardInfo.cardBase = customCard.GetCardBase();
                 // Apply card data
                 newCardInfo.cardStats = customCard.GetStats() ?? Array.Empty<CardInfoStat>();
 
-                newCardInfo.SetCardName(customCard.GetTitle());
-                newCardInfo.SetCardDescription(customCard.GetDescription());
 
-                newCard.gameObject.name = $"__{customCard.GetModName()}__{customCard.GetTitle()}".Sanitize();
+                newCardInfo.SetCardName(customCard.GetTitle(), customCard.GetTranslationData());
+                newCardInfo.SetCardDescription(customCard.GetDescription(), customCard.GetTranslationData());
+
                 newCardInfo.sourceCard = newCardInfo;
                 newCardInfo.rarity = customCard.GetRarity();
                 newCardInfo.colorTheme = customCard.GetTheme();
@@ -179,11 +186,11 @@ namespace UnboundLib.Cards
         {
             CardInfo cardInfo = cardPrefab.GetComponent<CardInfo>();
             CustomCard customCard = cardPrefab.GetOrAddComponent<T>();
+            cardInfo.gameObject.name = $"__{customCard.GetModName()}__{customCard.GetTitle()}".Sanitize();
 
             cardInfo.cardBase = customCard.GetCardBase();
             cardInfo.cardStats = customCard.GetStats();
             cardInfo.SetCardName(customCard.GetTitle());
-            cardInfo.gameObject.name = $"__{customCard.GetModName()}__{customCard.GetTitle()}".Sanitize();
             cardInfo.SetCardDescription(customCard.GetDescription());
             cardInfo.sourceCard = cardInfo;
             cardInfo.rarity = customCard.GetRarity();
