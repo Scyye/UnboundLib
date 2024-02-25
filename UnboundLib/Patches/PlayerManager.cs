@@ -1,10 +1,10 @@
 ﻿using HarmonyLib;
 using System.Collections.Generic;
 using System.Reflection.Emit;
-using UnboundLib.Extensions;
+using Unbound.Core.Extensions;
 
 
-namespace UnboundLib.Patches
+namespace Unbound.Core.Patches
 {
     [HarmonyPatch(typeof(PlayerManager), nameof(PlayerManager.GetColorFromPlayer))]
     class PlayerManager_Patch_GetColorFromPlayer
@@ -19,8 +19,8 @@ namespace UnboundLib.Patches
     {
         static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
-            var f_playerID = UnboundLib.ExtensionMethods.GetFieldInfo(typeof(Player), "playerID");
-            var m_colorID = UnboundLib.ExtensionMethods.GetMethodInfo(typeof(PlayerExtensions), nameof(PlayerExtensions.colorID));
+            var f_playerID = global::Unbound.Core.ExtensionMethods.GetFieldInfo(typeof(Player), "playerID");
+            var m_colorID = global::Unbound.Core.ExtensionMethods.GetMethodInfo(typeof(PlayerExtensions), nameof(PlayerExtensions.colorID));
 
             foreach (var ins in instructions)
             {

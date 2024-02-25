@@ -1,4 +1,4 @@
-﻿namespace UnboundLib.GameModes
+﻿namespace Unbound.Core.GameModes
 {
     public class SandboxHandler : GameModeHandler<GM_Test>
     {

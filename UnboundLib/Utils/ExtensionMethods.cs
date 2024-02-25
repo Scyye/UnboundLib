@@ -10,7 +10,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
-namespace UnboundLib
+namespace Unbound.Core
 {
     public static class ExtensionMethods
     {

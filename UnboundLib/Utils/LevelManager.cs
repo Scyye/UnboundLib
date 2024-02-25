@@ -8,11 +8,11 @@ using System.Text.RegularExpressions;
 using BepInEx.Configuration;
 using ExitGames.Client.Photon.StructWrapping;
 using Photon.Pun;
-using UnboundLib.Networking;
-using UnboundLib.Utils.UI;
+using Unbound.Core.Networking;
+using Unbound.Core.Utils.UI;
 using UnityEngine;
 
-namespace UnboundLib.Utils
+namespace Unbound.Core.Utils
 {
     public class LevelManager : MonoBehaviour
     {
@@ -83,14 +83,14 @@ namespace UnboundLib.Utils
             // Populate the categoryBools dictionary
             foreach (var category in categories)
             {
-                categoryBools[category] = Unbound.BindConfig("Level categories", category, true);
+                categoryBools[category] = UnboundCore.BindConfig("Level categories", category, true);
             }
 
             // Disable all default levels that are disabled in config
             foreach (var level in allLevels)
             {
                 levelPaths[GetVisualName(level)] = level;
-                if (!Unbound.BindConfig("Levels: " + levels[level].category, GetVisualName(level), true).Value)
+                if (!UnboundCore.BindConfig("Levels: " + levels[level].category, GetVisualName(level), true).Value)
                 {
                     DisableLevel(level);
                 }
@@ -145,7 +145,7 @@ namespace UnboundLib.Utils
 
             if (!saved) return;
             levels[levelName].enabled = true;
-            Unbound.BindConfig("Levels: " + levels[levelName].category, GetVisualName(levelName), true).Value = true;
+            UnboundCore.BindConfig("Levels: " + levels[levelName].category, GetVisualName(levelName), true).Value = true;
         }
 
         public static void DisableLevels(string[] levelNames, bool saved = true)
@@ -171,7 +171,7 @@ namespace UnboundLib.Utils
 
             if (!saved) return;
             levels[levelName].enabled = false;
-            Unbound.BindConfig("Levels: " + levels[levelName].category, GetVisualName(levelName), true).Value = false;
+            UnboundCore.BindConfig("Levels: " + levels[levelName].category, GetVisualName(levelName), true).Value = false;
         }
 
 
@@ -286,9 +286,9 @@ namespace UnboundLib.Utils
             if (!categories.Contains(category))
             {
                 categories.Add(category);
-                categoryBools[category] = Unbound.BindConfig("Level categories", category, true);
+                categoryBools[category] = UnboundCore.BindConfig("Level categories", category, true);
             }
-            if (!Unbound.BindConfig("Levels: " + levels[path].category, GetVisualName(path), true).Value)
+            if (!UnboundCore.BindConfig("Levels: " + levels[path].category, GetVisualName(path), true).Value)
             {
                 DisableLevel(path);
             }
@@ -340,17 +340,17 @@ namespace UnboundLib.Utils
                 }
                 else
                 {
-                    Unbound.BuildInfoPopup("Can't find level: " + formattedMessage);
+                    UnboundCore.BuildInfoPopup("Can't find level: " + formattedMessage);
                 }
             }
             catch (Exception e)
             {
-                Unbound.BuildModal()
+                UnboundCore.BuildModal()
                     .Title("Error Loading Level")
                     .Message($"No map found named:\n{message}\n\nError:\n{e}")
                     .CancelButton("Copy", () =>
                     {
-                        Unbound.BuildInfoPopup("Copied Message!");
+                        UnboundCore.BuildInfoPopup("Copied Message!");
                         GUIUtility.systemCopyBuffer = e.ToString();
                     })
                     .CancelButton("Cancel", () => { })
@@ -416,12 +416,12 @@ namespace UnboundLib.Utils
 
             if (disabledLevels.Count != 0)
             {
-                Unbound.BuildModal()
+                UnboundCore.BuildModal()
                     .Title("These levels have been disabled because someone didn't have them")
                     .Message(string.Join(", ", disabledLevels.ToArray()))
                     .CancelButton("Copy", () =>
                     {
-                        Unbound.BuildInfoPopup("Copied Message!");
+                        UnboundCore.BuildInfoPopup("Copied Message!");
                         GUIUtility.systemCopyBuffer = string.Join(", ", disabledLevels.ToArray());
                     })
                     .CancelButton("Cancel", () => { })

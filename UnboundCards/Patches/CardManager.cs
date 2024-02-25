@@ -5,12 +5,12 @@ using System.Collections.Specialized;
 using System.Linq;
 using BepInEx.Configuration;
 using Photon.Pun;
-using UnboundLib.Cards;
-using UnboundLib;
-using UnboundLib.Networking;
+using Unbound.Cards;
+using Unbound.Core;
+using Unbound.Core.Networking;
 using UnityEngine;
 
-namespace UnboundLib.Cards.Utils
+namespace Unbound.Cards.Utils
 {
     public class CardManager : MonoBehaviour
     {
@@ -72,7 +72,7 @@ namespace UnboundLib.Cards.Utils
             // Populate the categoryBools dictionary
             foreach (var category in categories)
             {
-                categoryBools.Add(category, UnboundLib.Unbound.BindConfig("Card categories", category, true));
+                categoryBools.Add(category, Unbound.Core.UnboundCore.BindConfig("Card categories", category, true));
             }
 
             foreach (Action<CardInfo[]> callback in FirstStartCallbacks)
@@ -227,7 +227,7 @@ namespace UnboundLib.Cards.Utils
         {
             CardChoice.instance.cards = activeCards.ToArray();
 
-            UnboundLib.Unbound.Instance.ExecuteAfterFrames(45, () =>
+            Unbound.Core.UnboundCore.Instance.ExecuteAfterFrames(45, () =>
             {
                 // send available cardInfo pool to the master client
                 if (!PhotonNetwork.IsMasterClient)

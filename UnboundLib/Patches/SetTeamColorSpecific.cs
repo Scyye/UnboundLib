@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
-using UnboundLib.Extensions;
+using Unbound.Core.Extensions;
 
-namespace UnboundLib.Patches
+namespace Unbound.Core.Patches
 {
     [HarmonyPatch(typeof(SetTeamColorSpecific), "Start")]
     class SetTeamColorSpecific_Patch_Start

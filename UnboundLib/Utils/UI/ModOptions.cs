@@ -8,7 +8,7 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 using Color = UnityEngine.Color;
 
-namespace UnboundLib.Utils.UI
+namespace Unbound.Core.Utils.UI
 {
     
     public class ModOptions
@@ -80,7 +80,7 @@ namespace UnboundLib.Utils.UI
         internal void CreateModOptions(bool firstTime)
         {
             // create mod options
-            Unbound.Instance.ExecuteAfterSeconds(firstTime ? 0.1f : 0, () =>
+            UnboundCore.Instance.ExecuteAfterSeconds(firstTime ? 0.1f : 0, () =>
             {
                 CreateModOptionsMenu(MainMenuHandler.instance.transform.Find("Canvas/ListSelector/Main").gameObject, null, false);
                 //CreateModOptionsMenu(UIHandler.instance.transform.Find("Canvas/EscapeMenu/Main").gameObject, UIHandler.instance.transform.Find("Canvas/EscapeMenu").gameObject, true);

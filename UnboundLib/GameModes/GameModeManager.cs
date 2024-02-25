@@ -12,7 +12,7 @@ using Object = UnityEngine.Object;
 using System.Reflection;
 using System.Diagnostics;
 
-namespace UnboundLib.GameModes
+namespace Unbound.Core.GameModes
 {
     public static class GameModeManager
     {
@@ -100,13 +100,13 @@ namespace UnboundLib.GameModes
                 newSandboxGo.name = "Test";
 
                 // Select the local button so selection doesn't look weird
-                Unbound.Instance.ExecuteAfterFrames(15, () =>
+                UnboundCore.Instance.ExecuteAfterFrames(15, () =>
                 {
                     GameObject.Find("Game/UI/UI_MainMenu/Canvas/ListSelector/Main/Group/LOCAL").GetComponent<ListMenuButton>().OnPointerEnter(null);
                 });
 
                 // finally, restore the main menu button order
-                Unbound.Instance.ExecuteAfterFrames(5, () =>
+                UnboundCore.Instance.ExecuteAfterFrames(5, () =>
                 {
                     Transform group = MainMenuHandler.instance.transform.Find("Canvas/ListSelector/Main/Group");
                     group.Find("LOCAL")?.SetAsLastSibling();

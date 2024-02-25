@@ -1,7 +1,7 @@
 ﻿using HarmonyLib;
-using UnboundLib.Cards;
+using Unbound.Cards;
 
-namespace UnboundLib.Cards.Patches
+namespace Unbound.Cards.Patches
 {
 
     [HarmonyPatch(typeof(CardBarHandler), "AddCard")]

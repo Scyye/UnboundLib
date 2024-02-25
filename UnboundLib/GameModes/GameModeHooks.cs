@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Diagnostics;
 using System.Reflection;
-namespace UnboundLib.GameModes
+namespace Unbound.Core.GameModes
 {
     // When possible, use these keys when adding game hooks to a game mode
     public static class GameModeHooks

@@ -2,7 +2,7 @@
 using UnityEngine.UI.ProceduralImage;
 using System.Collections.Generic;
 
-namespace UnboundLib.Extensions
+namespace Unbound.Core.Extensions
 {
     public static class CardBarHandlerExtensions
     {

@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-namespace UnboundLib.Utils.UI
+namespace Unbound.Core.Utils.UI
 {
     public static class MainMenuLinks
     {
@@ -17,7 +17,7 @@ namespace UnboundLib.Utils.UI
             {
                 if (links != null) { return links; }
                 
-                links = UnityEngine.Object.Instantiate(Unbound.linkAssets.LoadAsset<GameObject>("Links"), MainMenuHandler.instance.transform.Find("Canvas/"));
+                links = UnityEngine.Object.Instantiate(UnboundCore.linkAssets.LoadAsset<GameObject>("Links"), MainMenuHandler.instance.transform.Find("Canvas/"));
                 UnityEngine.Object.DontDestroyOnLoad(links);
                 // do setup like placement and adding components
                 links.transform.position = MainCam.instance.transform.GetComponent<Camera>().ScreenToWorldPoint(new Vector3(Screen.height*16f/9f, 0, 0f));
@@ -35,7 +35,7 @@ namespace UnboundLib.Utils.UI
 
         public static void AddLinks(bool firstTime)
         {
-            Unbound.Instance.ExecuteAfterSeconds(firstTime ? 0.1f : 0, () =>
+            UnboundCore.Instance.ExecuteAfterSeconds(firstTime ? 0.1f : 0, () =>
             {
                 Links.SetActive(true);
             });

@@ -1,9 +1,9 @@
 ﻿using HarmonyLib;
 using System.Collections.Generic;
 using System.Reflection.Emit;
-using UnboundLib.Extensions;
+using Unbound.Core.Extensions;
 
-namespace UnboundLib.Patches
+namespace Unbound.Core.Patches
 {
     [HarmonyPatch(typeof(PlayerSkinHandler), "Init")]
     class PlayerSkinHandler_Patch_Init

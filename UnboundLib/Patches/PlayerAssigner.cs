@@ -4,9 +4,9 @@ using System.Linq;
 using HarmonyLib;
 using System.Reflection;
 using System.Reflection.Emit;
-using UnboundLib.Extensions;
+using Unbound.Core.Extensions;
 
-namespace UnboundLib.Patches
+namespace Unbound.Core.Patches
 {
     [HarmonyPatch]
     class PlayerAssigner_Patch_CreatePlayer
@@ -37,8 +37,8 @@ namespace UnboundLib.Patches
             // add player.AssignColorID right after RegisterPlayer
             // this way everything gets colored properly
 
-            var m_registerPlayer = UnboundLib.ExtensionMethods.GetMethodInfo(typeof(PlayerAssigner), "RegisterPlayer");
-            var m_assignColorID = UnboundLib.ExtensionMethods.GetMethodInfo(typeof(PlayerAssigner_Patch_CreatePlayer), nameof(PlayerAssigner_Patch_CreatePlayer.AssignColorID));
+            var m_registerPlayer = global::Unbound.Core.ExtensionMethods.GetMethodInfo(typeof(PlayerAssigner), "RegisterPlayer");
+            var m_assignColorID = global::Unbound.Core.ExtensionMethods.GetMethodInfo(typeof(PlayerAssigner_Patch_CreatePlayer), nameof(PlayerAssigner_Patch_CreatePlayer.AssignColorID));
 
             foreach (var ins in instructions)
             {

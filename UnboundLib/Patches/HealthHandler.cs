@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
-using UnboundLib.Extensions;
+using Unbound.Core.Extensions;
 
-namespace UnboundLib.Patches
+namespace Unbound.Core.Patches
 {
     [HarmonyPatch(typeof(HealthHandler), "RPCA_Die")]
     class HealthHandler_Patch_RPCA_Die

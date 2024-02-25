@@ -9,24 +9,24 @@ using System.Linq;
 using BepInEx.Configuration;
 using Jotunn.Utils;
 using TMPro;
-using UnboundLib.GameModes;
-using UnboundLib.Networking;
-using UnboundLib.Utils;
-using UnboundLib.Utils.UI;
+using Unbound.Core.GameModes;
+using Unbound.Core.Networking;
+using Unbound.Core.Utils;
+using Unbound.Core.Utils.UI;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 using Steamworks;
 
-namespace UnboundLib {
+namespace Unbound.Core {
     [BepInPlugin(ModId, ModName, Version)]
     [BepInProcess("Rounds.exe")]
-    public class Unbound : BaseUnityPlugin {
+    public class UnboundCore : BaseUnityPlugin {
         private const string ModId = "com.willis.rounds.unbound";
         private const string ModName = "Rounds Unbound";
         public const string Version = "3.2.13";
 
-        public static Unbound Instance { get; private set; }
+        public static UnboundCore Instance { get; private set; }
         public static readonly ConfigFile config = new ConfigFile(Path.Combine(Paths.ConfigPath, "UnboundLib.cfg"), true);
 
         private Canvas _canvas;
@@ -71,7 +71,7 @@ namespace UnboundLib {
         private static GameObject modalPrefab;
 
 
-        public Unbound()
+        public UnboundCore()
         {
             GameModeManager.AddHook(GameModeHooks.HookGameStart, handler => SyncModClients.DisableSyncModUi(SyncModClients.uiParent));
 
@@ -172,7 +172,7 @@ namespace UnboundLib {
             // sync modded clients
             networkEvents.OnJoinedRoomEvent += SyncModClients.RequestSync;
 
-            Unbound.Instance.ExecuteAfterFrames(20, () =>
+            UnboundCore.Instance.ExecuteAfterFrames(20, () =>
             {
                 StartCoroutine("BanPlayer");
             });
@@ -262,8 +262,8 @@ namespace UnboundLib {
         private static void LoadAssets()
         {
             toggleUI = AssetUtils.LoadAssetBundleFromResources("togglemenuui", typeof(ToggleLevelMenuHandler).Assembly);
-            linkAssets = AssetUtils.LoadAssetBundleFromResources("unboundlinks", typeof(Unbound).Assembly);
-            UIAssets = AssetUtils.LoadAssetBundleFromResources("unboundui", typeof(Unbound).Assembly);
+            linkAssets = AssetUtils.LoadAssetBundleFromResources("unboundlinks", typeof(UnboundCore).Assembly);
+            UIAssets = AssetUtils.LoadAssetBundleFromResources("unboundui", typeof(UnboundCore).Assembly);
 
             if (UIAssets != null)
             {

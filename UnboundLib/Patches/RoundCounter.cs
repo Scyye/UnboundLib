@@ -1,10 +1,10 @@
 ﻿using HarmonyLib;
 using System.Collections.Generic;
 using System.Reflection.Emit;
-using UnboundLib.Extensions;
+using Unbound.Core.Extensions;
 using System.Linq;
 
-namespace UnboundLib.Patches
+namespace Unbound.Core.Patches
 {
     [HarmonyPatch(typeof(RoundCounter), "ReDraw")]
     class RoundCounter_Patch_ReDraw

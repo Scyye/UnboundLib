@@ -1,13 +1,11 @@
 ﻿using BepInEx;
 using System;
-using UnboundLib.Cards.Utils;
-using UnboundLib;
-using UnboundLib.Utils.UI;
+using Unbound.Cards.Utils;
+using Unbound.Core;
+using Unbound.Core.Utils.UI;
 using UnityEngine;
-using static UnboundLib.NetworkEventCallbacks;
-using System.Linq;
 
-namespace UnboundLib.Cards
+namespace Unbound.Cards
 {
     [BepInDependency("com.willis.rounds.unbound")]
     [BepInPlugin("dev.rounds.unbound.cards", "Unbound Lib Cards", "1.0.0")]
@@ -17,7 +15,7 @@ namespace UnboundLib.Cards
         void Awake()
         {
             instance = this;
-            var hamony = new HarmonyLib.Harmony("dev.rounds.unbound.card");
+            var hamony = new HarmonyLib.Harmony("dev.rounds.unbound.cards");
             hamony.PatchAll();
 
             gameObject.AddComponent<CardManager>();
@@ -36,7 +34,7 @@ namespace UnboundLib.Cards
             foreach (var card in CardManager.defaultCards)
             {
                 CardManager.cards.Add(card.name,
-                    new Card("Vanilla", UnboundLib.Unbound.config.Bind("Cards: Vanilla", card.name, true), card));
+                    new Card("Vanilla", Unbound.Core.UnboundCore.config.Bind("Cards: Vanilla", card.name, true), card));
 
                 var networkEvents = gameObject.AddComponent<NetworkEventCallbacks>();
                 networkEvents.OnJoinedRoomEvent += CardManager.OnJoinedRoomAction;

@@ -1,8 +1,8 @@
 ﻿using HarmonyLib;
-using UnboundLib.Utils;
+using Unbound.Core.Utils;
 using UnityEngine;
 
-namespace UnboundLib.Patches
+namespace Unbound.Core.Patches
 {
 
     [HarmonyPatch(typeof(PlayerSkinBank), "GetPlayerSkin")]

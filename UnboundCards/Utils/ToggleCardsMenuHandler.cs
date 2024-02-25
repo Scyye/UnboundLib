@@ -3,14 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
-using UnboundLib;
-using UnboundLib.Cards.Utils;
+using Unbound.Core;
+using Unbound.Cards.Utils;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
 
-namespace UnboundLib.Cards.Utils
+namespace Unbound.Cards.Utils
 {
     public class ToggleCardsMenuHandler : MonoBehaviour
     {
@@ -54,12 +54,12 @@ namespace UnboundLib.Cards.Utils
             instance = this;
             var mainCamera = GameObject.Find("MainCamera").GetComponent<Camera>();
 
-            var cardMenu = UnboundLib.Unbound.toggleUI.LoadAsset<GameObject>("CardMenuCanvas");
+            var cardMenu = Unbound.Core.UnboundCore.toggleUI.LoadAsset<GameObject>("CardMenuCanvas");
 
-            cardObjAsset = UnboundLib.Unbound.toggleUI.LoadAsset<GameObject>("CardObj");
+            cardObjAsset = Unbound.Core.UnboundCore.toggleUI.LoadAsset<GameObject>("CardObj");
 
-            cardScrollViewAsset = UnboundLib.Unbound.toggleUI.LoadAsset<GameObject>("CardScrollView");
-            categoryButtonAsset = UnboundLib.Unbound.toggleUI.LoadAsset<GameObject>("CategoryButton");
+            cardScrollViewAsset = Unbound.Core.UnboundCore.toggleUI.LoadAsset<GameObject>("CardScrollView");
+            categoryButtonAsset = Unbound.Core.UnboundCore.toggleUI.LoadAsset<GameObject>("CategoryButton");
 
             cardMenuCanvas = Instantiate(cardMenu);
             DontDestroyOnLoad(cardMenuCanvas);
@@ -642,16 +642,16 @@ namespace UnboundLib.Cards.Utils
 
             if (trans.gameObject != null) trans.gameObject.SetActive(active);
 
-            UnboundLib.Unbound.Instance.ExecuteAfterFrames(1, () =>
+            Unbound.Core.UnboundCore.Instance.ExecuteAfterFrames(1, () =>
             {
                 if (active)
                 {
                     if (instance.cardVisualsCoroutine != null)
                     {
-                        UnboundLib.Unbound.Instance.StopCoroutine(instance.cardVisualsCoroutine);
+                        Unbound.Core.UnboundCore.Instance.StopCoroutine(instance.cardVisualsCoroutine);
                     }
 
-                    instance.cardVisualsCoroutine = UnboundLib.Unbound.Instance.StartCoroutine(instance.currentCategory != null ? instance.EnableCardsInCategory(instance.currentCategory) : instance.EnableCardsInCategory("Vanilla"));
+                    instance.cardVisualsCoroutine = Unbound.Core.UnboundCore.Instance.StartCoroutine(instance.currentCategory != null ? instance.EnableCardsInCategory(instance.currentCategory) : instance.EnableCardsInCategory("Vanilla"));
                 }
                 else
                 {

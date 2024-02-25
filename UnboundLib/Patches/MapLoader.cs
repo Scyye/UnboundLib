@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace UnboundLib.Patches
+namespace Unbound.Core.Patches
 {
     internal class MapLoaderPatch
     {

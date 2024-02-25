@@ -13,7 +13,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-namespace UnboundLib.Utils.UI
+namespace Unbound.Core.Utils.UI
 {
     public class ToggleLevelMenuHandler : MonoBehaviour
     {
@@ -78,11 +78,11 @@ namespace UnboundLib.Utils.UI
             var mainCamera = GameObject.Find("MainCamera").GetComponent<Camera>();
 
             // Load assets
-            var mapsMenuCanvas = Unbound.toggleUI.LoadAsset<GameObject>("MapMenuCanvas");
-            mapObj = Unbound.toggleUI.LoadAsset<GameObject>("MapObj");
-            categoryButton = Unbound.toggleUI.LoadAsset<GameObject>("CategoryButton");
-            scrollView = Unbound.toggleUI.LoadAsset<GameObject>("MapScrollView");
-            rightClickMenu = Unbound.toggleUI.LoadAsset<GameObject>("RightClickMenu");
+            var mapsMenuCanvas = UnboundCore.toggleUI.LoadAsset<GameObject>("MapMenuCanvas");
+            mapObj = UnboundCore.toggleUI.LoadAsset<GameObject>("MapObj");
+            categoryButton = UnboundCore.toggleUI.LoadAsset<GameObject>("CategoryButton");
+            scrollView = UnboundCore.toggleUI.LoadAsset<GameObject>("MapScrollView");
+            rightClickMenu = UnboundCore.toggleUI.LoadAsset<GameObject>("RightClickMenu");
 
             // Create guiStyle for waiting text
             guiStyle = new GUIStyle { fontSize = 100, normal = { textColor = Color.black } };
@@ -248,7 +248,7 @@ namespace UnboundLib.Utils.UI
 
                     lvlObjs.Add(mapObject);
                     UpdateVisualsLevelObj(mapObject);
-                    if (!Unbound.BindConfig("Levels: " + level.Value.category, LevelManager.GetVisualName(level.Key), true).Value)
+                    if (!UnboundCore.BindConfig("Levels: " + level.Value.category, LevelManager.GetVisualName(level.Key), true).Value)
                     {
                         LevelManager.DisableLevel(level.Key);
                         UpdateVisualsLevelObj(mapObject);

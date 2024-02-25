@@ -4,13 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using UnboundLib.Cards.Utils;
-using UnboundLib;
-using UnboundLib.Patches;
-using UnboundLib.Utils.UI;
+using Unbound.Cards.Utils;
+using Unbound.Core;
+using Unbound.Core.Patches;
+using Unbound.Core.Utils.UI;
 using UnityEngine;
 
-namespace UnboundLib.Cards.Patches
+namespace Unbound.Cards.Patches
 {
     [HarmonyPatch(typeof(MainMenuHandler))]
     internal class MainMenuHandlerPatch
@@ -21,13 +21,13 @@ namespace UnboundLib.Cards.Patches
         {
             Debug.Log("0");
 
-            UnboundLib.Unbound.Instance.ExecuteAfterFrames(5, () =>
+            Unbound.Core.UnboundCore.Instance.ExecuteAfterFrames(5, () =>
             {
                 CardManager.RestoreCardToggles();
                 ToggleCardsMenuHandler.RestoreCardToggleVisuals();
             });
 
-            UnboundLib.Unbound.Instance.ExecuteAfterSeconds(0.4f, () => 
+            Unbound.Core.UnboundCore.Instance.ExecuteAfterSeconds(0.4f, () => 
                 CardManager.FirstTimeStart());
             
         }

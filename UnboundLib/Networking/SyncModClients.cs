@@ -5,14 +5,14 @@ using System.Linq;
 using BepInEx;
 using Photon.Pun;
 using TMPro;
-using UnboundLib.GameModes;
-using UnboundLib.Utils.UI;
+using Unbound.Core.GameModes;
+using Unbound.Core.Utils.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
-namespace UnboundLib.Networking
+namespace Unbound.Core.Networking
 {
     internal static class SyncModClients
     {
@@ -52,7 +52,7 @@ namespace UnboundLib.Networking
             if (!PhotonNetwork.IsMasterClient) return;
             
             CheckLobby();
-            Unbound.Instance.StartCoroutine(Check());
+            UnboundCore.Instance.StartCoroutine(Check());
         }
 
         internal static IEnumerator Check()
@@ -264,7 +264,7 @@ namespace UnboundLib.Networking
                 text.transform.localPosition = Vector3.zero;
             }
 
-            Unbound.Instance.ExecuteAfterFrames(5, () =>
+            UnboundCore.Instance.ExecuteAfterFrames(5, () =>
             {
                 uiParent.GetComponent<VerticalLayoutGroup>().SetLayoutVertical();
             });

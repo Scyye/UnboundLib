@@ -5,14 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TMPro;
-using UnboundLib.Utils.UI;
-using UnboundLib.Utils;
+using Unbound.Core.Utils.UI;
+using Unbound.Core.Utils;
 using System.Collections;
 using UnityEngine.UI;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace UnboundLib.Patches
+namespace Unbound.Core.Patches
 {
     [HarmonyPatch(typeof(MainMenuHandler))]
     public class MainMenuHandlerPatch
@@ -27,20 +27,20 @@ namespace UnboundLib.Patches
         internal static void MainMenuHandlerAwake()
         {
             // reapply cards and levels
-            Unbound.Instance.ExecuteAfterFrames(5, () =>
+            UnboundCore.Instance.ExecuteAfterFrames(5, () =>
             {
                 MapManager.instance.levels = LevelManager.activeLevels.ToArray();
             });
 
             // create unbound text
-            Unbound.Instance.StartCoroutine(AddTextWhenReady(firstTime ? 2f : 0.1f));
+            UnboundCore.Instance.StartCoroutine(AddTextWhenReady(firstTime ? 2f : 0.1f));
 
             Debug.Log("1");
             ModOptions.instance.CreateModOptions(firstTime?firstTime:!firstTime);
             Credits.Instance.CreateCreditsMenu(firstTime);
             MainMenuLinks.AddLinks(firstTime);
 
-            Unbound.Instance.ExecuteAfterSeconds(firstTime ? 0.4f : 0, () =>
+            UnboundCore.Instance.ExecuteAfterSeconds(firstTime ? 0.4f : 0, () =>
             {
                 var resumeButton = UIHandler.instance.transform.Find("Canvas/EscapeMenu/Main/Group/Resume").gameObject;
                 // Create options button in escapeMenu

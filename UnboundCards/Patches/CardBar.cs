@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace UnboundLib.Cards.Patches
+namespace Unbound.Cards.Patches
 {
     [HarmonyPatch(typeof(CardBar), nameof(CardBar.OnHover))]
     class CardBar_Patch

@@ -2,15 +2,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnboundLib.Cards;
-using UnboundLib.Cards.Utils;
-using UnboundLib;
-using UnboundLib.Cards.Utils;
+using Unbound.Cards;
+using Unbound.Cards.Utils;
+using Unbound.Core;
+using Unbound.Cards.Utils;
 using UnityEngine;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
-namespace UnboundLib.Cards.Patches
+namespace Unbound.Cards.Patches
 {
     [Serializable]
     [HarmonyPatch(typeof(CardInfo), "Awake")]

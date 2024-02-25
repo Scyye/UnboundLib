@@ -2,7 +2,7 @@
 using UnityEngine;
 using System.Reflection;
 
-namespace UnboundLib.Utils
+namespace Unbound.Core.Utils
 {
     public static class ExtraPlayerSkins
     {

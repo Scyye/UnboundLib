@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using UnboundLib.Extensions;
+using Unbound.Core.Extensions;
 
-namespace UnboundLib.GameModes
+namespace Unbound.Core.GameModes
 {
     public class ArmsRaceHandler : GameModeHandler<GM_ArmsRace>
     {

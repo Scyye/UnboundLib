@@ -1,4 +1,4 @@
-﻿namespace UnboundLib.Utils
+﻿namespace Unbound.Core.Utils
 {
     static class Math
     {

@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
-using UnboundLib.GameModes;
+using Unbound.Core.GameModes;
 using UnityEngine;
 
-namespace UnboundLib.Patches
+namespace Unbound.Core.Patches
 {
     [HarmonyPatch(typeof(LoadingScreen), "IDoLoading")]
     class LoadingScreen_Patch_IDoLoading

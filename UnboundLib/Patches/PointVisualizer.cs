@@ -1,10 +1,10 @@
 ﻿using HarmonyLib;
 using System.Collections.Generic;
 using System.Reflection.Emit;
-using UnboundLib.Extensions;
+using Unbound.Core.Extensions;
 using System.Linq;
 
-namespace UnboundLib.Patches
+namespace Unbound.Core.Patches
 {
     [HarmonyPatch(typeof(PointVisualizer), "DoShowPoints")]
     class PointVisualizer_Patch_DoShowPoints

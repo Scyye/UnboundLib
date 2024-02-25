@@ -1,7 +1,7 @@
 ﻿using HarmonyLib;
-using UnboundLib.GameModes;
+using Unbound.Core.GameModes;
 
-namespace UnboundLib.Patches
+namespace Unbound.Core.Patches
 {
     [HarmonyPatch(typeof(NetworkConnectionHandler), "QuickMatch")]
     class NetworkConnectionHandler_Patch_QuickMatch

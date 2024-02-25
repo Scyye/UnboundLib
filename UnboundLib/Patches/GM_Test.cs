@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Collections.Generic;
 
-namespace UnboundLib.Patches
+namespace Unbound.Core.Patches
 {
     /*
     [HarmonyPatch(typeof(GM_Test), "Start")]

@@ -1,9 +1,9 @@
 ﻿using HarmonyLib;
-using UnboundLib.Cards.Utils;
-using UnboundLib.Utils.UI;
+using Unbound.Cards.Utils;
+using Unbound.Core.Utils.UI;
 using UnityEngine;
 
-namespace UnboundLib.Patches
+namespace Unbound.Core.Patches
 {
     [HarmonyPatch(typeof(EscapeMenuHandler))]
     public class EscapeMenuHandlerPath

@@ -7,8 +7,9 @@ using UnityEngine.UI;
 using UnityEngine;
 using System.Collections;
 using UnityEngine.Networking;
+using Unbound.Core;
 
-namespace UnboundLib.Cards
+namespace Unbound.Cards
 {
     public class DeckSmithUtil : MonoBehaviour
     {
@@ -41,19 +42,19 @@ namespace UnboundLib.Cards
             }
         }
 
-        public GameObject GetArtFromUrl(string url)
+        public static GameObject GetArtFromUrl(string url)
         {
             var future = new TextureFuture();
 
             var go = new GameObject("Web Card Art");
             go.AddComponent<WebCardArt>().TextureFuture = future;
 
-            StartCoroutine(GetTexture(url, future));
+            UnboundCore.Instance.StartCoroutine(GetTexture(url, future));
 
             return go;
         }
 
-        internal IEnumerator GetTexture(string url, TextureFuture future)
+        internal static IEnumerator GetTexture(string url, TextureFuture future)
         {
             yield return new WaitUntil(() => future.Ready);
 

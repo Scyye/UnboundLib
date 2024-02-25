@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace UnboundLib.Utils
+namespace Unbound.Core.Utils
 {
     public struct TimeSince : IEquatable<TimeSince>
     {

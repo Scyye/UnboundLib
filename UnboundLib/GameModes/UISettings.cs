@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace UnboundLib.GameModes
+namespace Unbound.Core.GameModes
 {
     public struct UISettings
     {

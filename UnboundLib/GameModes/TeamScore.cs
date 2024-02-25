@@ -1,4 +1,4 @@
-﻿namespace UnboundLib.GameModes
+﻿namespace Unbound.Core.GameModes
 {
     public struct TeamScore
     {
