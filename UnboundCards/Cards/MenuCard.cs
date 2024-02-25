@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace UnboundLib.Cards
+namespace Unbound.Cards
 {
     internal class MenuCard : MonoBehaviour
     {

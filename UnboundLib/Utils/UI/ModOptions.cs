@@ -1,14 +1,29 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using Color = UnityEngine.Color;
 
 namespace UnboundLib.Utils.UI
 {
+    
     public class ModOptions
     {
+        public struct subMenu
+        {
+            public string text;
+            public UnityAction onClickAction;
+            public int fontSize;
+            public bool forceUpper;
+            public Color color;
+            public TMP_FontAsset font;
+            public Material fontMaterial;
+            public TextAlignmentOptions alignmentOptions;
+        }
         internal static List<ModMenu> modMenus = new List<ModMenu>();
         internal static Dictionary<string, GUIListener> GUIListeners = new Dictionary<string, GUIListener>();
 
@@ -20,6 +35,7 @@ namespace UnboundLib.Utils.UI
         internal static bool noDeprecatedMods;
 
         public static ModOptions instance = new ModOptions();
+        public static List<subMenu> subMenus = new List<subMenu>();
 
         private ModOptions()
         {
@@ -49,12 +65,12 @@ namespace UnboundLib.Utils.UI
             // create mod options
             Unbound.Instance.ExecuteAfterSeconds(firstTime ? 0.1f : 0, () =>
             {
-                CreatModOptionsMenu(MainMenuHandler.instance.transform.Find("Canvas/ListSelector/Main").gameObject, null, false);
-                CreatModOptionsMenu(UIHandler.instance.transform.Find("Canvas/EscapeMenu/Main").gameObject, UIHandler.instance.transform.Find("Canvas/EscapeMenu").gameObject, true);
+                CreateModOptionsMenu(MainMenuHandler.instance.transform.Find("Canvas/ListSelector/Main").gameObject, null, false);
+                CreateModOptionsMenu(UIHandler.instance.transform.Find("Canvas/EscapeMenu/Main").gameObject, UIHandler.instance.transform.Find("Canvas/EscapeMenu").gameObject, true);
             });
         }
 
-        private void CreatModOptionsMenu(GameObject parent, GameObject parentForMenu, bool pauseMenu)
+        private void CreateModOptionsMenu(GameObject parent, GameObject parentForMenu, bool pauseMenu)
         {
             // Create mod options menu
             modOptionsMenu = MenuHandler.CreateMenu("MODS", () => {showingModOptions = true;
@@ -95,16 +111,23 @@ namespace UnboundLib.Utils.UI
                 visibleObj.transform.parent = parent.transform;
             }
 
-            // Create toggle cards button
-            MenuHandler.CreateButton("Toggle Cards", modOptionsMenu,
-                () =>
-                {
-                    ToggleCardsMenuHandler.SetActive(ToggleCardsMenuHandler.cardMenuCanvas.transform, true);
-                });
+            // Create sub menus
 
             // Create toggle levels button
             MenuHandler.CreateButton("Toggle Levels", modOptionsMenu,
                 () => { ToggleLevelMenuHandler.instance.SetActive(true); });
+            
+            Debug.Log("Creating submenus");
+            foreach (var subMenu in subMenus)
+            {
+                Debug.Log("Creating submenu: " + subMenu.text);
+                MenuHandler.CreateButton(subMenu.text, modOptionsMenu, subMenu.onClickAction,
+                    subMenu.fontSize, subMenu.forceUpper, subMenu.color, subMenu.font, subMenu.fontMaterial, subMenu.alignmentOptions);
+            }
+            Debug.Log("Submenus created");
+
+
+
 
             // Create menu's for mods with new UI
             foreach (var menu in modMenus)

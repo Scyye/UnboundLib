@@ -51,7 +51,6 @@ namespace UnboundLib {
                 FinishHandshake = "ModLoader_HandshakeFinish";
         }
 
-        internal static CardInfo templateCard;
 
         public delegate void OnJoinedDelegate();
         public delegate void OnLeftDelegate();
@@ -113,13 +112,11 @@ namespace UnboundLib {
 
             // Add managers
             gameObject.AddComponent<LevelManager>();
-            gameObject.AddComponent<CardManager>();
 
             Debug.Log("UnboundLib: Adding menu handlers");
 
             // Add menu handlers
             gameObject.AddComponent<ToggleLevelMenuHandler>();
-            gameObject.AddComponent<ToggleCardsMenuHandler>();
 
             //Debug.Log("UnboundLib: Loading assets");
 
@@ -130,9 +127,7 @@ namespace UnboundLib {
 
             Debug.Log("UnboundLib: Initializing Card shit");
 
-            // fetch card to use as a template for all custom cards
-            templateCard = Resources.Load<GameObject>("0 Cards/0. PlainCard").GetComponent<CardInfo>();
-            templateCard.allowMultiple = true;
+            
             
         }
 
@@ -164,22 +159,11 @@ namespace UnboundLib {
                 GameModeManager.CurrentHandler.SetSettings((GameSettings) data[1]);
             });
 
-            CardManager.defaultCards = CardChoice.instance.cards;
-
-            // register default cards with toggle menu
-            foreach (var card in CardManager.defaultCards)
-            {
-                CardManager.cards.Add(card.name,
-                    new Card("Vanilla", config.Bind("Cards: Vanilla", card.name, true), card));
-            }
-
             // hook up Photon callbacks
             var networkEvents = gameObject.AddComponent<NetworkEventCallbacks>();
             networkEvents.OnJoinedRoomEvent += OnJoinedRoomAction;
             networkEvents.OnJoinedRoomEvent += LevelManager.OnJoinedRoomAction;
-            networkEvents.OnJoinedRoomEvent += CardManager.OnJoinedRoomAction;
             networkEvents.OnLeftRoomEvent += OnLeftRoomAction;
-            networkEvents.OnLeftRoomEvent += CardManager.OnLeftRoomAction;
             networkEvents.OnLeftRoomEvent += LevelManager.OnLeftRoomAction;
 
             // Adds the ping monitor
@@ -238,7 +222,6 @@ namespace UnboundLib {
                                     (
                                     UIHandler.instance.transform.Find("Canvas/EscapeMenu/MOD OPTIONS/Group") &&
                                     UIHandler.instance.transform.Find("Canvas/EscapeMenu/MOD OPTIONS/Group").gameObject.activeInHierarchy) ||
-                                    ToggleCardsMenuHandler.menuOpenFromOutside ||
                                     lockInputBools.Values.Any(b => b);
         }
 
@@ -356,10 +339,6 @@ namespace UnboundLib {
         {
             SyncModClients.RegisterClientSideMod(GUID);
         }
-        public static void AddAllCardsCallback(Action<CardInfo[]> callback)
-        {
-            CardManager.AddAllCardsCallback(callback);
-        }
 
         public static void RegisterHandshake(string modId, Action callback)
         {
@@ -401,7 +380,7 @@ namespace UnboundLib {
                    (PhotonNetwork.OfflineMode || !PhotonNetwork.IsConnected);
         }
 
-        internal static ConfigEntry<T> BindConfig<T>(string section, string key, T defaultValue, ConfigDescription configDescription = null)
+        public static ConfigEntry<T> BindConfig<T>(string section, string key, T defaultValue, ConfigDescription configDescription = null)
         {
             return config.Bind(EscapeConfigKey(section), EscapeConfigKey(key), defaultValue, configDescription);
         }

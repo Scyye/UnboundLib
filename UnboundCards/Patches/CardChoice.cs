@@ -5,14 +5,33 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Unbound.Cards.Utils;
+using UnboundLib;
 using UnboundLib.Utils;
 using UnityEngine;
 
-namespace UnboundLib.Patches
+namespace Unbound.Cards.Patches
 {
+    [HarmonyPatch(typeof(CardChoice))]
     internal class CardChoicePatch
     {
-        [HarmonyPatch(typeof(CardChoice), "Start")]
+        [HarmonyPrefix]
+        [HarmonyPatch(nameof(CardChoice.GetSourceCard))]
+        private static bool CheckHiddenCards(CardChoice __instance, CardInfo info, ref CardInfo __result)
+        {
+            for (int i = 0; i < __instance.cards.Length; i++)
+            {
+                if ((__instance.cards[i].gameObject.name + "(Clone)") == info.gameObject.name)
+                {
+                    __result = __instance.cards[i];
+                    return false;
+                }
+            }
+            __result = null;
+
+            return false;
+        }
+        [HarmonyPatch("Start")]
         [HarmonyPostfix]
         static void CardChoiceStartPost(CardChoice __instance)
         {

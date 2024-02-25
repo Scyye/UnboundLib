@@ -3,13 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
-using UnboundLib.Cards;
+using UnboundLib;
+using UnboundLib.Cards.Utils;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
 
-namespace UnboundLib.Utils.UI
+namespace Unbound.Cards.Utils
 {
     public class ToggleCardsMenuHandler : MonoBehaviour
     {
@@ -53,12 +54,12 @@ namespace UnboundLib.Utils.UI
             instance = this;
             var mainCamera = GameObject.Find("MainCamera").GetComponent<Camera>();
 
-            var cardMenu = Unbound.toggleUI.LoadAsset<GameObject>("CardMenuCanvas");
+            var cardMenu = UnboundLib.Unbound.toggleUI.LoadAsset<GameObject>("CardMenuCanvas");
 
-            cardObjAsset = Unbound.toggleUI.LoadAsset<GameObject>("CardObj");
+            cardObjAsset = UnboundLib.Unbound.toggleUI.LoadAsset<GameObject>("CardObj");
 
-            cardScrollViewAsset = Unbound.toggleUI.LoadAsset<GameObject>("CardScrollView");
-            categoryButtonAsset = Unbound.toggleUI.LoadAsset<GameObject>("CategoryButton");
+            cardScrollViewAsset = UnboundLib.Unbound.toggleUI.LoadAsset<GameObject>("CardScrollView");
+            categoryButtonAsset = UnboundLib.Unbound.toggleUI.LoadAsset<GameObject>("CategoryButton");
 
             cardMenuCanvas = Instantiate(cardMenu);
             DontDestroyOnLoad(cardMenuCanvas);
@@ -222,7 +223,7 @@ namespace UnboundLib.Utils.UI
                 // sort categories
                 // always have Vanilla first, then sort most cards -> least cards, followed by "Modded" at the end (if it exists)
                 List<string> sortedCategories = new[] { "Vanilla" }.Concat(CardManager.categories.OrderBy(x => x).Except(new[] { "Vanilla" })).ToList();
-                
+
                 foreach (var category in sortedCategories)
                 {
                     var categoryObj = Instantiate(categoryButtonAsset, categoryContent);
@@ -641,16 +642,16 @@ namespace UnboundLib.Utils.UI
 
             if (trans.gameObject != null) trans.gameObject.SetActive(active);
 
-            Unbound.Instance.ExecuteAfterFrames(1, () =>
+            UnboundLib.Unbound.Instance.ExecuteAfterFrames(1, () =>
             {
                 if (active)
                 {
                     if (instance.cardVisualsCoroutine != null)
                     {
-                        Unbound.Instance.StopCoroutine(instance.cardVisualsCoroutine);
+                        UnboundLib.Unbound.Instance.StopCoroutine(instance.cardVisualsCoroutine);
                     }
 
-                    instance.cardVisualsCoroutine = Unbound.Instance.StartCoroutine(instance.currentCategory != null ? instance.EnableCardsInCategory(instance.currentCategory) : instance.EnableCardsInCategory("Vanilla"));
+                    instance.cardVisualsCoroutine = UnboundLib.Unbound.Instance.StartCoroutine(instance.currentCategory != null ? instance.EnableCardsInCategory(instance.currentCategory) : instance.EnableCardsInCategory("Vanilla"));
                 }
                 else
                 {

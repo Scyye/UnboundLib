@@ -6,8 +6,10 @@ using UnityEngine.Localization.Tables;
 using System.Xml.Linq;
 using System.Collections.Generic;
 using System;
+using UnboundLib;
+using Unbound = UnboundLib.Unbound;
 
-namespace UnboundLib.Extensions
+namespace Unbound.Extensions
 {
     // for testing
     internal static class CardInfoExt
@@ -17,7 +19,7 @@ namespace UnboundLib.Extensions
             var reference = (TableEntryReference) ("CARD_" + info.name);
             var table = (TableReference) ("StringTableCards");
             var locStr = new LocalizedString("StringTableCards", reference);
-            Unbound.Instance.StartCoroutine(TableRefHelper.InjectTableData(table, reference, name, tableRef));
+            UnboundLib.Unbound.Instance.StartCoroutine(TableRefHelper.InjectTableData(table, reference, name, tableRef));
             info.SetFieldValue("m_localizedCardName", locStr);
             return info;
         }
@@ -26,7 +28,7 @@ namespace UnboundLib.Extensions
             var reference = (TableEntryReference) ("CARD_" + info.name+ "_DESC");
             var table = (TableReference) ("StringTableCards");
             var locStr = new LocalizedString("StringTableCards", reference);
-            Unbound.Instance.StartCoroutine(TableRefHelper.InjectTableData(table, reference, description, tableRef));
+            UnboundLib.Unbound.Instance.StartCoroutine(TableRefHelper.InjectTableData(table, reference, description, tableRef));
             info.SetFieldValue("m_localizedCardDescription", locStr); 
             return info;
         }
@@ -38,7 +40,7 @@ namespace UnboundLib.Extensions
                 var reference = (TableEntryReference) ($"STAT({i++})_" + info.name);
                 var table = (TableReference) ("StringTableCards");
                 var locStr = new LocalizedString("StringTableCards", reference);
-                Unbound.Instance.StartCoroutine(TableRefHelper.InjectTableData(table, reference, stat.stat, tableRef));
+                UnboundLib.Unbound.Instance.StartCoroutine(TableRefHelper.InjectTableData(table, reference, stat.stat, tableRef));
                 stat.SetFieldValue("m_localizedStat", locStr); 
             }
             info.cardStats = cardStats;

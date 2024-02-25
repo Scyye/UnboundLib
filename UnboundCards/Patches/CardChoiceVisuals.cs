@@ -3,9 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
+using UnboundLib;
 using UnboundLib.Extensions;
 
-namespace UnboundLib.Patches
+namespace Unbound.Cards.Patches
 {
     [HarmonyPatch(typeof(CardChoiceVisuals), "Show")]
     class CardChoiceVisuals_Patch_Show

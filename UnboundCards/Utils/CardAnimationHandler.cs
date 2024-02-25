@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace UnboundLib.Utils.UI
+namespace UnboundLib.Cards.Utils
 {
     internal class CardAnimationHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {

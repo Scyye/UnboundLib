@@ -2,10 +2,9 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2F32C3B2-635E-40DE-869E-6BC48A85989E}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>UnboundLib</RootNamespace>
-    <AssemblyName>UnboundLib</AssemblyName>
+    <RootNamespace>Unbound.Cards</RootNamespace>
+    <AssemblyName>UnboundCards</AssemblyName>
     <Authors>RoundsModding</Authors>
     <TargetFramework>net461</TargetFramework>
     <FileAlignment>512</FileAlignment>
@@ -53,10 +52,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="..\AssetsEmbedded\unboundui" Link="Assets\unboundui" />
-    <EmbeddedResource Include="..\AssetsEmbedded\modoptionsui" Link="Assets\modoptionsui" />
-    <EmbeddedResource Include="..\AssetsEmbedded\unboundlinks" Link="Assets\unboundlinks" />
-    <EmbeddedResource Include="Assets\togglemenuui" />
+    <ProjectReference Include="..\UnboundLib\UnboundLib.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -120,9 +116,9 @@
     <Reference Include="Unity.Addressables">
       <HintPath>$(ManagedFolder)\Unity.Addressables.dll</HintPath>
     </Reference>
-	  <Reference Include="com.rlabrecque.steamworks.net">
-		  <HintPath>$(ManagedFolder)\com.rlabrecque.steamworks.net.dll</HintPath>
-	  </Reference>
+    <Reference Include="com.rlabrecque.steamworks.net">
+      <HintPath>$(ManagedFolder)\com.rlabrecque.steamworks.net.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.ParticleSystemModule">
       <HintPath>$(ManagedFolder)\UnityEngine.ParticleSystemModule.dll</HintPath>
     </Reference>
@@ -159,12 +155,5 @@
     <PropertyGroup>
       <PackageVersion>%(PackAssembly.Version)</PackageVersion>
     </PropertyGroup>
-  </Target>
-
-  <Target Name="PostBuildTaskWin" Condition="'$(OS)' == 'Windows_NT'" DependsOnTargets="Build" AfterTargets="Build">
-    <CallTarget Targets="ReadPackageVersionFromOutputAssembly">
-      <Output TaskParameter="TargetOutputs" PropertyName="PackageVersion" />
-    </CallTarget>
-    <Exec Command="powershell.exe -ExecutionPolicy RemoteSigned -File &quot;$(SolutionDir)publish.ps1&quot; -Version &quot;$(PackageVersion.Remove($(PackageVersion.LastIndexOf('.')), 2))&quot; -Target &quot;$(ConfigurationName)&quot; -TargetPath &quot;$(TargetDir.TrimEnd('\'))&quot; -TargetAssembly &quot;$(TargetFileName)&quot; -RoundsPath &quot;$(RoundsFolder.TrimEnd('\'))&quot; -ProjectPath &quot;$(SolutionDir.TrimEnd('\'))&quot;" />
   </Target>
 </Project>

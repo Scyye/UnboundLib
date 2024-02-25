@@ -7,8 +7,11 @@ using TMPro;
 using System.Linq;
 using UnboundLib.Utils;
 using UnboundLib.Extensions;
+using UnboundLib;
+using Unbound.Extensions;
+using Unbound.Cards.Utils;
 
-namespace UnboundLib.Cards
+namespace Unbound.Cards
 {
     public abstract class CustomCard : MonoBehaviour
     {
@@ -21,8 +24,7 @@ namespace UnboundLib.Cards
         public Block block;
         private bool isPrefab;
 
-        private void Awake()
-        {
+        private void Awake() {
             cardInfo = gameObject.GetOrAddComponent<CardInfo>();
             gun = gameObject.GetOrAddComponent<Gun>();
             cardStats = gameObject.GetOrAddComponent<ApplyCardStats>();
@@ -59,8 +61,7 @@ namespace UnboundLib.Cards
             Callback();
         }
 
-        public virtual TableRefHelper GetTranslationData()
-        {
+        public virtual TableRefHelper GetTranslationData() {
             return null;
         }
 
@@ -72,7 +73,7 @@ namespace UnboundLib.Cards
         protected abstract CardThemeColor.CardThemeColorType GetTheme();
         protected virtual GameObject GetCardBase()
         {
-            return Unbound.templateCard.cardBase;
+            return UnboundCards.templateCard.cardBase;
         }
 
         public virtual void SetupCard(CardInfo cardInfo, Gun gun, ApplyCardStats cardStats, CharacterStatModifiers statModifiers) { }
@@ -129,10 +130,10 @@ namespace UnboundLib.Cards
 
         public static void BuildCard<T>(Action<CardInfo> callback) where T : CustomCard
         {
-            Unbound.Instance.ExecuteAfterFrames(2, () =>
+            UnboundLib.Unbound.Instance.ExecuteAfterFrames(2, () =>
             {
                 // Instantiate card and mark to avoid destruction on scene change
-                var newCard = Instantiate(Unbound.templateCard.gameObject, Vector3.up * 100, Quaternion.identity);
+                var newCard = Instantiate(UnboundCards.templateCard.gameObject, Vector3.up * 100, Quaternion.identity);
                 DestroyImmediate(newCard.transform.GetChild(0).gameObject);
                 newCard.transform.SetParent(null, true);
                 var newCardInfo = newCard.GetComponent<CardInfo>();
@@ -170,7 +171,7 @@ namespace UnboundLib.Cards
                     CardManager.activeCards.CollectionChanged += CardManager.CardsChanged;
                     // Register card with the toggle menu
                     CardManager.cards.Add(newCard.gameObject.name,
-                        new Card(customCard.GetModName().Sanitize(), Unbound.BindConfig("Cards: " + customCard.GetModName().Sanitize(), newCard.gameObject.name, true), newCardInfo));
+                        new Card(customCard.GetModName().Sanitize(), UnboundLib.Unbound.BindConfig("Cards: " + customCard.GetModName().Sanitize(), newCard.gameObject.name, true), newCardInfo));
                 }
 
                 // Post-creation clean up
@@ -201,12 +202,12 @@ namespace UnboundLib.Cards
 
             if (customCard.GetEnabled())
             {
-                CardManager.cards.Add(cardInfo.gameObject.name, new Card(customCard.GetModName().Sanitize(), Unbound.BindConfig("Cards: " + customCard.GetModName().Sanitize(), cardInfo.gameObject.name, true), cardInfo));
+                CardManager.cards.Add(cardInfo.gameObject.name, new Card(customCard.GetModName().Sanitize(), UnboundLib.Unbound.BindConfig("Cards: " + customCard.GetModName().Sanitize(), cardInfo.gameObject.name, true), cardInfo));
             }
 
             customCard.Awake();
 
-            Unbound.Instance.ExecuteAfterFrames(5, () =>
+            UnboundLib.Unbound.Instance.ExecuteAfterFrames(5, () =>
             {
                 callback?.Invoke(cardInfo);
             });
@@ -232,12 +233,12 @@ namespace UnboundLib.Cards
 
             if (customCard.GetEnabled())
             {
-                CardManager.cards.Add(cardInfo.gameObject.name, new Card(customCard.GetModName().Sanitize(), Unbound.BindConfig("Cards: " + customCard.GetModName().Sanitize(), cardInfo.gameObject.name, true), cardInfo));
+                CardManager.cards.Add(cardInfo.gameObject.name, new Card(customCard.GetModName().Sanitize(), UnboundLib.Unbound.BindConfig("Cards: " + customCard.GetModName().Sanitize(), cardInfo.gameObject.name, true), cardInfo));
             }
 
             this.Awake();
 
-            Unbound.Instance.ExecuteAfterFrames(5, () =>
+            UnboundLib.Unbound.Instance.ExecuteAfterFrames(5, () =>
             {
                 callback?.Invoke(cardInfo);
             });
@@ -254,10 +255,10 @@ namespace UnboundLib.Cards
 
             if (customCard.GetEnabled())
             {
-                CardManager.cards.Add(cardInfo.gameObject.name, new Card(customCard.GetModName().Sanitize(), Unbound.BindConfig("Cards: " + customCard.GetModName().Sanitize(), cardInfo.gameObject.name, true), cardInfo));
+                CardManager.cards.Add(cardInfo.gameObject.name, new Card(customCard.GetModName().Sanitize(), UnboundLib.Unbound.BindConfig("Cards: " + customCard.GetModName().Sanitize(), cardInfo.gameObject.name, true), cardInfo));
             }
 
-            Unbound.Instance.ExecuteAfterFrames(5, () =>
+            UnboundLib.Unbound.Instance.ExecuteAfterFrames(5, () =>
             {
                 callback?.Invoke(cardInfo);
             });
@@ -273,10 +274,10 @@ namespace UnboundLib.Cards
 
             if (enabled)
             {
-                CardManager.cards.Add(cardInfo.gameObject.name, new Card(modInitials.Sanitize(), Unbound.BindConfig("Cards: " + cardname.Sanitize(), cardInfo.gameObject.name, true), cardInfo));
+                CardManager.cards.Add(cardInfo.gameObject.name, new Card(modInitials.Sanitize(), UnboundLib.Unbound.BindConfig("Cards: " + cardname.Sanitize(), cardInfo.gameObject.name, true), cardInfo));
             }
 
-            Unbound.Instance.ExecuteAfterFrames(5, () =>
+            UnboundLib.Unbound.Instance.ExecuteAfterFrames(5, () =>
             {
                 callback?.Invoke(cardInfo);
             });
@@ -292,10 +293,10 @@ namespace UnboundLib.Cards
 
             if (this.GetEnabled())
             {
-                CardManager.cards.Add(cardInfo.gameObject.name, new Card(this.GetModName().Sanitize(), Unbound.BindConfig("Cards: " + this.GetModName().Sanitize(), cardInfo.gameObject.name, true), cardInfo));
+                CardManager.cards.Add(cardInfo.gameObject.name, new Card(this.GetModName().Sanitize(), UnboundLib.Unbound.BindConfig("Cards: " + this.GetModName().Sanitize(), cardInfo.gameObject.name, true), cardInfo));
             }
 
-            Unbound.Instance.ExecuteAfterFrames(5, () =>
+            UnboundLib.Unbound.Instance.ExecuteAfterFrames(5, () =>
             {
                 callback?.Invoke(cardInfo);
             });

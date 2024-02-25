@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using Jotunn.Utils;
 using TMPro;
 using UnityEngine;
@@ -21,6 +22,8 @@ namespace UnboundLib.Utils.UI
         public static MenuHandler Instance = new MenuHandler();
 
         public static AssetBundle modOptionsUI;
+
+        public static Dictionary<string, GameObject> modMenus = new Dictionary<string, GameObject>();
 
         private MenuHandler()
         {
@@ -101,6 +104,9 @@ namespace UnboundLib.Utils.UI
             button.GetComponent<Button>().onClick.AddListener(buttonAction);
 
             menuButton = button;
+
+            if (!modMenus.ContainsKey(Name))
+                modMenus.Add(Name, obj);
 
             return obj;
         }

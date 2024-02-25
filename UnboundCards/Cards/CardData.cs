@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace UnboundLib.Cards
+namespace Unbound.Cards
 {
     public static class CardData
     {

@@ -15,36 +15,31 @@ using Object = UnityEngine.Object;
 namespace UnboundLib.Patches
 {
     [HarmonyPatch(typeof(MainMenuHandler))]
-    internal class MainMenuHandlerPatch
+    public class MainMenuHandlerPatch
     {
+        public static bool firstTime = true;
         private static TextMeshProUGUI text;
 
 
         [HarmonyPatch("Awake")]
+        [HarmonyPriority(Priority.Last)]
         [HarmonyPrefix]
         internal static void MainMenuHandlerAwake()
         {
-            // Add UNBOUND text to the main menu screen
-            bool firstTime = true;
-
-
             // reapply cards and levels
             Unbound.Instance.ExecuteAfterFrames(5, () =>
             {
                 MapManager.instance.levels = LevelManager.activeLevels.ToArray();
-                CardManager.RestoreCardToggles();
-                ToggleCardsMenuHandler.RestoreCardToggleVisuals();
-
             });
 
             // create unbound text
             Unbound.Instance.StartCoroutine(AddTextWhenReady(firstTime ? 2f : 0.1f));
 
-            ModOptions.instance.CreateModOptions(firstTime);
+            Debug.Log("1");
+            ModOptions.instance.CreateModOptions(firstTime?firstTime:!firstTime);
             Credits.Instance.CreateCreditsMenu(firstTime);
             MainMenuLinks.AddLinks(firstTime);
 
-            var time = firstTime;
             Unbound.Instance.ExecuteAfterSeconds(firstTime ? 0.4f : 0, () =>
             {
                 var resumeButton = UIHandler.instance.transform.Find("Canvas/EscapeMenu/Main/Group/Resume").gameObject;
@@ -67,11 +62,6 @@ namespace UnboundLib.Patches
                     optionsMenu.transform.Find("Group").gameObject.SetActive(true);
                     UIHandler.instance.transform.Find("Canvas/EscapeMenu/Main/Group").gameObject.SetActive(false);
                 }));
-
-                if (time)
-                {
-                    CardManager.FirstTimeStart();
-                }
             });
 
             firstTime = false;

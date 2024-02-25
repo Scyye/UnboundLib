@@ -5,12 +5,12 @@ using System.Collections.Specialized;
 using System.Linq;
 using BepInEx.Configuration;
 using Photon.Pun;
-using UnboundLib.Cards;
+using Unbound.Cards;
+using UnboundLib;
 using UnboundLib.Networking;
-using UnboundLib.Utils.UI;
 using UnityEngine;
 
-namespace UnboundLib.Utils
+namespace Unbound.Cards.Utils
 {
     public class CardManager : MonoBehaviour
     {
@@ -72,7 +72,7 @@ namespace UnboundLib.Utils
             // Populate the categoryBools dictionary
             foreach (var category in categories)
             {
-                categoryBools.Add(category, Unbound.BindConfig("Card categories", category, true));
+                categoryBools.Add(category, UnboundLib.Unbound.BindConfig("Card categories", category, true));
             }
 
             foreach (Action<CardInfo[]> callback in FirstStartCallbacks)
@@ -227,7 +227,7 @@ namespace UnboundLib.Utils
         {
             CardChoice.instance.cards = activeCards.ToArray();
 
-            Unbound.Instance.ExecuteAfterFrames(45, () =>
+            UnboundLib.Unbound.Instance.ExecuteAfterFrames(45, () =>
             {
                 // send available cardInfo pool to the master client
                 if (!PhotonNetwork.IsMasterClient)
@@ -258,16 +258,18 @@ namespace UnboundLib.Utils
 
             if (disabledCards.Count != 0)
             {
-                Unbound.BuildModal()
+                /*
+                UnboundLib.Unbound.BuildModal()
                     .Title("These cards have been disabled because someone didn't have them")
                     .Message(string.Join(", ", disabledCards.ToArray()))
                     .CancelButton("Copy", () =>
                     {
-                        Unbound.BuildInfoPopup("Copied Message!");
+                        UnboundLib.Unbound.BuildInfoPopup("Copied Message!");
                         GUIUtility.systemCopyBuffer = string.Join(", ", disabledCards.ToArray());
                     })
                     .CancelButton("Cancel", () => { })
                     .Show();
+                */
             }
 
             // reply to all users with new list of valid cardInfos
