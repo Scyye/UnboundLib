@@ -35,9 +35,9 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <RoundsFolder>K:\SteamLibrary\steamapps\common\ROUNDS</RoundsFolder>
-    <ManagedFolder>$(RoundsFolder)\ROUNDS_Data\Managed</ManagedFolder>
-    <BepInFolder>C:\Users\salma\AppData\Roaming\Thunderstore Mod Manager\DataFolder\ROUNDS\profiles\gu\BepInEx</BepInFolder>
+	  <RoundsFolder>F:\SteamLibrary\steamapps\common\ROUNDS</RoundsFolder>
+	  <ManagedFolder>$(RoundsFolder)\ROUNDS_Data\Managed</ManagedFolder>
+	  <BepInFolder>F:\SteamLibrary\steamapps\common\ROUNDS\BepInEx</BepInFolder>
     <IndirectBuildTask>true</IndirectBuildTask>
     <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
     <LangVersion>7.1</LangVersion>

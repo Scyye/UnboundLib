@@ -6,7 +6,7 @@ using System.Reflection.Emit;
 using UnboundLib;
 using UnboundLib.Extensions;
 
-namespace Unbound.Cards.Patches
+namespace UnboundLib.Cards.Patches
 {
     [HarmonyPatch(typeof(CardChoiceVisuals), "Show")]
     class CardChoiceVisuals_Patch_Show

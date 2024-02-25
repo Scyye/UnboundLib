@@ -3,7 +3,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <OutputType>Library</OutputType>
-    <RootNamespace>Unbound.Cards</RootNamespace>
+    <RootNamespace>UnboundLib.Cards</RootNamespace>
     <AssemblyName>UnboundCards</AssemblyName>
     <Authors>RoundsModding</Authors>
     <TargetFramework>net461</TargetFramework>
@@ -34,9 +34,9 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <RoundsFolder>K:\SteamLibrary\steamapps\common\ROUNDS</RoundsFolder>
+    <RoundsFolder>F:\SteamLibrary\steamapps\common\ROUNDS</RoundsFolder>
     <ManagedFolder>$(RoundsFolder)\ROUNDS_Data\Managed</ManagedFolder>
-    <BepInFolder>C:\Users\salma\AppData\Roaming\Thunderstore Mod Manager\DataFolder\ROUNDS\profiles\gu\BepInEx</BepInFolder>
+    <BepInFolder>F:\SteamLibrary\steamapps\common\ROUNDS\BepInEx</BepInFolder>
     <IndirectBuildTask>true</IndirectBuildTask>
     <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
     <LangVersion>7.1</LangVersion>
@@ -156,4 +156,12 @@
       <PackageVersion>%(PackAssembly.Version)</PackageVersion>
     </PropertyGroup>
   </Target>
+
+  <Target Name="PostBuildTaskWin" Condition="'$(OS)' == 'Windows_NT'" DependsOnTargets="Build" AfterTargets="Build">
+    <CallTarget Targets="ReadPackageVersionFromOutputAssembly">
+      <Output TaskParameter="TargetOutputs" PropertyName="PackageVersion" />
+    </CallTarget>
+    <Exec Command="powershell.exe -ExecutionPolicy RemoteSigned -File &quot;$(SolutionDir)publish.ps1&quot; -Version &quot;$(PackageVersion.Remove($(PackageVersion.LastIndexOf('.')), 2))&quot; -Target &quot;$(ConfigurationName)&quot; -TargetPath &quot;$(TargetDir.TrimEnd('\'))&quot; -TargetAssembly &quot;$(TargetFileName)&quot; -RoundsPath &quot;$(RoundsFolder.TrimEnd('\'))&quot; -ProjectPath &quot;UnboundLib&quot;" />
+  </Target>
 </Project>
+ 

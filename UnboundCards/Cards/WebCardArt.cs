@@ -8,7 +8,7 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.Networking;
 
-namespace Unbound.Cards
+namespace UnboundLib.Cards
 {
     public class DeckSmithUtil : MonoBehaviour
     {

@@ -5,12 +5,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Unbound.Cards.Utils;
+using UnboundLib.Cards.Utils;
 using UnboundLib;
 using UnboundLib.Utils;
 using UnityEngine;
 
-namespace Unbound.Cards.Patches
+namespace UnboundLib.Cards.Patches
 {
     [HarmonyPatch(typeof(CardChoice))]
     internal class CardChoicePatch

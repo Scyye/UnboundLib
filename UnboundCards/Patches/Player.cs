@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Unbound.Cards;
+using UnboundLib.Cards;
 
-namespace Unbound.Cards.Patches
+namespace UnboundLib.Cards.Patches
 {
     [HarmonyPatch(typeof(Player), "FullReset")]
     class PlayerFullResetPatch

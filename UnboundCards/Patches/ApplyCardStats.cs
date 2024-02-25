@@ -1,7 +1,7 @@
 using HarmonyLib;
-using Unbound.Cards;
+using UnboundLib.Cards;
 
-namespace Unbound.Cards.Patches
+namespace UnboundLib.Cards.Patches
 {
     [HarmonyPatch(typeof(ApplyCardStats), "ApplyStats")]
     class ApplyCardStats_Patch

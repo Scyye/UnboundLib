@@ -1,13 +1,15 @@
 ﻿using BepInEx;
 using System;
-using Unbound.Cards.Utils;
+using UnboundLib.Cards.Utils;
 using UnboundLib;
 using UnboundLib.Utils.UI;
 using UnityEngine;
 using static UnboundLib.NetworkEventCallbacks;
+using System.Linq;
 
-namespace Unbound.Cards
+namespace UnboundLib.Cards
 {
+    [BepInDependency("com.willis.rounds.unbound")]
     [BepInPlugin("dev.rounds.unbound.cards", "Unbound Lib Cards", "1.0.0")]
     public class UnboundCards : BaseUnityPlugin {
         public static UnboundCards instance;
@@ -15,10 +17,11 @@ namespace Unbound.Cards
         void Awake()
         {
             instance = this;
-            var hamony = new HarmonyLib.Harmony("dev.rounds.unbound.cards");
+            var hamony = new HarmonyLib.Harmony("dev.rounds.unbound.card");
             hamony.PatchAll();
 
             gameObject.AddComponent<CardManager>();
+            gameObject.AddComponent<ToggleCardsMenuHandler>();
 
             // fetch card to use as a template for all custom cards
             templateCard = Resources.Load<GameObject>("0 Cards/0. PlainCard").GetComponent<CardInfo>();
@@ -54,6 +57,7 @@ namespace Unbound.Cards
                 Debug.Log("No card menu canvas");
                 return;
             }
+            if(!ModOptions.subMenus.Any(menu => menu.text == "Toggle Cards"))
             ModOptions.subMenus.Add(new ModOptions.subMenu
             {
                 text = "Toggle Cards",

@@ -5,12 +5,12 @@ using System.Collections.Specialized;
 using System.Linq;
 using BepInEx.Configuration;
 using Photon.Pun;
-using Unbound.Cards;
+using UnboundLib.Cards;
 using UnboundLib;
 using UnboundLib.Networking;
 using UnityEngine;
 
-namespace Unbound.Cards.Utils
+namespace UnboundLib.Cards.Utils
 {
     public class CardManager : MonoBehaviour
     {

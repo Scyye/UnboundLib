@@ -9,9 +9,9 @@ using UnboundLib.Utils;
 using UnboundLib.Extensions;
 using UnboundLib;
 using Unbound.Extensions;
-using Unbound.Cards.Utils;
+using UnboundLib.Cards.Utils;
 
-namespace Unbound.Cards
+namespace UnboundLib.Cards
 {
     public abstract class CustomCard : MonoBehaviour
     {

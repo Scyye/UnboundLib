@@ -10,7 +10,7 @@ using UnityEngine.Events;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
 
-namespace Unbound.Cards.Utils
+namespace UnboundLib.Cards.Utils
 {
     public class ToggleCardsMenuHandler : MonoBehaviour
     {
