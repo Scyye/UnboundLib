@@ -13,16 +13,16 @@ namespace UnboundLib.Utils.UI
     
     public class ModOptions
     {
-        public struct subMenu
+        internal struct subMenu
         {
             public string text;
             public UnityAction onClickAction;
             public int fontSize;
             public bool forceUpper;
-            public Color color;
+            public Color? color;
             public TMP_FontAsset font;
             public Material fontMaterial;
-            public TextAlignmentOptions alignmentOptions;
+            public TextAlignmentOptions? alignmentOptions;
         }
         internal static List<ModMenu> modMenus = new List<ModMenu>();
         internal static Dictionary<string, GUIListener> GUIListeners = new Dictionary<string, GUIListener>();
@@ -35,13 +35,30 @@ namespace UnboundLib.Utils.UI
         internal static bool noDeprecatedMods;
 
         public static ModOptions instance = new ModOptions();
-        public static List<subMenu> subMenus = new List<subMenu>();
+        internal static List<subMenu> subMenus = new List<subMenu>();
 
         private ModOptions()
         {
             // singleton first time setup
 
             instance = this;
+        }
+
+        public static bool RegesterSubMenu(string text, UnityAction onClickAction = null, int fontSize = 60, bool forceUpper = true, Color? color = null, TMP_FontAsset font = null, Material fontMaterial = null, TextAlignmentOptions? alignmentOptions = null)
+        {
+            if (subMenus.Any(menu => menu.text == text))
+                return false;
+            subMenus.Add(new subMenu {
+                text = text, 
+                onClickAction = onClickAction, 
+                fontSize = fontSize, 
+                forceUpper = forceUpper, 
+                color = color, 
+                font = font, 
+                fontMaterial = fontMaterial, 
+                alignmentOptions = alignmentOptions
+            });
+            return true;
         }
 
         public static void RegisterGUI(string modName, Action guiAction)
@@ -66,7 +83,7 @@ namespace UnboundLib.Utils.UI
             Unbound.Instance.ExecuteAfterSeconds(firstTime ? 0.1f : 0, () =>
             {
                 CreateModOptionsMenu(MainMenuHandler.instance.transform.Find("Canvas/ListSelector/Main").gameObject, null, false);
-                CreateModOptionsMenu(UIHandler.instance.transform.Find("Canvas/EscapeMenu/Main").gameObject, UIHandler.instance.transform.Find("Canvas/EscapeMenu").gameObject, true);
+                //CreateModOptionsMenu(UIHandler.instance.transform.Find("Canvas/EscapeMenu/Main").gameObject, UIHandler.instance.transform.Find("Canvas/EscapeMenu").gameObject, true);
             });
         }
 
@@ -120,7 +137,7 @@ namespace UnboundLib.Utils.UI
             Debug.Log("Creating submenus");
             foreach (var subMenu in subMenus)
             {
-                Debug.Log("Creating submenu: " + subMenu.text);
+                Debug.Log("Creating submenu: " + subMenu.text); 
                 MenuHandler.CreateButton(subMenu.text, modOptionsMenu, subMenu.onClickAction,
                     subMenu.fontSize, subMenu.forceUpper, subMenu.color, subMenu.font, subMenu.fontMaterial, subMenu.alignmentOptions);
             }

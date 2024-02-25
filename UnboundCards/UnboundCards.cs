@@ -57,15 +57,11 @@ namespace UnboundLib.Cards
                 Debug.Log("No card menu canvas");
                 return;
             }
-            if(!ModOptions.subMenus.Any(menu => menu.text == "Toggle Cards"))
-            ModOptions.subMenus.Add(new ModOptions.subMenu
-            {
-                text = "Toggle Cards",
-                onClickAction = () => {
+            ModOptions.RegesterSubMenu("Toggle Cards",
+                () => {
                     Debug.Log("Toggle Cards");
                     ToggleCardsMenuHandler.SetActive(ToggleCardsMenuHandler.cardMenuCanvas.transform, true);
-                }
-            });
+                });
         }
 
         public static void AddAllCardsCallback(Action<CardInfo[]> callback)
