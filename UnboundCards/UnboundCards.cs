@@ -55,7 +55,7 @@ namespace Unbound.Cards
                 Debug.Log("No card menu canvas");
                 return;
             }
-            ModOptions.RegesterSubMenu("Toggle Cards",
+            ModOptions.RegesterPrioritySubMenu("Toggle Cards",
                 () => {
                     Debug.Log("Toggle Cards");
                     ToggleCardsMenuHandler.SetActive(ToggleCardsMenuHandler.cardMenuCanvas.transform, true);
