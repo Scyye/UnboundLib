@@ -124,7 +124,7 @@ namespace Unbound.Core {
             gameObject.AddComponent<PingMonitor>();
 
             // sync modded clients
-            networkEvents.OnJoinedRoomEvent += SyncModClients.RequestSync;
+            gameObject.GetOrAddComponent<NetworkEventCallbacks>().OnJoinedRoomEvent += SyncModClients.RequestSync;
 
             UnboundCore.Instance.ExecuteAfterFrames(20, () =>
             {

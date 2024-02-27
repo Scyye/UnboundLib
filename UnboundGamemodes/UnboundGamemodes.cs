@@ -2,9 +2,12 @@
 using Photon.Pun;
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using Unbound.Core;
 using Unbound.Core.Networking;
 using Unbound.Core.Utils;
+using static Unbound.Core.Networking.NetworkEventCallbacks;
 using static Unbound.Core.UnboundCore;
 
 namespace Unbound.Gamemodes
@@ -39,6 +42,20 @@ namespace Unbound.Gamemodes
                 GameModeManager.SetGameMode((string) data[0], false);
                 GameModeManager.CurrentHandler.SetSettings((GameSettings) data[1]);
             });
+        }
+
+        void Start()
+        {
+            gameObject.GetOrAddComponent<NetworkEventCallbacks>().OnPlayerLeftRoomEvent += ReomovePlayer;
+        }
+
+        internal static void ReomovePlayer(PlayerEventArg arg)
+        {
+            Photon.Realtime.Player otherPlayer = arg.Player;
+            List<Player> disconnected = PlayerManager.instance.players.Where(p => p.data.view.ControllerActorNr == otherPlayer.ActorNumber).ToList();
+
+            foreach (Player player in disconnected)
+                GameModeManager.CurrentHandler.PlayerLeft(player);
         }
 
         private static IEnumerator CloseLobby(IGameModeHandler gm)

@@ -8,6 +8,7 @@ using System.Reflection.Emit;
 
 using UnityEngine;
 using Unbound.Core.Extensions;
+using Unbound.Gamemodes;
 
 namespace Unbound.Core.Patches
 {
