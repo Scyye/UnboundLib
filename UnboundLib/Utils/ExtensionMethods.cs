@@ -297,6 +297,10 @@ namespace Unbound.Core
                     string.Format("Couldn't find property {0} in type {1}", methodName, objType.FullName));
             return propInfo.Invoke(obj, arguments);
         }
+        public static T InvokeMethod<T>(this object obj, string methodName, params object[] arguments)
+        {
+            return (T) InvokeMethod(obj, methodName, arguments);
+        }
         public static MethodInfo GetMethodInfo(Type type, string methodName, Type[] parameters)
         {
             MethodInfo methodInfo = null;
@@ -323,6 +327,10 @@ namespace Unbound.Core
                     string.Format("Couldn't find property {0} in type {1}", methodName, objType.FullName));
             return propInfo.Invoke(obj, arguments);
         }
+        public static T InvokeMethod<T>(this object obj, string methodName, Type[] argumentOrder, params object[] arguments)
+        {
+            return (T) InvokeMethod(obj, methodName,argumentOrder,arguments);
+        }
 
         // fields
         public static FieldInfo GetFieldInfo(Type type, string fieldName)
@@ -348,6 +356,12 @@ namespace Unbound.Core
                     string.Format("Couldn't find property {0} in type {1}", fieldName, objType.FullName));
             return propInfo.GetValue(obj);
         }
+
+        public static T GetFieldValue<T>(this object obj, string fieldName)
+        {
+            return (T) GetFieldValue(obj, fieldName);
+        }
+
         public static void SetFieldValue(this object obj, string fieldName, object val)
         {
             if (obj == null)
@@ -383,6 +397,10 @@ namespace Unbound.Core
                 throw new ArgumentOutOfRangeException("propertyName",
                     string.Format("Couldn't find property {0} in type {1}", propertyName, objType.FullName));
             return propInfo.GetValue(obj, null);
+        }
+        public static T GetPropertyValue<T>(this object obj, string propertyName)
+        {
+            return (T) GetPropertyValue(obj, propertyName);
         }
         public static void SetPropertyValue(this object obj, string propertyName, object val)
         {

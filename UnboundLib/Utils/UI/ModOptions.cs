@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -10,7 +10,7 @@ using Color = UnityEngine.Color;
 
 namespace Unbound.Core.Utils.UI
 {
-    
+
     public class ModOptions
     {
         internal struct subMenu
@@ -35,6 +35,7 @@ namespace Unbound.Core.Utils.UI
         internal static bool noDeprecatedMods;
 
         public static ModOptions instance = new ModOptions();
+        internal static List<subMenu> prioritySubMenus = new List<subMenu>();
         internal static List<subMenu> subMenus = new List<subMenu>();
 
         private ModOptions()
@@ -44,18 +45,36 @@ namespace Unbound.Core.Utils.UI
             instance = this;
         }
 
+        public static bool RegesterPrioritySubMenu(string text, UnityAction onClickAction = null, int fontSize = 60, bool forceUpper = true, Color? color = null, TMP_FontAsset font = null, Material fontMaterial = null, TextAlignmentOptions? alignmentOptions = null)
+        {
+            if (prioritySubMenus.Any(menu => menu.text == text))
+                return false;
+            prioritySubMenus.Add(new subMenu
+            {
+                text = text,
+                onClickAction = onClickAction,
+                fontSize = fontSize,
+                forceUpper = forceUpper,
+                color = color,
+                font = font,
+                fontMaterial = fontMaterial,
+                alignmentOptions = alignmentOptions
+            });
+            return true;
+        }
         public static bool RegesterSubMenu(string text, UnityAction onClickAction = null, int fontSize = 60, bool forceUpper = true, Color? color = null, TMP_FontAsset font = null, Material fontMaterial = null, TextAlignmentOptions? alignmentOptions = null)
         {
             if (subMenus.Any(menu => menu.text == text))
                 return false;
-            subMenus.Add(new subMenu {
-                text = text, 
-                onClickAction = onClickAction, 
-                fontSize = fontSize, 
-                forceUpper = forceUpper, 
-                color = color, 
-                font = font, 
-                fontMaterial = fontMaterial, 
+            subMenus.Add(new subMenu
+            {
+                text = text,
+                onClickAction = onClickAction,
+                fontSize = fontSize,
+                forceUpper = forceUpper,
+                color = color,
+                font = font,
+                fontMaterial = fontMaterial,
                 alignmentOptions = alignmentOptions
             });
             return true;
@@ -90,22 +109,23 @@ namespace Unbound.Core.Utils.UI
         private void CreateModOptionsMenu(GameObject parent, GameObject parentForMenu, bool pauseMenu)
         {
             // Create mod options menu
-            modOptionsMenu = MenuHandler.CreateMenu("MODS", () => {showingModOptions = true;
-                    inPauseMenu = pauseMenu;
-                }, parent
+            modOptionsMenu = MenuHandler.CreateMenu("MODS", () => {
+                showingModOptions = true;
+                inPauseMenu = pauseMenu;
+            }, parent
                 , 60, true, false, parentForMenu,
                 true, pauseMenu ? 2 : 4);
-            
+
             // Create back actions 
             if (!pauseMenu)
             {
-                modOptionsMenu.GetComponentInChildren<GoBack>(true).goBackEvent.AddListener(() => {showingModOptions = false;});
+                modOptionsMenu.GetComponentInChildren<GoBack>(true).goBackEvent.AddListener(() => { showingModOptions = false; });
             }
             else
             {
                 GameObject.Destroy(modOptionsMenu.GetComponentInChildren<GoBack>(true));
             }
-            modOptionsMenu.transform.Find("Group/Back").gameObject.GetComponent<Button>().onClick.AddListener(() => {showingModOptions = false;});
+            modOptionsMenu.transform.Find("Group/Back").gameObject.GetComponent<Button>().onClick.AddListener(() => { showingModOptions = false; });
 
             if (!pauseMenu)
             {
@@ -131,13 +151,24 @@ namespace Unbound.Core.Utils.UI
             // Create sub menus
 
             // Create toggle levels button
-            MenuHandler.CreateButton("Toggle Levels", modOptionsMenu,
-                () => { ToggleLevelMenuHandler.instance.SetActive(true); });
-            
+
+            RegesterPrioritySubMenu("Toggle Levels",
+                () => {
+                    ToggleLevelMenuHandler.instance.SetActive(true);
+                });
+            prioritySubMenus.Sort((menu1, menu2) => menu1.text.CompareTo(menu2.text));
+            subMenus.Sort((menu1, menu2) => menu1.text.CompareTo(menu2.text));
             Debug.Log("Creating submenus");
+            foreach (var subMenu in prioritySubMenus)
+            {
+                Debug.Log("Creating submenu: " + subMenu.text);
+                MenuHandler.CreateButton(subMenu.text, modOptionsMenu, subMenu.onClickAction,
+                    subMenu.fontSize, subMenu.forceUpper, subMenu.color, subMenu.font, subMenu.fontMaterial, subMenu.alignmentOptions);
+            }
+            MenuHandler.CreateText("---------------", modOptionsMenu, out _);
             foreach (var subMenu in subMenus)
             {
-                Debug.Log("Creating submenu: " + subMenu.text); 
+                Debug.Log("Creating submenu: " + subMenu.text);
                 MenuHandler.CreateButton(subMenu.text, modOptionsMenu, subMenu.onClickAction,
                     subMenu.fontSize, subMenu.forceUpper, subMenu.color, subMenu.font, subMenu.fontMaterial, subMenu.alignmentOptions);
             }
@@ -172,7 +203,7 @@ namespace Unbound.Core.Utils.UI
                     .AddListener(disableOldMenu);
 
                 try { menu.guiAction.Invoke(mmenu); }
-                catch (Exception e) 
+                catch (Exception e)
                 {
                     UnityEngine.Debug.LogError($"Exception thrown when attempting to build menu '{menu.menuName}', see log below for details.");
                     UnityEngine.Debug.LogException(e);
@@ -189,15 +220,15 @@ namespace Unbound.Core.Utils.UI
             foreach (var modMenu in GUIListeners.Keys)
             {
                 var menu = MenuHandler.CreateMenu(modMenu, () =>
+                {
+                    foreach (var list in GUIListeners.Values.Where(list => list.guiEnabled))
                     {
-                        foreach (var list in GUIListeners.Values.Where(list => list.guiEnabled))
-                        {
-                            list.guiEnabled = false;
-                        }
+                        list.guiEnabled = false;
+                    }
 
-                        GUIListeners[modMenu].guiEnabled = true;
-                        showModUi = true;
-                    }, modOptionsMenu,
+                    GUIListeners[modMenu].guiEnabled = true;
+                    showModUi = true;
+                }, modOptionsMenu,
                     75, true, true, parentForMenu);
 
                 void disableOldMenu()
