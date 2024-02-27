@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Unbound.Core.GameModes
+namespace Unbound.Gamemodes
 {
     /// <summary>
     ///     A GameModeHandler is the interface between a mod and a game mode component. The game mode component, for example GM_ArmsRace,

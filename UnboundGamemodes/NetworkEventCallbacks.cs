@@ -1,9 +1,11 @@
 ﻿using Photon.Pun;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Unbound.Core.GameModes;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Unbound.Core
+namespace Unbound.Gamemodes
 {
     public class NetworkEventCallbacks : MonoBehaviourPunCallbacks
     {
@@ -25,9 +27,7 @@ namespace Unbound.Core
             List<Player> disconnected = PlayerManager.instance.players.Where(p => p.data.view.ControllerActorNr == otherPlayer.ActorNumber).ToList();
 
             foreach (Player player in disconnected)
-            {
                 GameModeManager.CurrentHandler.PlayerLeft(player);
-            }
         }
-    }
+    }   
 }

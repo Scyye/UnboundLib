@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.Serialization.Formatters.Binary;
 
-namespace Unbound.Core.GameModes
+namespace Unbound.Gamemodes
 {
     /// <summary>
     ///     A Photon serializable wrapper for arbitrary game settings.

@@ -12,7 +12,7 @@ using Object = UnityEngine.Object;
 using System.Reflection;
 using System.Diagnostics;
 
-namespace Unbound.Core.GameModes
+namespace Unbound.Gamemodes
 {
     public static class GameModeManager
     {

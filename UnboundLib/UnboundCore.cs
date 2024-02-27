@@ -9,7 +9,6 @@ using System.Linq;
 using BepInEx.Configuration;
 using Jotunn.Utils;
 using TMPro;
-using Unbound.Core.GameModes;
 using Unbound.Core.Networking;
 using Unbound.Core.Utils;
 using Unbound.Core.Utils.UI;
@@ -44,7 +43,7 @@ namespace Unbound.Core {
             }
         }
 
-        private struct NetworkEventType
+        public struct NetworkEventType
         {
             public const string
                 StartHandshake = "ModLoader_HandshakeStart",
@@ -70,24 +69,6 @@ namespace Unbound.Core {
         internal static AssetBundle linkAssets;
         private static GameObject modalPrefab;
 
-
-        public UnboundCore()
-        {
-            GameModeManager.AddHook(GameModeHooks.HookGameStart, handler => SyncModClients.DisableSyncModUi(SyncModClients.uiParent));
-
-            // hook for closing ongoing lobbies
-            GameModeManager.AddHook(GameModeHooks.HookGameStart, CloseLobby);
-        }
-
-        private static IEnumerator CloseLobby(IGameModeHandler gm)
-        {
-            if (!PhotonNetwork.IsMasterClient || PhotonNetwork.OfflineMode) yield break;
-            PhotonNetwork.CurrentRoom.IsVisible = false;
-            PhotonNetwork.CurrentRoom.IsOpen = false;
-            yield break;
-        }
-
-        
 
         private void Awake()
         {
@@ -121,14 +102,6 @@ namespace Unbound.Core {
             //Debug.Log("UnboundLib: Loading assets");
 
             LoadAssets();
-
-            Debug.Log("UnboundLib: Initializing game mode manager");
-            GameModeManager.Init();
-
-            Debug.Log("UnboundLib: Initializing Card shit");
-
-            
-            
         }
 
         private void Start()
@@ -136,16 +109,8 @@ namespace Unbound.Core {
             // request mod handshake
             NetworkingManager.RegisterEvent(NetworkEventType.StartHandshake, data =>
             {
-                if (PhotonNetwork.IsMasterClient)
-                {
-                    NetworkingManager.RaiseEvent(NetworkEventType.FinishHandshake,
-                        GameModeManager.CurrentHandlerID,
-                        GameModeManager.CurrentHandler?.Settings);
-                }
-                else
-                {
+                if (!PhotonNetwork.IsMasterClient)
                     NetworkingManager.RaiseEvent(NetworkEventType.FinishHandshake);
-                }
             });
 
             // receive mod handshake
@@ -153,18 +118,7 @@ namespace Unbound.Core {
             {
                 // attempt to syncronize levels and cards with other players
                 MapManager.instance.levels = LevelManager.activeLevels.ToArray();
-
-                if (data.Length <= 0) return;
-                GameModeManager.SetGameMode((string) data[0], false);
-                GameModeManager.CurrentHandler.SetSettings((GameSettings) data[1]);
             });
-
-            // hook up Photon callbacks
-            var networkEvents = gameObject.AddComponent<NetworkEventCallbacks>();
-            networkEvents.OnJoinedRoomEvent += OnJoinedRoomAction;
-            networkEvents.OnJoinedRoomEvent += LevelManager.OnJoinedRoomAction;
-            networkEvents.OnLeftRoomEvent += OnLeftRoomAction;
-            networkEvents.OnLeftRoomEvent += LevelManager.OnLeftRoomAction;
 
             // Adds the ping monitor
             gameObject.AddComponent<PingMonitor>();
@@ -178,7 +132,7 @@ namespace Unbound.Core {
             });
         }
 
-        IEnumerator BanPlayer()
+            IEnumerator BanPlayer()
         {
             while (!SteamManager.Initialized)
             {

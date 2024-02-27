@@ -5,8 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
 using Unbound.Core.Extensions;
-using Unbound.Core.GameModes;
-using Unbound.Core.Utils;
 
 namespace Unbound.Core.Patches
 {
@@ -42,26 +40,7 @@ namespace Unbound.Core.Patches
         }
     }
 
-    [HarmonyPatch(typeof(Player), "Awake")]
-    class Player_Patch_Awake
-    {
-        static void Postfix(Player __instance)
-        {
-            if (__instance.data.view.IsMine)
-            {
-                GameModeManager.AddOnceHook(GameModeHooks.HookGameStart, gm => OnGameStart(gm, __instance));
-            }
-        }
-
-        static IEnumerator OnGameStart(IGameModeHandler gm, Player player)
-        {
-            if (gm.Name != "Sandbox")
-            {
-                player.GetFaceOffline();
-            }
-            yield break;
-        }
-    }
+    
     [HarmonyPatch(typeof(Player), "SetColors")]
     class Player_Patch_SetColors
     {

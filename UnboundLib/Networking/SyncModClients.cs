@@ -5,7 +5,6 @@ using System.Linq;
 using BepInEx;
 using Photon.Pun;
 using TMPro;
-using Unbound.Core.GameModes;
 using Unbound.Core.Utils.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -14,7 +13,7 @@ using Object = UnityEngine.Object;
 
 namespace Unbound.Core.Networking
 {
-    internal static class SyncModClients
+    public static class SyncModClients
     {
         internal static readonly float timeoutTime = 5f;
 

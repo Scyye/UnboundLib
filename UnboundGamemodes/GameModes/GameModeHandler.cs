@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
 
-namespace Unbound.Core.GameModes
+namespace Unbound.Gamemodes
 {
     /// <inheritdoc/>
     public abstract class GameModeHandler<T> : IGameModeHandler<T> where T : MonoBehaviour

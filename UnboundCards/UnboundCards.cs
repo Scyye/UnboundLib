@@ -2,6 +2,7 @@
 using System;
 using Unbound.Cards.Utils;
 using Unbound.Core;
+using Unbound.Core.Utils;
 using Unbound.Core.Utils.UI;
 using UnityEngine;
 
@@ -36,7 +37,7 @@ namespace Unbound.Cards
                 CardManager.cards.Add(card.name,
                     new Card("Vanilla", Unbound.Core.UnboundCore.config.Bind("Cards: Vanilla", card.name, true), card));
 
-                var networkEvents = gameObject.AddComponent<NetworkEventCallbacks>();
+                var networkEvents = gameObject.GetOrAddComponent<NetworkEventCallbacks>();
                 networkEvents.OnJoinedRoomEvent += CardManager.OnJoinedRoomAction;
                 networkEvents.OnLeftRoomEvent += CardManager.OnLeftRoomAction;
             }
