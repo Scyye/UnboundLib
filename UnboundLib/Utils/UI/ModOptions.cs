@@ -165,7 +165,7 @@ namespace Unbound.Core.Utils.UI
                 MenuHandler.CreateButton(subMenu.text, modOptionsMenu, subMenu.onClickAction,
                     subMenu.fontSize, subMenu.forceUpper, subMenu.color, subMenu.font, subMenu.fontMaterial, subMenu.alignmentOptions);
             }
-            MenuHandler.CreateText("---------------", modOptionsMenu, out _);
+            if(prioritySubMenus.Any() && subMenus.Any())MenuHandler.CreateText("---------------", modOptionsMenu, out _);
             foreach (var subMenu in subMenus)
             {
                 Debug.Log("Creating submenu: " + subMenu.text);
