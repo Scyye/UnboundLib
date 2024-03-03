@@ -5,7 +5,7 @@
     <ProjectGuid>{2F32C3B2-635E-40DE-869E-6BC48A85989E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>Unbound.Core</RootNamespace>
-    <AssemblyName>Unbound</AssemblyName>
+    <AssemblyName>UnboundLib</AssemblyName>
     <Authors>RoundsModding</Authors>
     <TargetFramework>net461</TargetFramework>
     <FileAlignment>512</FileAlignment>
