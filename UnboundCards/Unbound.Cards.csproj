@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -34,7 +34,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <RoundsFolder>F:\SteamLibrary\steamapps\common\ROUNDS</RoundsFolder>
+    <RoundsFolder>K:\SteamLibrary\steamapps\common\ROUNDS</RoundsFolder>
     <ManagedFolder>$(RoundsFolder)\ROUNDS_Data\Managed</ManagedFolder>
     <BepInFolder>F:\SteamLibrary\steamapps\common\ROUNDS\BepInEx</BepInFolder>
     <IndirectBuildTask>true</IndirectBuildTask>
@@ -52,15 +52,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\UnboundLib\UnboundLib.csproj" />
+    <ProjectReference Include="..\UnboundLib\Unbound.Core.csproj"/>
   </ItemGroup>
 
   <ItemGroup>
     <Reference Include="0Harmony">
-      <HintPath>$(BepInFolder)\core\0Harmony.dll</HintPath>
+      <HintPath>..\Assemblies\0Harmony.dll</HintPath>
     </Reference>
     <Reference Include="BepInEx">
-      <HintPath>$(BepInFolder)\core\BepInEx.dll</HintPath>
+      <HintPath>..\Assemblies\BepInEx.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>$(ManagedFolder)\Assembly-CSharp.dll</HintPath>

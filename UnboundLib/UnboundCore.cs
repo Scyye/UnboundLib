@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using BepInEx.Configuration;
-using Jotunn.Utils;
 using TMPro;
 using Unbound.Core.Networking;
 using Unbound.Core.Utils;
@@ -16,6 +15,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 using Steamworks;
+using Jotunn.Utils;
 
 namespace Unbound.Core {
     [BepInPlugin(ModId, ModName, Version)]
@@ -95,6 +95,8 @@ namespace Unbound.Core {
             gameObject.AddComponent<LevelManager>();
 
             Debug.Log("UnboundLib: Adding menu handlers");
+
+            RegisterClientSideMod("com.sinai.unityexplorer");
 
             // Add menu handlers
             gameObject.AddComponent<ToggleLevelMenuHandler>();
