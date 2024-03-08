@@ -28,6 +28,8 @@ namespace Unbound.Core {
         public static UnboundCore Instance { get; private set; }
         public static readonly ConfigFile config = new ConfigFile(Path.Combine(Paths.ConfigPath, "UnboundLib.cfg"), true);
 
+        internal static Dictionary<BaseUnityPlugin, (string, string)> TargetVertions = new Dictionary<BaseUnityPlugin, (string, string)>();
+
         private Canvas _canvas;
         public Canvas canvas
         {
@@ -131,10 +133,11 @@ namespace Unbound.Core {
             UnboundCore.Instance.ExecuteAfterFrames(20, () =>
             {
                 StartCoroutine("BanPlayer");
+                StartCoroutine(nameof(ValidateVertions));
             });
         }
 
-            IEnumerator BanPlayer()
+        IEnumerator BanPlayer()
         {
             while (!SteamManager.Initialized)
             {
@@ -294,6 +297,30 @@ namespace Unbound.Core {
         public static void RegisterClientSideMod(string GUID)
         {
             SyncModClients.RegisterClientSideMod(GUID);
+        }
+        public static void SetTargetRoundsVertion(BaseUnityPlugin plugin, string vertion, string patchCode = "")
+        {
+            TargetVertions.Add(plugin, (vertion, patchCode));
+        }
+
+        internal IEnumerator ValidateVertions()
+        {
+            string currentVertion = Application.version;
+            TextAsset gitversion = Resources.Load<TextAsset>("gitversion");
+            string currentPatchCode = gitversion != null ? gitversion.text : string.Empty;
+            foreach (BaseUnityPlugin plugin in TargetVertions.Keys)
+            {
+                string modVertion = TargetVertions[plugin].Item1;
+                string modPatchCode = TargetVertions[plugin].Item2;
+                if(modVertion != currentVertion || (modPatchCode != "" && modPatchCode != currentPatchCode))
+                {
+                    BuildModal($"{plugin.Info.Metadata.Name} targets a difrent vertion of rounds.",
+                        $"{plugin.Info.Metadata.GUID} was build for rounds vertion {modVertion}.{modPatchCode} " +
+                        $"but you are running {currentVertion}.{(modPatchCode!=""?currentPatchCode:string.Empty)}" +
+                        "\nThings may not work properly, please contact the mod author for an update.");
+                } 
+            }
+            yield break;
         }
 
         public static void RegisterHandshake(string modId, Action callback)
