@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace Unbound.Cards
 {
-    [BepInDependency("com.willis.rounds.unbound")]
+    [BepInDependency("dev.rounds.unbound.core")]
     [BepInPlugin("dev.rounds.unbound.cards", "Unbound Lib Cards", "1.0.0")]
     public class UnboundCards : BaseUnityPlugin {
         public static UnboundCards instance;

@@ -21,7 +21,7 @@ namespace Unbound.Core {
     [BepInPlugin(ModId, ModName, Version)]
     [BepInProcess("Rounds.exe")]
     public class UnboundCore : BaseUnityPlugin {
-        private const string ModId = "com.willis.rounds.unbound";
+        private const string ModId = "dev.rounds.unbound.core";
         private const string ModName = "Rounds Unbound";
         public const string Version = "3.2.13";
 
@@ -320,6 +320,15 @@ namespace Unbound.Core {
                         "\nThings may not work properly, please contact the mod author for an update.");
                 } 
             }
+            var unregesteredPlugings = BepInEx.Bootstrap.Chainloader.PluginInfos.Keys.Where(key =>
+            !TargetVertions.Keys.Any(mod=>mod.Info.Metadata.GUID == key) && 
+            !key.Contains("dev.rounds.unbound") && key != "com.sinai.unityexplorer");
+            if(unregesteredPlugings.Any())
+            {
+                BuildModal("Warning", "The following mods have not declared a target vertion, and might not work on the current vertion of ROUNDS:\n" +
+                    unregesteredPlugings.Join());
+            }
+                
             yield break;
         }
 

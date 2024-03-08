@@ -13,7 +13,7 @@ using static Unbound.Core.UnboundCore;
 namespace Unbound.Gamemodes
 {
     [BepInPlugin("dev.rounds.unbound.gamemodes", "Unbound Lib Gamemodes", "1.0.0")]
-    [BepInDependency("com.willis.rounds.unbound")]
+    [BepInDependency("dev.rounds.unbound.core")]
     [BepInProcess("Rounds.exe")]
     public class UnboundGamemodes : BaseUnityPlugin {
         void Awake()
