@@ -3,17 +3,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
+using Unbound.Core;
 using Unbound.Core.Extensions;
 
-namespace Unbound.Core.Patches
+namespace Unbound.Patches
 {
     [HarmonyPatch(typeof(Gun), "ApplyProjectileStats")]
     class Gun_Patch_ApplyProjectileStats
     {
         static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
-            var f_playerID = global::Unbound.Core.ExtensionMethods.GetFieldInfo(typeof(Player), "playerID");
-            var m_colorID = global::Unbound.Core.ExtensionMethods.GetMethodInfo(typeof(PlayerExtensions), nameof(PlayerExtensions.colorID));
+            var f_playerID = typeof(Player).GetFieldInfo("playerID");
+            var m_colorID = typeof(PlayerExtensions).GetMethodInfo(nameof(PlayerExtensions.colorID));
 
             List<CodeInstruction> ins = instructions.ToList();
 

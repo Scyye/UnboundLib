@@ -4,9 +4,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
+using Unbound.Core;
 using Unbound.Core.Extensions;
 
-namespace Unbound.Core.Patches
+namespace Unbound.Patches
 {
     [HarmonyPatch(typeof(Player), "Start")]
     class Player_Patch_Start
@@ -19,8 +20,8 @@ namespace Unbound.Core.Patches
 			 * from Player::Start
              */
             var f_gmInstance = AccessTools.Field(typeof(GM_ArmsRace), "instance");
-            var f_startGameAction = ExtensionMethods.GetFieldInfo(typeof(GM_ArmsRace), "StartGameAction");
-            var m_getFace = ExtensionMethods.GetMethodInfo(typeof(Player), "GetFaceOffline");
+            var f_startGameAction = typeof(GM_ArmsRace).GetFieldInfo("StartGameAction");
+            var m_getFace = typeof(Player).GetMethodInfo("GetFaceOffline");
 
             var list = instructions.ToList();
             for (int i = 0; i < list.Count; i++)
@@ -46,8 +47,8 @@ namespace Unbound.Core.Patches
     {
         static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
-            var f_playerID = global::Unbound.Core.ExtensionMethods.GetFieldInfo(typeof(Player), "playerID");
-            var m_colorID = global::Unbound.Core.ExtensionMethods.GetMethodInfo(typeof(PlayerExtensions), nameof(PlayerExtensions.colorID));
+            var f_playerID = typeof(Player).GetFieldInfo("playerID");
+            var m_colorID = typeof(PlayerExtensions).GetMethodInfo(nameof(PlayerExtensions.colorID));
 
             foreach (var ins in instructions)
             {
@@ -68,8 +69,8 @@ namespace Unbound.Core.Patches
     {
         static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
-            var f_playerID = global::Unbound.Core.ExtensionMethods.GetFieldInfo(typeof(Player), "playerID");
-            var m_colorID = global::Unbound.Core.ExtensionMethods.GetMethodInfo(typeof(PlayerExtensions), nameof(PlayerExtensions.colorID));
+            var f_playerID = typeof(Player).GetFieldInfo("playerID");
+            var m_colorID = typeof(PlayerExtensions).GetMethodInfo(nameof(PlayerExtensions.colorID));
 
             foreach (var ins in instructions)
             {

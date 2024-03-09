@@ -4,8 +4,9 @@ using UnityEngine;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Collections.Generic;
+using Unbound.Core;
 
-namespace Unbound.Core.Patches
+namespace Unbound.Patches
 {
     [HarmonyPatch(typeof(SetTeamColor), "TeamColorThis")]
     class SetTeamColor_Patch_TeamColorThis
@@ -16,8 +17,8 @@ namespace Unbound.Core.Patches
         // to ensure that disabled components have their colors set properly
         static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
-            var m_getCompGeneric = ExtensionMethods.GetMethodInfo(typeof(GameObject), nameof(GameObject.GetComponentsInChildren), new System.Type[] { });
-            var m_getAllGeneric = ExtensionMethods.GetMethodInfo(typeof(GameObject), nameof(GameObject.GetComponentsInChildren), new System.Type[] {typeof(bool)});
+            var m_getCompGeneric = typeof(GameObject).GetMethodInfo(nameof(GameObject.GetComponentsInChildren), new System.Type[] { });
+            var m_getAllGeneric = typeof(GameObject).GetMethodInfo(nameof(GameObject.GetComponentsInChildren), new System.Type[] {typeof(bool)});
             var m_getSetTeamColor = m_getCompGeneric.MakeGenericMethod(typeof(SetTeamColor));
             var m_getAllSetTeamColor = m_getAllGeneric.MakeGenericMethod(typeof(SetTeamColor));
 

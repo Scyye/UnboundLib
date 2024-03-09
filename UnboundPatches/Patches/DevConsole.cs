@@ -2,7 +2,7 @@
 using Unbound.Core.Utils;
 using UnityEngine;
 
-namespace Unbound.Core.Patches
+namespace Unbound.Patches
 {
     [HarmonyPatch(typeof(DevConsole))]
     internal class DevConsolePatch

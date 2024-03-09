@@ -1,17 +1,18 @@
 ﻿using HarmonyLib;
 using System.Collections.Generic;
 using System.Reflection.Emit;
+using Unbound.Core;
 using Unbound.Core.Extensions;
 
-namespace Unbound.Core.Patches
+namespace Unbound.Patches
 {
-    [HarmonyPatch(typeof(DeathEffect), "PlayDeath")]
-    class DeathEffect_Patch_PlayDeath
+    [HarmonyPatch(typeof(SetTeamColorFromParentPlayer), "Start")]
+    class SetTeamColorFromParentPlayer_Patch_Start
     {
         static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
-            var f_playerID = ExtensionMethods.GetFieldInfo(typeof(Player), "playerID");
-            var m_colorID = ExtensionMethods.GetMethodInfo(typeof(PlayerExtensions), nameof(PlayerExtensions.colorID));
+            var f_playerID = typeof(Player).GetFieldInfo("playerID");
+            var m_colorID = typeof(PlayerExtensions).GetMethodInfo(nameof(PlayerExtensions.colorID));
 
             foreach (var ins in instructions)
             {

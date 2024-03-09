@@ -295,7 +295,7 @@ namespace Unbound.Core.Utils
         }
 
         // loads a map in via its name prefixed with a forward-slash
-        internal static void SpawnMap(string message)
+        public static void SpawnMap(string message)
         {
             if (!message.StartsWith("/"))
             {

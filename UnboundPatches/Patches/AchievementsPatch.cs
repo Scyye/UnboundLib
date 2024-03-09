@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Unbound.Core.Patches
+namespace Unbound.Patches
 {
     [HarmonyPatch(typeof(PlatformManager))]
     public class NoAchievementsPatch
