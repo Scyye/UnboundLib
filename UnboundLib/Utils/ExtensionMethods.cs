@@ -274,7 +274,7 @@ namespace Unbound.Core
         }
 
         // methods
-        public static MethodInfo GetMethodInfo(Type type, string methodName)
+        public static MethodInfo GetMethodInfo(this Type type, string methodName)
         {
             MethodInfo methodInfo = null;
             do
@@ -301,7 +301,7 @@ namespace Unbound.Core
         {
             return (T) InvokeMethod(obj, methodName, arguments);
         }
-        public static MethodInfo GetMethodInfo(Type type, string methodName, Type[] parameters)
+        public static MethodInfo GetMethodInfo(this Type type, string methodName, Type[] parameters)
         {
             MethodInfo methodInfo = null;
             do
@@ -333,7 +333,7 @@ namespace Unbound.Core
         }
 
         // fields
-        public static FieldInfo GetFieldInfo(Type type, string fieldName)
+        public static FieldInfo GetFieldInfo(this Type type, string fieldName)
         {
             FieldInfo fieldInfo = null;
             do
@@ -375,7 +375,7 @@ namespace Unbound.Core
         }
 
         // properties
-        public static PropertyInfo GetPropertyInfo(Type type, string propertyName)
+        public static PropertyInfo GetPropertyInfo(this Type type, string propertyName)
         {
             PropertyInfo propInfo = null;
             do
