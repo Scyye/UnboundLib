@@ -28,7 +28,18 @@ namespace Unbound.Core {
         public static UnboundCore Instance { get; private set; }
         public static readonly ConfigFile config = new ConfigFile(Path.Combine(Paths.ConfigPath, "UnboundLib.cfg"), true);
 
-        internal static Dictionary<BaseUnityPlugin, (string, string)> TargetVertions = new Dictionary<BaseUnityPlugin, (string, string)>();
+
+        internal class Tuple<t1,t2> //exists till i figure out why rounds hates normal tuples.
+        {
+            internal t1 Item1;
+            internal t2 Item2;
+            internal Tuple(t1 item1, t2 item2)
+            {
+                Item1 = item1;
+                Item2 = item2;
+            }  
+        }
+        internal static Dictionary<BaseUnityPlugin, Tuple<string, string>> TargetVertions = new Dictionary<BaseUnityPlugin, Tuple<string, string>>();
 
         private Canvas _canvas;
         public Canvas canvas
@@ -300,7 +311,7 @@ namespace Unbound.Core {
         }
         public static void SetTargetRoundsVertion(BaseUnityPlugin plugin, string vertion, string patchCode = "")
         {
-            TargetVertions.Add(plugin, (vertion, patchCode));
+            TargetVertions.Add(plugin, new Tuple<string, string>(vertion, patchCode));
         }
 
         internal IEnumerator ValidateVertions()
