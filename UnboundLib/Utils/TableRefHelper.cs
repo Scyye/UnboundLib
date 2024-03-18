@@ -28,6 +28,10 @@ namespace Unbound.Core.Utils
             ja,
             zh
         }
+        public class TranslationData
+        {
+            public string en_US, fr, it, de, es, pt_BR, ru, ja, zh;
+        }
 
         public TableRefHelper(string modID)
         {
@@ -42,11 +46,21 @@ namespace Unbound.Core.Utils
         }
         public TableRefHelper UpdateSrting(string key, Locales lang, string Translated)
         {
+            if (Translated == default) return this;
             if (!overrides.ContainsKey(key))
                 overrides.Add(key, new Dictionary<Locales, string>());
             overrides[key][lang] = Translated;
             return this;
         }
+        public TableRefHelper UpdateSrting(string key, TranslationData translations )
+        {
+            return UpdateSrting(key,Locales.en_US,translations.en_US).UpdateSrting(key, Locales.fr, translations.fr)
+                .UpdateSrting(key, Locales.it, translations.it).UpdateSrting(key, Locales.de, translations.de)
+                .UpdateSrting(key, Locales.es, translations.es).UpdateSrting(key, Locales.pt_BR, translations.pt_BR)
+                .UpdateSrting(key, Locales.ru, translations.ru).UpdateSrting(key, Locales.ja, translations.ja)
+                .UpdateSrting(key, Locales.zh, translations.zh);
+        }
+
 
         public TableRefHelper Build(TableReference table)
         {
@@ -74,6 +88,7 @@ namespace Unbound.Core.Utils
             var locals = LocalizationSettings.AvailableLocales.Locales;
             foreach (var local in locals)
             {
+                LocalizationSettings.StringDatabase.TableProvider
                 var table = LocalizationSettings.StringDatabase.GetTableAsync(Table, local);
                 yield return table;
                 Addressables.ResourceManager.Acquire(table);

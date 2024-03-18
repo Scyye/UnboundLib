@@ -21,7 +21,7 @@ namespace Unbound.Core {
     [BepInPlugin(ModId, ModName, Version)]
     [BepInProcess("Rounds.exe")]
     public class UnboundCore : BaseUnityPlugin {
-        private const string ModId = "dev.rounds.unbound.core";
+        internal const string ModId = "dev.rounds.unbound.core";
         private const string ModName = "Rounds Unbound";
         public const string Version = "3.2.13";
 
