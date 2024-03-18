@@ -88,7 +88,6 @@ namespace Unbound.Core.Utils
             var locals = LocalizationSettings.AvailableLocales.Locales;
             foreach (var local in locals)
             {
-                LocalizationSettings.StringDatabase.TableProvider
                 var table = LocalizationSettings.StringDatabase.GetTableAsync(Table, local);
                 yield return table;
                 Addressables.ResourceManager.Acquire(table);
