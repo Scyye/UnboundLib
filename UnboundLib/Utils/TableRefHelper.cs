@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Localization.Settings;
 using UnityEngine.Localization.Tables;
@@ -44,21 +40,21 @@ namespace Unbound.Core.Utils
                 retrn = (Locales) (-1);
             return retrn;
         }
-        public TableRefHelper UpdateSrting(string key, Locales lang, string Translated)
+        public TableRefHelper UpdateSrting(string key, Locales lang, string Translated, bool isSmart = false)
         {
             if (Translated == default) return this;
             if (!overrides.ContainsKey(key))
-                overrides.Add(key, new Dictionary<Locales, string>());
-            overrides[key][lang] = Translated;
+                overrides.Add(key, new Dictionary<Locales, UnboundCore.Tuple<string, bool>>());
+            overrides[key][lang] = new UnboundCore.Tuple<string, bool>(Translated, isSmart);
             return this;
         }
-        public TableRefHelper UpdateSrting(string key, TranslationData translations )
+        public TableRefHelper UpdateSrting(string key, TranslationData translations, bool isSmart = false)
         {
-            return UpdateSrting(key,Locales.en_US,translations.en_US).UpdateSrting(key, Locales.fr, translations.fr)
-                .UpdateSrting(key, Locales.it, translations.it).UpdateSrting(key, Locales.de, translations.de)
-                .UpdateSrting(key, Locales.es, translations.es).UpdateSrting(key, Locales.pt_BR, translations.pt_BR)
-                .UpdateSrting(key, Locales.ru, translations.ru).UpdateSrting(key, Locales.ja, translations.ja)
-                .UpdateSrting(key, Locales.zh, translations.zh);
+            return UpdateSrting(key,Locales.en_US,translations.en_US, isSmart).UpdateSrting(key, Locales.fr, translations.fr, isSmart)
+                .UpdateSrting(key, Locales.it, translations.it, isSmart).UpdateSrting(key, Locales.de, translations.de, isSmart)
+                .UpdateSrting(key, Locales.es, translations.es, isSmart).UpdateSrting(key, Locales.pt_BR, translations.pt_BR, isSmart)
+                .UpdateSrting(key, Locales.ru, translations.ru, isSmart).UpdateSrting(key, Locales.ja, translations.ja, isSmart)
+                .UpdateSrting(key, Locales.zh, translations.zh, isSmart);
         }
 
 
@@ -82,7 +78,7 @@ namespace Unbound.Core.Utils
 
         private bool built = false;
         private string modID;
-        internal Dictionary<string, Dictionary<Locales, string>> overrides = new Dictionary<string, Dictionary<Locales, string>>();
+        internal Dictionary<string, Dictionary<Locales, UnboundCore.Tuple<string, bool>>> overrides = new Dictionary<string, Dictionary<Locales, UnboundCore.Tuple<string, bool>>>();
         public static IEnumerator InjectTableData(TableReference Table, TableEntryReference reference, string Data, TableRefHelper tableRef = null)
         {
             var locals = LocalizationSettings.AvailableLocales.Locales;
@@ -94,12 +90,17 @@ namespace Unbound.Core.Utils
 
                 var stringTable = table.Result;
                 var entry = stringTable.GetEntryFromReference(reference);
+                if (entry == null) stringTable.AddEntryFromReference(reference, "");
                 string value = Data;
-                if (tableRef != null && tableRef.overrides.TryGetValue(Data, out var translations)) if (!translations.TryGetValue(getEnumFormLocal(local), out value)) value = Data;
-                if (entry == null)
-                    stringTable.AddEntryFromReference(reference, value);
-                else
-                    entry.Value = value;
+                UnboundCore.Tuple<string, bool> translationData;
+                if (tableRef != null && tableRef.overrides.TryGetValue(Data, out var translations)
+                    && translations.TryGetValue(getEnumFormLocal(local), out translationData))
+                {
+                    value = translationData.Item1;
+                    entry.IsSmart = translationData.Item2;
+                }
+
+                entry.Value = value;
             }
             yield return null;
         }
