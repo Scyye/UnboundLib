@@ -5,6 +5,7 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.Localization.Settings;
 using UnityEngine.Localization.Tables;
 using UnityEngine.Localization;
+using UnityEngine;
 
 namespace Unbound.Core.Utils
 {
@@ -89,8 +90,8 @@ namespace Unbound.Core.Utils
                 Addressables.ResourceManager.Acquire(table);
 
                 var stringTable = table.Result;
+                if (stringTable.GetEntryFromReference(reference) == null) stringTable.AddEntryFromReference(reference, "");
                 var entry = stringTable.GetEntryFromReference(reference);
-                if (entry == null) stringTable.AddEntryFromReference(reference, "");
                 string value = Data;
                 UnboundCore.Tuple<string, bool> translationData;
                 if (tableRef != null && tableRef.overrides.TryGetValue(Data, out var translations)
