@@ -71,7 +71,7 @@ namespace Unbound.Cards
         protected abstract CardInfo.Rarity GetRarity();
         protected virtual GameObject GetCardArt()
         {
-            if (GetCardArtUrl() != string.Empty)
+            if (GetCardArtUrl() != string.Empty && GetCardArtUrl() != null)
                 return DeckSmithUtil.GetArtFromUrl(GetCardArtUrl());
 
             return null;
