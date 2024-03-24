@@ -1,62 +1,66 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{3635C40E-6E71-472F-8758-1A0776147A99}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Unbound.Patches</RootNamespace>
-    <AssemblyName>Unbound.Patches</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <AssemblyName>UnboundPatches</AssemblyName>
+    <Authors>RoundsModding</Authors>
+    <TargetFramework>net461</TargetFramework>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <TargetFrameworkProfile />
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugSymbols>false</DebugSymbols>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <DebugType>none</DebugType>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <GenerateNuspecDependsOn>$(GenerateNuspecDependsOn);ReadPackageVersionFromOutputAssembly</GenerateNuspecDependsOn>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageOutputPath>$(SolutionDir)/release</PackageOutputPath>
   </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <DefineConstants>DEBUG</DefineConstants>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DebugType>portable</DebugType>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
   <PropertyGroup>
-    <RoundsFolder>F:\SteamLibrary\steamapps\common\ROUNDS</RoundsFolder>
-    <ManagedFolder>$(RoundsFolder)\ROUNDS_Data\Managed</ManagedFolder>
-    <BepInFolder>F:\SteamLibrary\steamapps\common\ROUNDS\BepInEx</BepInFolder>
+	  <RoundsFolder>F:\SteamLibrary\steamapps\common\ROUNDS</RoundsFolder>
+	  <ManagedFolder>$(RoundsFolder)\ROUNDS_Data\Managed</ManagedFolder>
+    <BepInFolder>..\Assemblies</BepInFolder>
     <IndirectBuildTask>true</IndirectBuildTask>
     <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
     <LangVersion>7.1</LangVersion>
   </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
+    <None Remove="Assets\togglemenuui" />
+    <None Remove="UnboundLib.csproj.user.dist" />
+    <None Remove="PostBuild.msbuild" />
+    <None Remove="unboundlinks" />
+    <None Include="..\README.md" />
+    <None Include="..\.gitignore" />
   </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\UnboundLib\Unbound.Core.csproj" />
   </ItemGroup>
+
   <ItemGroup>
     <Reference Include="0Harmony">
-      <HintPath>..\Assemblies\0Harmony.dll</HintPath>
+      <HintPath>$(BepInFolder)\0Harmony.dll</HintPath>
     </Reference>
     <Reference Include="BepInEx">
-      <HintPath>..\Assemblies\BepInEx.dll</HintPath>
+      <HintPath>$(BepInFolder)\BepInEx.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>$(ManagedFolder)\Assembly-CSharp.dll</HintPath>
@@ -143,47 +147,21 @@
       <HintPath>$(ManagedFolder)\UnityEngine.UnityWebRequestTextureModule.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Patches\AchievementsPatch.cs" />
-    <Compile Include="Patches\DeathEffect.cs" />
-    <Compile Include="Patches\DevConsole.cs" />
-    <Compile Include="Patches\GoBack.cs" />
-    <Compile Include="Patches\Gun.cs" />
-    <Compile Include="Patches\HealthHandler.cs" />
-    <Compile Include="Patches\Holding.cs" />
-    <Compile Include="Patches\MapLoader.cs" />
-    <Compile Include="Patches\Player.cs" />
-    <Compile Include="Patches\PlayerAssigner.cs" />
-    <Compile Include="Patches\PlayerManager.cs" />
-    <Compile Include="Patches\PlayerSkinBank.cs" />
-    <Compile Include="Patches\PlayerSkinHandler.cs" />
-    <Compile Include="Patches\PointVisualizer.cs" />
-    <Compile Include="Patches\RoundCounter.cs" />
-    <Compile Include="Patches\SetSpawnedParticleColor.cs" />
-    <Compile Include="Patches\SetTeamColor.cs" />
-    <Compile Include="Patches\SetTeamColorFromParentPlayer.cs" />
-    <Compile Include="Patches\SetTeamColorFromSpawnedAttack.cs" />
-    <Compile Include="Patches\SetTeamColorSpecific.cs" />
-    <Compile Include="Patches\SpawnStaticRemnant.cs" />
-    <Compile Include="UnboundPatches.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 
+  <Target Name="ReadPackageVersionFromOutputAssembly" DependsOnTargets="Build" Outputs="$(PackageVersion)">
+    <GetAssemblyIdentity AssemblyFiles="$(TargetPath)">
+      <Output TaskParameter="Assemblies" ItemName="PackAssembly" />
+    </GetAssemblyIdentity>
+    <PropertyGroup>
+      <PackageVersion>%(PackAssembly.Version)</PackageVersion>
+    </PropertyGroup>
+  </Target>
 
-	<Target Name="ReadPackageVersionFromOutputAssembly" DependsOnTargets="Build" Outputs="$(PackageVersion)">
-		<GetAssemblyIdentity AssemblyFiles="$(TargetPath)">
-			<Output TaskParameter="Assemblies" ItemName="PackAssembly" />
-		</GetAssemblyIdentity>
-		<PropertyGroup>
-			<PackageVersion>%(PackAssembly.Version)</PackageVersion>
-		</PropertyGroup>
-	</Target>
+  <Target Name="PostBuildTaskWin" Condition="'$(OS)' == 'Windows_NT'" DependsOnTargets="Build" AfterTargets="Build">
+    <CallTarget Targets="ReadPackageVersionFromOutputAssembly">
+      <Output TaskParameter="TargetOutputs" PropertyName="PackageVersion" />
+    </CallTarget>
+    <Exec Command="powershell.exe -ExecutionPolicy RemoteSigned -File &quot;$(SolutionDir)publish.ps1&quot; -Version &quot;$(PackageVersion.Remove($(PackageVersion.LastIndexOf('.')), 2))&quot; -Target &quot;$(ConfigurationName)&quot; -TargetPath &quot;$(TargetDir.TrimEnd('\'))&quot; -TargetAssembly &quot;$(TargetFileName)&quot; -RoundsPath &quot;$(RoundsFolder.TrimEnd('\'))&quot; -ProjectPath &quot;$(SolutionDir.TrimEnd('\'))&quot;" />
+  </Target>
 
-	<Target Name="PostBuildTaskWin" Condition="'$(OS)' == 'Windows_NT'" DependsOnTargets="Build" AfterTargets="Build">
-		<CallTarget Targets="ReadPackageVersionFromOutputAssembly">
-			<Output TaskParameter="TargetOutputs" PropertyName="PackageVersion" />
-		</CallTarget>
-		<Exec Command="powershell.exe -ExecutionPolicy RemoteSigned -File &quot;$(SolutionDir)publish.ps1&quot; -Version &quot;$(PackageVersion.Remove($(PackageVersion.LastIndexOf('.')), 2))&quot; -Target &quot;$(ConfigurationName)&quot; -TargetPath &quot;$(TargetDir.TrimEnd('\'))&quot; -TargetAssembly &quot;$(TargetFileName)&quot; -RoundsPath &quot;$(RoundsFolder.TrimEnd('\'))&quot; -ProjectPath &quot;$(SolutionDir.TrimEnd('\'))&quot;" />
-	</Target>
 </Project>
