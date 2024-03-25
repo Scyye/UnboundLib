@@ -15,6 +15,7 @@ namespace Unbound.Cards.Patches
     [HarmonyPatch(typeof(MainMenuHandler))]
     internal class MainMenuHandlerPatch
     {
+        static bool first = true;
         [HarmonyPatch("Awake")]
         [HarmonyPrefix]
         internal static void MainMenuHandlerAwake()
@@ -26,9 +27,10 @@ namespace Unbound.Cards.Patches
                 CardManager.RestoreCardToggles();
                 ToggleCardsMenuHandler.RestoreCardToggleVisuals();
             });
-
-            Unbound.Core.UnboundCore.Instance.ExecuteAfterSeconds(0.4f, () => 
+            if (first)
+                Unbound.Core.UnboundCore.Instance.ExecuteAfterSeconds(0.4f, () => 
                 CardManager.FirstTimeStart());
+            first = false;
             
         }
     }
