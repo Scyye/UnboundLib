@@ -5,6 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Reflection.Emit;
+using BepInEx;
 using HarmonyLib;
 using UnityEngine;
 using UnityEngine.UI;
@@ -66,6 +67,15 @@ namespace Unbound.Core
         {
             yield return new WaitForSeconds(delay);
             action();
+        }
+
+        #endregion
+
+        #region BaseUnityPlugin
+
+        public static void PatchAll(this BaseUnityPlugin plugin)
+        {
+            new Harmony(plugin.Info.Metadata.GUID).PatchAll(plugin.GetType().Assembly);
         }
 
         #endregion

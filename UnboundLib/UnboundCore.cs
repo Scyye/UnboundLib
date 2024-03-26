@@ -77,17 +77,18 @@ namespace Unbound.Core {
                 DestroyImmediate(gameObject);
                 return;
             }
-                
+
 
             // Patch game with Harmony
-            var harmony = new Harmony(ModId);
-            harmony.PatchAll();
+            this.PatchAll();
 
             Debug.Log("UnboundLib: Adding menu handlers");
 
             //Debug.Log("UnboundLib: Loading assets");
 
             LoadAssets();
+
+            TranslationStrings.INIT();
         }
 
         private void Start()

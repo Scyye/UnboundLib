@@ -33,6 +33,7 @@ namespace Unbound.Core.Utils
         public TableRefHelper(string modID)
         {
             this.modID = modID;
+            overide = modID == "";
         }
 
         internal static Locales getEnumFormLocal(Locale locale)
@@ -65,7 +66,7 @@ namespace Unbound.Core.Utils
             {
                 foreach (string key in overrides.Keys)
                 {
-                    UnboundCore.Instance.StartCoroutine(InjectTableData(table, (TableEntryReference) $"{modID}_{key}", key, this));
+                    UnboundCore.Instance.StartCoroutine(InjectTableData(table, (TableEntryReference) (overide? key : $"{modID}_{key}"), key, this));
                 }
                 built = true;
             }
@@ -74,11 +75,12 @@ namespace Unbound.Core.Utils
 
         public LocalizedString GenerateString(TableReference table, string key)
         {
-            return new LocalizedString(table, (TableEntryReference) $"{modID}_{key}");
+            return new LocalizedString(table, (TableEntryReference) (overide ? key : $"{modID}_{key}"));
         }
 
         private bool built = false;
         private string modID;
+        private bool overide;
         internal Dictionary<string, Dictionary<Locales, UnboundCore.Tuple<string, bool>>> overrides = new Dictionary<string, Dictionary<Locales, UnboundCore.Tuple<string, bool>>>();
         public static IEnumerator InjectTableData(TableReference Table, TableEntryReference reference, string Data, TableRefHelper tableRef = null)
         {
@@ -88,7 +90,7 @@ namespace Unbound.Core.Utils
                 var table = LocalizationSettings.StringDatabase.GetTableAsync(Table, local);
                 yield return table;
                 Addressables.ResourceManager.Acquire(table);
-
+                
                 var stringTable = table.Result;
                 if (stringTable.GetEntryFromReference(reference) == null) stringTable.AddEntryFromReference(reference, "");
                 var entry = stringTable.GetEntryFromReference(reference);

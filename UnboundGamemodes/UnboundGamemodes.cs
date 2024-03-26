@@ -13,6 +13,8 @@ using static Unbound.Core.UnboundCore;
 using static Unbound.Networking.UnboundNetworking;
 using UnboundLib.Networking.Utils;
 using UnboundLib.Networking;
+using Unbound.Networking;
+using Unbound.Core;
 
 namespace Unbound.Gamemodes
 {
@@ -22,8 +24,7 @@ namespace Unbound.Gamemodes
     public class UnboundGamemodes : BaseUnityPlugin {
         void Awake()
         {
-            var harmony = new HarmonyLib.Harmony("dev.rounds.unbound.gamemodes");
-            harmony.PatchAll();
+            this.PatchAll();
 
             gameObject.AddComponent<LevelManager>();
 
@@ -33,20 +34,21 @@ namespace Unbound.Gamemodes
 
             // hook for closing ongoing lobbies
             GameModeManager.AddHook(GameModeHooks.HookGameStart, CloseLobby);
-            NetworkingManager.RegisterEvent(NetworkEventType.StartHandshake, data =>
+            RegisterHandshake(Info.Metadata.GUID,() =>
             {
                 if (PhotonNetwork.IsMasterClient)
-                    NetworkingManager.RaiseEvent(NetworkEventType.FinishHandshake,
+                    NetworkingManager.RaiseEvent("Sync_Gamemodes_and_Levels",
                             GameModeManager.CurrentHandlerID,
                             GameModeManager.CurrentHandler?.Settings);
             });
 
             // receive mod handshake
-            NetworkingManager.RegisterEvent(NetworkEventType.FinishHandshake, data =>
+            NetworkingManager.RegisterEvent("Sync_Gamemodes_and_Levels", data =>
             {
                 if (data.Length <= 0) return;
                 GameModeManager.SetGameMode((string) data[0], false);
                 GameModeManager.CurrentHandler.SetSettings((GameSettings) data[1]);
+                MapManager.instance.levels = LevelManager.activeLevels.ToArray();
             });
 
             gameObject.AddComponent<ToggleLevelMenuHandler>();
@@ -56,12 +58,6 @@ namespace Unbound.Gamemodes
         {
             NetworkEventCallbacks.OnPlayerLeftRoomEvent += ReomovePlayer;
 
-            // receive mod handshake
-            NetworkingManager.RegisterEvent(NetworkEventType.FinishHandshake, data =>
-            {
-                // attempt to syncronize levels and cards with other players
-                MapManager.instance.levels = LevelManager.activeLevels.ToArray();
-            });
 
         }
 

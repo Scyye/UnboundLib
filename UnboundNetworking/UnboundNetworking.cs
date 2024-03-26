@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System;
 using UnboundLib.Networking.Utils;
 using UnboundLib.Networking;
+using Unbound.Core;
 
 namespace Unbound.Networking
 {
@@ -15,15 +16,6 @@ namespace Unbound.Networking
     [BepInPlugin("dev.rounds.unbound.networking", "Unbound Lib Networking", "1.0.0")]
     public class UnboundNetworking : BaseUnityPlugin
     {
-
-
-        public struct NetworkEventType
-        {
-            public const string
-                StartHandshake = "ModLoader_HandshakeStart",
-                FinishHandshake = "ModLoader_HandshakeFinish";
-        }
-
 
         public delegate void OnJoinedDelegate();
         public delegate void OnLeftDelegate();
@@ -39,18 +31,11 @@ namespace Unbound.Networking
 
         private void Awake()
         {
-            new Harmony(Info.Metadata.GUID).PatchAll();
+            this.PatchAll();
         }
 
         private void Start() 
         {
-
-            // request mod handshake
-            NetworkingManager.RegisterEvent(NetworkEventType.StartHandshake, data =>
-            {
-                if (!PhotonNetwork.IsMasterClient)
-                    NetworkingManager.RaiseEvent(NetworkEventType.FinishHandshake);
-            });
 
             // Adds the ping monitor
             gameObject.AddComponent<PingMonitor>();
@@ -64,7 +49,6 @@ namespace Unbound.Networking
         {
             //if (!PhotonNetwork.OfflineMode)
             //   CardChoice.instance.cards = CardManager.defaultCards;
-            NetworkingManager.RaiseEventOthers(NetworkEventType.StartHandshake);
 
             OnJoinedRoom?.Invoke();
             foreach (var handshake in handShakeActions)

@@ -17,8 +17,7 @@ namespace Unbound.Cards
         void Awake()
         {
             instance = this;
-            var hamony = new HarmonyLib.Harmony("dev.rounds.unbound.cards");
-            hamony.PatchAll();
+            this.PatchAll();
 
             gameObject.AddComponent<CardManager>();
             gameObject.AddComponent<ToggleCardsMenuHandler>();

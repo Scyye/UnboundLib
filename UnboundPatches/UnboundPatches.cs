@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Unbound.Core;
 
 namespace Unbound.Patches
 {
@@ -15,7 +16,7 @@ namespace Unbound.Patches
     {
         private void Awake()
         {
-            new Harmony(Info.Metadata.GUID).PatchAll();
+            this.PatchAll();
         }
     }
 }
