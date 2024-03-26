@@ -4,10 +4,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using Unbound.Core.Networking;
+
 using UnityEngine;
 
-namespace Unbound.Core
+namespace UnboundLib.Networking.RPCs
 {
     // stolen from RWF
     public static class MonoBehaviourExtensions

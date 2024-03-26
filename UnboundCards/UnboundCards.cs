@@ -2,9 +2,9 @@
 using System;
 using Unbound.Cards.Utils;
 using Unbound.Core;
-using Unbound.Core.Networking;
 using Unbound.Core.Utils;
 using Unbound.Core.Utils.UI;
+using UnboundLib.Networking.Utils;
 using UnityEngine;
 
 namespace Unbound.Cards
@@ -37,16 +37,15 @@ namespace Unbound.Cards
             {
                 CardManager.cards.Add(card.name,
                     new Card("Vanilla", UnboundCore.config.Bind("Cards: Vanilla", card.name, true), card));
-
-                var networkEvents = gameObject.GetOrAddComponent<NetworkEventCallbacks>();
-                networkEvents.OnJoinedRoomEvent += CardManager.OnJoinedRoomAction;
-                networkEvents.OnLeftRoomEvent += CardManager.OnLeftRoomAction;
             }
+
+            NetworkEventCallbacks.OnJoinedRoomEvent += CardManager.OnJoinedRoomAction;
+            NetworkEventCallbacks.OnLeftRoomEvent += CardManager.OnLeftRoomAction;
         }
 
         bool reg = false;
         void Update() {
-            GameManager.lockInput = GameManager.lockInput || ToggleCardsMenuHandler.menuOpenFromOutside;
+            UnboundCore.lockInputBools["ToggleCardsMenuHandler.menuOpenFromOutside"] = ToggleCardsMenuHandler.menuOpenFromOutside;
 
             if (reg) {
                 Debug.Log("Already registered");

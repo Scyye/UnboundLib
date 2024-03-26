@@ -7,13 +7,15 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using TMPro;
+using Unbound.Core;
+using Unbound.Core.Utils;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-namespace Unbound.Core.Utils.UI
+namespace Unbound.Gamemodes.Utils
 {
     public class ToggleLevelMenuHandler : MonoBehaviour
     {
@@ -550,7 +552,7 @@ namespace Unbound.Core.Utils.UI
             var filename = Path.Combine(dir.FullName, LevelManager.GetVisualName(levelName) + ".png");
             File.WriteAllBytes(filename, bytes);
 #if DEBUG
-            UnityEngine.Debug.Log($"Took screenshot to: {filename}");
+            Debug.Log($"Took screenshot to: {filename}");
 #endif
         }
 
@@ -615,6 +617,7 @@ namespace Unbound.Core.Utils.UI
 
         private void Update()
         {
+            UnboundCore.lockInputBools["mapMenuCanvas.activeInHierarchy"] = mapMenuCanvas.activeInHierarchy;
             // // Activate and deactivate the menu
             // if (Input.GetKeyDown(KeyCode.F2))
             // {

@@ -96,7 +96,7 @@ namespace Unbound.Core.Utils.UI
             modMenus.Add(new ModMenu(name, buttonAction, guiAction, parent, showInPauseMenu));
         }
 
-        internal void CreateModOptions(bool firstTime)
+        public void CreateModOptions(bool firstTime)
         {
             // create mod options
             UnboundCore.Instance.ExecuteAfterSeconds(firstTime ? 0.1f : 0, () =>
@@ -152,10 +152,6 @@ namespace Unbound.Core.Utils.UI
 
             // Create toggle levels button
 
-            RegesterPrioritySubMenu("Toggle Levels",
-                () => {
-                    ToggleLevelMenuHandler.instance.SetActive(true);
-                });
             prioritySubMenus.Sort((menu1, menu2) => menu1.text.CompareTo(menu2.text));
             subMenus.Sort((menu1, menu2) => menu1.text.CompareTo(menu2.text));
             Debug.Log("Creating submenus");

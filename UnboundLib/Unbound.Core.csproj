@@ -152,6 +152,10 @@
     </Reference>
   </ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Patches\" />
+	</ItemGroup>
+
   <Target Name="ReadPackageVersionFromOutputAssembly" DependsOnTargets="Build" Outputs="$(PackageVersion)">
     <GetAssemblyIdentity AssemblyFiles="$(TargetPath)">
       <Output TaskParameter="Assemblies" ItemName="PackAssembly" />

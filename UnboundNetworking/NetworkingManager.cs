@@ -5,10 +5,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Unbound.Core.Networking;
+using UnboundLib.Networking.RPCs;
 using Debug = UnityEngine.Debug;
 
-namespace Unbound.Core
+namespace UnboundLib.Networking
 {
     public static class NetworkingManager
     {
@@ -50,7 +50,8 @@ namespace Unbound.Core
             events.Add(eventName, handler);
         }
 
-        public static void RaiseEvent(string eventName, RaiseEventOptions options, params object[] data) {
+        public static void RaiseEvent(string eventName, RaiseEventOptions options, params object[] data)
+        {
             if (data == null) data = Array.Empty<object>();
             var allData = new List<object> { eventName };
             allData.AddRange(data);
@@ -71,7 +72,8 @@ namespace Unbound.Core
         {
             if (data == null) data = Array.Empty<object>();
 
-            if (PhotonNetwork.OfflineMode || PhotonNetwork.CurrentRoom == null) {
+            if (PhotonNetwork.OfflineMode || PhotonNetwork.CurrentRoom == null)
+            {
                 var methodInfo = GetRPCMethod(targetType, methodName);
                 if (methodInfo != null)
                 {
@@ -89,7 +91,7 @@ namespace Unbound.Core
         {
             RPC(targetType, methodName, options, reliableSendOptions, data);
         }
-        
+
         public static void RPC(Type targetType, string methodName, params object[] data)
         {
             RPC(targetType, methodName, raiseEventOptionsAll, reliableSendOptions, data);
@@ -116,7 +118,7 @@ namespace Unbound.Core
 
             try
             {
-                data = (object[])photonEvent.CustomData;
+                data = (object[]) photonEvent.CustomData;
             }
             catch (Exception e)
             {
@@ -146,16 +148,17 @@ namespace Unbound.Core
             }
         }
 
-        private static MethodInfo GetRPCMethod(Type type, string methodName) {
+        private static MethodInfo GetRPCMethod(Type type, string methodName)
+        {
             var key = new Tuple<Type, string>(type, methodName);
 
             if (rpcMethodCache.ContainsKey(key)) return rpcMethodCache[key];
             var methodInfo = (from m in type.GetMethods(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static | BindingFlags.FlattenHierarchy)
-                let attr = m.GetCustomAttribute<UnboundRPC>()
-                where attr != null
-                let name = attr.EventID ?? m.Name
-                where methodName == name
-                select m).FirstOrDefault();
+                              let attr = m.GetCustomAttribute<UnboundRPC>()
+                              where attr != null
+                              let name = attr.EventID ?? m.Name
+                              where methodName == name
+                              select m).FirstOrDefault();
             if (methodInfo == null)
             {
                 throw new Exception($"There is no method '{type.FullName}#{methodName}' found");

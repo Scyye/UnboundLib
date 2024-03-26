@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using Unbound.Cards.Utils;
 using Unbound.Core.Utils.UI;
+using Unbound.Gamemodes.Utils;
 using UnityEngine;
 
 namespace Unbound.Core.Patches

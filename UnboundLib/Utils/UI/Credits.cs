@@ -33,7 +33,7 @@ namespace Unbound.Core.Utils.UI
         {
             this.modCredits[modCredits.modName] = modCredits;
         }
-        internal void CreateCreditsMenu(bool firstTime)
+        public void CreateCreditsMenu(bool firstTime)
         {
             UnboundCore.Instance.ExecuteAfterSeconds(firstTime ? 0.1f : 0f, () =>
             {

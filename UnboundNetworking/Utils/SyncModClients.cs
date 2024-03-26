@@ -5,13 +5,16 @@ using System.Linq;
 using BepInEx;
 using Photon.Pun;
 using TMPro;
+using Unbound.Core;
+
 using Unbound.Core.Utils.UI;
+using UnboundLib.Networking.RPCs;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
-namespace Unbound.Core.Networking
+namespace UnboundLib.Networking.Utils
 {
     public static class SyncModClients
     {
@@ -49,7 +52,7 @@ namespace Unbound.Core.Networking
             Reset();
             LocalSetup();
             if (!PhotonNetwork.IsMasterClient) return;
-            
+
             CheckLobby();
             UnboundCore.Instance.StartCoroutine(Check());
         }
@@ -87,7 +90,7 @@ namespace Unbound.Core.Networking
         {
             if (PhotonNetwork.IsMasterClient)
             {
-                NetworkingManager.RPC(typeof(SyncModClients), "SendModList", new object[] {  });
+                NetworkingManager.RPC(typeof(SyncModClients), "SendModList", new object[] { });
             }
         }
 
@@ -143,7 +146,7 @@ namespace Unbound.Core.Networking
             //UnityEngine.Debug.Log("MAKING FLAGS...");
 
             // add a host flag for the host
-            NetworkingManager.RPC(typeof(SyncModClients), nameof(AddFlags), new object[] { PhotonNetwork.LocalPlayer.ActorNumber, new string[] { "✓ " + PhotonNetwork.CurrentRoom.GetPlayer(PhotonNetwork.LocalPlayer.ActorNumber).NickName, "HOST"}, false });
+            NetworkingManager.RPC(typeof(SyncModClients), nameof(AddFlags), new object[] { PhotonNetwork.LocalPlayer.ActorNumber, new string[] { "✓ " + PhotonNetwork.CurrentRoom.GetPlayer(PhotonNetwork.LocalPlayer.ActorNumber).NickName, "HOST" }, false });
 
             // detect unmodded clients
             foreach (int actorId in PhotonNetwork.CurrentRoom.Players.Values.Select(p => p.ActorNumber).Except(clientsServerSideGUIDs.Keys).Except(new int[] { PhotonNetwork.LocalPlayer.ActorNumber }).ToArray())
@@ -161,7 +164,7 @@ namespace Unbound.Core.Networking
                     flags.Add("ALL MODS SYNCED");
                     //UnityEngine.Debug.Log(PhotonNetwork.CurrentRoom.GetPlayer(actorID).NickName + " is synced!");
 
-                    NetworkingManager.RPC(typeof(SyncModClients), nameof(AddFlags), new object[] {actorId, flags.ToArray(), false});
+                    NetworkingManager.RPC(typeof(SyncModClients), nameof(AddFlags), new object[] { actorId, flags.ToArray(), false });
                     continue;
                 }
 
@@ -190,13 +193,13 @@ namespace Unbound.Core.Networking
             var objName = actorID.ToString();
 
             var _uiHolder = MenuHandler.modOptionsUI.LoadAsset<GameObject>("uiHolder");
-            var _checkmark =  MenuHandler.modOptionsUI.LoadAsset<GameObject>("checkmark");
+            var _checkmark = MenuHandler.modOptionsUI.LoadAsset<GameObject>("checkmark");
             var _redx = MenuHandler.modOptionsUI.LoadAsset<GameObject>("redx");
-            
+
             // Check if uiHolder has already been made
             if (!UIHandler.instance.transform.Find("Canvas/UIHolder"))
             {
-                uiParent = Object.Instantiate(_uiHolder,UIHandler.instance.transform.Find("Canvas"));
+                uiParent = Object.Instantiate(_uiHolder, UIHandler.instance.transform.Find("Canvas"));
                 uiParent.name = "UIHolder";
                 uiParent.GetComponent<RectTransform>().localPosition = new Vector3(-975, 486, 2565);
                 uiParent.GetOrAddComponent<DetectUnmodded>();
@@ -207,7 +210,7 @@ namespace Unbound.Core.Networking
             {
                 uiParent = UIHandler.instance.transform.Find("Canvas/UIHolder").gameObject;
             }
-            
+
             GameObject playerObj;
             if (!uiParent.transform.Find(objName))
             {
@@ -237,14 +240,15 @@ namespace Unbound.Core.Networking
                     var _hover = check.AddComponent<CheckHover>();
                     _hover.texts = flags;
                     check.transform.localPosition = new Vector3(-15, 25, 0);
-                } else if (flag.Contains("✗ "))
+                }
+                else if (flag.Contains("✗ "))
                 {
                     var redcheck = Object.Instantiate(_redx, playerObj.transform);
                     var _hover = redcheck.AddComponent<CheckHover>();
                     _hover.texts = flags;
                     redcheck.transform.localPosition = new Vector3(-15, 25, 0);
                 }
-                var text = MenuHandler.CreateText(nickName, playerObj, out var uGUI, 20, false, error ? Color.red : new Color(0.902f, 0.902f, 0.902f, 1f), null, null, TextAlignmentOptions.MidlineLeft );
+                var text = MenuHandler.CreateText(nickName, playerObj, out var uGUI, 20, false, error ? Color.red : new Color(0.902f, 0.902f, 0.902f, 1f), null, null, TextAlignmentOptions.MidlineLeft);
                 text.name = nickName;
                 var ping = text.AddComponent<PingUpdater>();
                 ping.actorId = actorID;
@@ -257,7 +261,7 @@ namespace Unbound.Core.Networking
                 layout.preferredHeight = 100;
                 layout.minWidth = 300;
                 layout.minHeight = 100;
-                
+
                 var rectTrans = text.GetComponent<RectTransform>();
                 rectTrans.pivot = Vector2.zero;
                 text.transform.localPosition = Vector3.zero;
@@ -273,7 +277,7 @@ namespace Unbound.Core.Networking
         {
             Object.Destroy(parent);
             yield break;
-        } 
+        }
 
         [UnboundRPC]
         private static void SendModList()
@@ -285,7 +289,7 @@ namespace Unbound.Core.Networking
         private static void ReceiveModList(string[] serverSideGUIDs, string[] serverSideMods, string[] versions, int actorID)
         {
             if (!PhotonNetwork.IsMasterClient) return;
-            
+
             if (PhotonNetwork.LocalPlayer.ActorNumber == actorID)
             {
                 hostsServerSideGUIDs = serverSideGUIDs.ToList();
@@ -357,8 +361,8 @@ namespace Unbound.Core.Networking
 
         private void Update()
         {
-            if(Time.time <= startTime + delay) return;
-            
+            if (Time.time <= startTime + delay) return;
+
             if (update)
             {
                 SyncModClients.MakeFlags();
@@ -369,7 +373,7 @@ namespace Unbound.Core.Networking
             {
                 startTime = Time.time;
                 if (prevPlayers == PhotonNetwork.CurrentRoom.PlayerCount) return;
-                
+
                 prevPlayers = PhotonNetwork.CurrentRoom.PlayerCount;
                 delay = SyncModClients.timeoutTime + 2f;
                 update = true;
@@ -436,7 +440,7 @@ namespace Unbound.Core.Networking
                 stretchWidth = true
             };
             var background = new Texture2D(1, 1);
-            background.SetPixel(0,0, Color.gray);
+            background.SetPixel(0, 0, Color.gray);
             background.Apply();
             guiStyleFore.normal.background = background;
             guiStyleFore.fontSize = 20;
@@ -445,15 +449,15 @@ namespace Unbound.Core.Networking
         }
         private void OnGUI()
         {
-            
+
             if (!inBounds || texts == Array.Empty<string>() || !(Input.mousePosition.x < Screen.width / 4f)) return;
-            
-            Vector2 size = guiStyleFore.CalcSize(new GUIContent(string.Join("\n",texts)));
-            GUILayout.BeginArea(new Rect(Input.mousePosition.x + 25, Screen.height - Input.mousePosition.y + 25, size.x + 10, size.y+10));
+
+            Vector2 size = guiStyleFore.CalcSize(new GUIContent(string.Join("\n", texts)));
+            GUILayout.BeginArea(new Rect(Input.mousePosition.x + 25, Screen.height - Input.mousePosition.y + 25, size.x + 10, size.y + 10));
             GUILayout.BeginVertical();
             foreach (var t in texts)
             {
-                GUILayout.Label (t, guiStyleFore);
+                GUILayout.Label(t, guiStyleFore);
             }
 
             GUILayout.EndVertical();

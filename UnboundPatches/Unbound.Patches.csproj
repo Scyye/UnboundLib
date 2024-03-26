@@ -52,7 +52,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\UnboundCards\Unbound.Cards.csproj" />
+    <ProjectReference Include="..\UnboundGamemodes\Unbound.Gamemodes.csproj" />
     <ProjectReference Include="..\UnboundLib\Unbound.Core.csproj" />
+    <ProjectReference Include="..\UnboundNetworking\Unbound.Networking.csproj" />
   </ItemGroup>
 
   <ItemGroup>

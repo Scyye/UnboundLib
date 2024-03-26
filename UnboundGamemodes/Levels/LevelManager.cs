@@ -8,8 +8,10 @@ using System.Text.RegularExpressions;
 using BepInEx.Configuration;
 using ExitGames.Client.Photon.StructWrapping;
 using Photon.Pun;
-using Unbound.Core.Networking;
-using Unbound.Core.Utils.UI;
+
+using Unbound.Gamemodes.Utils;
+using UnboundLib.Networking;
+using UnboundLib.Networking.RPCs;
 using UnityEngine;
 
 namespace Unbound.Core.Utils
@@ -37,8 +39,8 @@ namespace Unbound.Core.Utils
 
         // All default, active and inactive levels
         private static string[] defaultLevels;
-        internal static ObservableCollection<string> activeLevels;
-        internal static readonly List<string> inactiveLevels = new List<string>();
+        public static ObservableCollection<string> activeLevels;
+        public static readonly List<string> inactiveLevels = new List<string>();
         internal static ObservableCollection<string> previousActiveLevels = new ObservableCollection<string>();
         internal static readonly List<string> previousInactiveLevels = new List<string>();
 

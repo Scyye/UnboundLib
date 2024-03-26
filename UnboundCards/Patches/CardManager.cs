@@ -7,7 +7,9 @@ using BepInEx.Configuration;
 using Photon.Pun;
 using Unbound.Cards;
 using Unbound.Core;
-using Unbound.Core.Networking;
+
+using UnboundLib.Networking;
+using UnboundLib.Networking.RPCs;
 using UnityEngine;
 
 namespace Unbound.Cards.Utils

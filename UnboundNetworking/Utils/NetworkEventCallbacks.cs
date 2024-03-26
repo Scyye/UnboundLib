@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Unbound.Core.Networking
+namespace UnboundLib.Networking.Utils
 {
 
     public class NetworkEventCallbacks : MonoBehaviourPunCallbacks
@@ -13,8 +13,8 @@ namespace Unbound.Core.Networking
         public delegate void NetworkEvent();
         public class PlayerEventArg : EventArgs { public Photon.Realtime.Player Player { get; set; } };
         public delegate void NetworkPlayerEvent<PlayerEventArg>();
-        public event NetworkEvent OnJoinedRoomEvent, OnLeftRoomEvent;
-        public event Action<PlayerEventArg> OnPlayerLeftRoomEvent;
+        public static event NetworkEvent OnJoinedRoomEvent, OnLeftRoomEvent;
+        public static event Action<PlayerEventArg> OnPlayerLeftRoomEvent;
 
         public override void OnJoinedRoom()
         {

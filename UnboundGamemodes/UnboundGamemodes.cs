@@ -4,11 +4,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unbound.Core;
-using Unbound.Core.Networking;
 using Unbound.Core.Utils;
-using static Unbound.Core.Networking.NetworkEventCallbacks;
+using Unbound.Core.Utils.UI;
+using Unbound.Gamemodes.Utils;
+using UnityEngine;
+using static UnboundLib.Networking.Utils.NetworkEventCallbacks;
 using static Unbound.Core.UnboundCore;
+using static Unbound.Networking.UnboundNetworking;
+using UnboundLib.Networking.Utils;
+using UnboundLib.Networking;
 
 namespace Unbound.Gamemodes
 {
@@ -20,6 +24,8 @@ namespace Unbound.Gamemodes
         {
             var harmony = new HarmonyLib.Harmony("dev.rounds.unbound.gamemodes");
             harmony.PatchAll();
+
+            gameObject.AddComponent<LevelManager>();
 
             GameModeManager.Init();
 
@@ -42,11 +48,30 @@ namespace Unbound.Gamemodes
                 GameModeManager.SetGameMode((string) data[0], false);
                 GameModeManager.CurrentHandler.SetSettings((GameSettings) data[1]);
             });
+
+            gameObject.AddComponent<ToggleLevelMenuHandler>();
         }
 
         void Start()
         {
-            gameObject.GetOrAddComponent<NetworkEventCallbacks>().OnPlayerLeftRoomEvent += ReomovePlayer;
+            NetworkEventCallbacks.OnPlayerLeftRoomEvent += ReomovePlayer;
+
+            // receive mod handshake
+            NetworkingManager.RegisterEvent(NetworkEventType.FinishHandshake, data =>
+            {
+                // attempt to syncronize levels and cards with other players
+                MapManager.instance.levels = LevelManager.activeLevels.ToArray();
+            });
+
+        }
+
+        void Update()
+        {
+            ModOptions.RegesterPrioritySubMenu("Toggle Levels",
+                () => {
+                    Debug.Log("Toggle Levels");
+                    ToggleLevelMenuHandler.instance.SetActive(true);
+                });
         }
 
         internal static void ReomovePlayer(PlayerEventArg arg)

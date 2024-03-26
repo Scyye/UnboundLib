@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using Jotunn.Utils;
 using TMPro;
-using Unbound.Core.Networking;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;

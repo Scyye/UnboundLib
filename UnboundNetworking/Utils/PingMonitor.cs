@@ -3,10 +3,11 @@ using Photon.Pun;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Unbound.Core.Networking;
+using Unbound.Core;
+using UnboundLib.Networking.RPCs;
 using UnityEngine;
 
-namespace Unbound.Core
+namespace UnboundLib.Networking.Utils
 {
     [DisallowMultipleComponent]
     public class PingMonitor : MonoBehaviourPunCallbacks
@@ -102,11 +103,11 @@ namespace Unbound.Core
             if (PingUpdateAction == null) return;
             try
             {
-                PingUpdateAction(targetPlayer.ActorNumber, (int)ping);
+                PingUpdateAction(targetPlayer.ActorNumber, (int) ping);
             }
             catch (Exception e)
             {
-                UnityEngine.Debug.LogException(e);
+                Debug.LogException(e);
             }
         }
 
@@ -133,7 +134,7 @@ namespace Unbound.Core
 
         private static float Normalize(float val, float valmin, float valmax, float min, float max)
         {
-            return ((val - valmin) / (valmax - valmin) * (max - min)) + min;
+            return (val - valmin) / (valmax - valmin) * (max - min) + min;
         }
 
         private static Color GetColorGradient(float percentage)
