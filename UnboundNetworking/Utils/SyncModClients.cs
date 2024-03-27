@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using BepInEx;
 using Photon.Pun;
 using TMPro;
@@ -44,6 +46,18 @@ namespace UnboundLib.Networking.Utils
             if (PhotonNetwork.OfflineMode) return;
 
             NetworkingManager.RPC(typeof(SyncModClients), "SyncLobby", new object[] { });
+        }
+
+        internal static string GetCompatablityHash()
+        {
+            List<string> temp = loadedGUIDs.ToList();
+            temp.Sort();
+            byte[] bytes;
+            using (HashAlgorithm algorithm = SHA256.Create())
+                bytes = algorithm.ComputeHash(Encoding.UTF8.GetBytes(String.Join(",",temp.ToArray())));
+            var hash = "";
+            bytes.ForEach(x => hash += x.ToString());
+            return hash;
         }
 
         [UnboundRPC]

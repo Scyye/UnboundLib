@@ -148,10 +148,6 @@
     </Reference>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Lobies\" />
-  </ItemGroup>
-
   <Target Name="ReadPackageVersionFromOutputAssembly" DependsOnTargets="Build" Outputs="$(PackageVersion)">
     <GetAssemblyIdentity AssemblyFiles="$(TargetPath)">
       <Output TaskParameter="Assemblies" ItemName="PackAssembly" />

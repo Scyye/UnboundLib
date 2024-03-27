@@ -8,6 +8,7 @@ using System;
 using UnboundLib.Networking.Utils;
 using UnboundLib.Networking;
 using Unbound.Core;
+using UnboundLib.Networking.Lobbies;
 
 namespace Unbound.Networking
 {
@@ -28,6 +29,9 @@ namespace Unbound.Networking
 
         internal static List<Action> handShakeActions = new List<Action>();
 
+        public const int MaxPlayers = 16; //gonna try making this 32 or 64 at someponit.
+
+        public const int MinPlayers = 2;
 
         private void Awake()
         {
@@ -37,8 +41,8 @@ namespace Unbound.Networking
         private void Start() 
         {
 
-            // Adds the ping monitor
             gameObject.AddComponent<PingMonitor>();
+            gameObject.AddComponent<ConectionHandler>();
 
             // sync modded clients
             NetworkEventCallbacks.OnJoinedRoomEvent += SyncModClients.RequestSync;
