@@ -2,6 +2,7 @@
 using Landfall.Network;
 using Photon.Pun;
 using Photon.Realtime;
+using Steamworks;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -62,6 +63,7 @@ namespace UnboundLib.Networking.Lobbies
             {
                 PhotonNetwork.LocalPlayer.NickName = "PlayerName";
                 PhotonNetwork.ConnectUsingSettings();
+                PhotonNetwork.AuthValues = new AuthenticationValues($"Steam={SteamUser.GetSteamID().m_SteamID}");
                 if (region != "")
                 {
                     PhotonNetwork.ConnectToRegion(region);
@@ -94,6 +96,14 @@ namespace UnboundLib.Networking.Lobbies
     public static class DiableVanillaNetworkConnectionHandler
     {
         public static void Prefix(NetworkConnectionHandler __instance)
+        {
+            UnityEngine.Object.DestroyImmediate(__instance);
+        }
+    }
+    [HarmonyPatch(typeof(NetworkData), "Start")]
+    public static class DiableMasterDebugCheck
+    {
+        public static void Prefix(NetworkData __instance)
         {
             UnityEngine.Object.DestroyImmediate(__instance);
         }

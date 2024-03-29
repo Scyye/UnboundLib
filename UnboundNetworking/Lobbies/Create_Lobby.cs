@@ -15,7 +15,7 @@ using static UnboundLib.Networking.Lobbies.ConectionHandler;
 
 namespace UnboundLib.Networking.Lobbies
 {
-    public static class Create_Lobby
+    public static class Unbound_Lobby
     {
 
         public static void Host()
