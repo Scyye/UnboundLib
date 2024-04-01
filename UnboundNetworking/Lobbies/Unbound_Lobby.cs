@@ -7,7 +7,8 @@ using UnboundLib.Networking.Utils;
 using UnityEngine;
 using static UnboundLib.Networking.Lobbies.ConectionHandler;
 
-namespace UnboundLib.Networking.Lobbies{
+namespace UnboundLib.Networking.Lobbies
+{
     public static class Unbound_Lobby
     {
 
@@ -43,7 +44,8 @@ namespace UnboundLib.Networking.Lobbies{
 
             yield return instance.ConectIfDisconected("us");
             // idk if both of these are needed, but fuck you, it works
-            PhotonNetwork.JoinRoom(roomCode);
+            if(PhotonNetwork.JoinRoom(roomCode))
+                Debug.Log($"Joined Room: {roomCode}");
             steamLobby.JoinedRoom(roomCode);
         }
     }
