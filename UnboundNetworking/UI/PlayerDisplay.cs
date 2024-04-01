@@ -1,15 +1,14 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
-
-using InControl;
+﻿using InControl;
+using RWF;
 using System.Linq;
 using Unbound.Core;
-using RWF;
+using UnityEngine;
+using UnityEngine.UI;
 
-namespace Unbound.Networking.UI{
+namespace Unbound.Networking.UI
+{
     class PlayerDisplay : MonoBehaviour
-   {
+    {
         public static PlayerDisplay instance;
 
         internal float disableCountdown = 3f;
@@ -31,11 +30,11 @@ namespace Unbound.Networking.UI{
 
         private GameObject _Bar = null;
         public GameObject Bar
-       {
+        {
             get
-           {
+            {
                 if (_Bar == null)
-               {
+                {
                     _Bar = GameObject.Instantiate(ListMenu.instance.bar, gameObject.transform);
                     GameObject.Instantiate(UnityEngine.GameObject.Find("Game/UI/UI_MainMenu/Canvas/Particle"), _Bar.transform);
                     _Bar.name = "PlayerDisplayBar";
@@ -56,11 +55,11 @@ namespace Unbound.Networking.UI{
         public bool PlayersHaveBeenAdded => playersAdded;
 
         private void Awake()
-       {
+        {
             PlayerDisplay.instance = this;
         }
         void Start()
-       {
+        {
             // add the necessary components
             group = gameObject.GetOrAddComponent<GridLayoutGroup>();
 
@@ -98,107 +97,107 @@ namespace Unbound.Networking.UI{
         }
 
         void Update()
-       {
-            if (!playersAdded) 
-           {
+        {
+            if (!playersAdded)
+            {
                 if (VersusDisplay.instance.PlayersHaveBeenAdded)
-               {
+                {
                     playersAdded = true;
                     setBar.SetEnabled(true);
                     this.ExecuteAfterFrames(1, () => ListMenu.instance.InvokeMethod("DeselectButton"));
                 }
                 else
-               {
+                {
                     layout.minHeight = 0f;
                     return;
                 }
             }
             else if (!VersusDisplay.instance.PlayersHaveBeenAdded)
-           {
+            {
                 playersAdded = false;
                 setBar.SetEnabled(false);
                 this.ExecuteAfterFrames(1, () => ListMenu.instance.InvokeMethod("DeselectButton"));
                 return;
             }
             try
-           {
+            {
                 layout.minHeight = gameObject.GetComponentsInChildren<LayoutGroup>(false).Select(c => c.preferredHeight).Max() + PlayerDisplay.layoutPad;
                 group.cellSize = new Vector2(group.cellSize.x, gameObject.GetComponentsInChildren<LayoutGroup>(false).Where(c => c != group).Select(c => c.preferredHeight).Max() + PlayerDisplay.barPad);
             }
-            catch{ }
+            catch { }
         }
 
         void LateUpdate()
-       {
+        {
             if (disableCountdown >= 0f)
-           {
+            {
                 disableCountdown -= Time.deltaTime;
                 return;
             }
             // check for exit, ready, or join
             if (Input.GetKeyDown(KeyCode.Escape)) // exit with Esc
-           {
+            {
                 // if the player is ready, toggle their ready status
                 // if they are not ready, remove them
                 bool? ready = PrivateRoom.FindLobbyCharacter(null)?.ready;
-                if (ready == null) 
-               {
-                    return; 
+                if (ready == null)
+                {
+                    return;
                 }
-                else if ((bool)ready)
-               {
+                else if ((bool) ready)
+                {
                     PrivateRoom.StartCoroutine(PrivateRoom.ToggleReady(null, false));
                 }
                 else
-               {
+                {
                     // remove player
                     PrivateRoom.StartCoroutine(PrivateRoom.RemovePlayer(PrivateRoom.FindLobbyCharacter(null)));
                 }
                 return;
             }
             else if (Input.GetKeyDown(KeyCode.Space)) // ready or join with space
-           {
+            {
                 // if the player is ready, do nothing
                 // if they are not ready, ready them 
                 // if they don't exist, let them join
                 bool? ready = PrivateRoom.FindLobbyCharacter(null)?.ready;
-                if (ready == null || !(bool)ready)
-               {
+                if (ready == null || !(bool) ready)
+                {
                     PrivateRoom.StartCoroutine(PrivateRoom.ToggleReady(null, false));
                 }
                 return;
             }
 
             for (int i = 0; i < InputManager.ActiveDevices.Count; i++)
-           {
+            {
                 InputDevice device = InputManager.ActiveDevices[i];
 
                 // enter with start/select
                 if (device.CommandWasPressed)
-               {
+                {
                     // if the player is ready, do nothing
                     // if they are not ready, ready them 
                     // if they don't exist, let them join
                     bool? ready = PrivateRoom.FindLobbyCharacter(device)?.ready;
-                    if (ready == null || !(bool)ready)
-                   { 
+                    if (ready == null || !(bool) ready)
+                    {
                         PrivateRoom.StartCoroutine(PrivateRoom.ToggleReady(device, false));
                     }
                     return;
                 }
 
                 else if (device.Action2.WasPressed) // exit with B
-               {
+                {
                     // if the player is ready, toggle their ready status
                     // if they are not ready, remove them
                     bool? ready = PrivateRoom.FindLobbyCharacter(device)?.ready;
-                    if (ready == null){ return; }
-                    else if ((bool)ready)
-                   {
+                    if (ready == null) { return; }
+                    else if ((bool) ready)
+                    {
                         PrivateRoom.StartCoroutine(PrivateRoom.ToggleReady(device, false));
                     }
                     else
-                   {
+                    {
                         // remove player
                         PrivateRoom.StartCoroutine(PrivateRoom.RemovePlayer(PrivateRoom.FindLobbyCharacter(device)));
                     }
@@ -209,7 +208,7 @@ namespace Unbound.Networking.UI{
 
     }
     class SetBar : MonoBehaviour
-   {
+    {
         GridLayoutGroup layoutGroup;
         PlayerDisplay playerDisplay;
         public float heightMult = 1f;
@@ -218,19 +217,19 @@ namespace Unbound.Networking.UI{
         bool apply = false;
 
         void Start()
-       {
+        {
             layoutGroup = gameObject.GetComponent<GridLayoutGroup>();
             playerDisplay = gameObject.GetComponent<PlayerDisplay>();
-            if (playerDisplay == null || layoutGroup == null){ Destroy(this); }
+            if (playerDisplay == null || layoutGroup == null) { Destroy(this); }
         }
         void Update()
-       {
-            if (!apply){ return; }
-            playerDisplay.Bar.transform.position = gameObject.transform.position + verticalOffset * Vector3.up;
-            playerDisplay.Bar.transform.localScale = new Vector3(playerDisplay.Bar.transform.localScale.x, layoutGroup.preferredHeight * heightMult + padding, 1f);
+        {
+            if (!apply) { return; }
+            playerDisplay.Bar.transform.position = gameObject.transform.position + (verticalOffset * Vector3.up);
+            playerDisplay.Bar.transform.localScale = new Vector3(playerDisplay.Bar.transform.localScale.x, (layoutGroup.preferredHeight * heightMult) + padding, 1f);
         }
         public void SetEnabled(bool enabled)
-       {
+        {
             apply = enabled;
             playerDisplay?.Bar.SetActive(enabled);
         }

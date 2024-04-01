@@ -1,15 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Collections;
-using System.Linq;
-using UnityEngine;
-
-using UnityEngine.UI;
-using UnityEngine.Rendering;
+﻿using System.Collections;
 using Unbound.Core;
+using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace Unbound.Networking.UI{
     public static class PlayerSpotlight
-   {
+    {
         internal static float SpotlightSizeMult = 1f;
 
         private static bool fadeInProgress = false;
@@ -27,13 +23,13 @@ namespace Unbound.Networking.UI{
         private static GameObject _Cam = null;
 
         public static GameObject Cam
-       {
+        {
             get
-           {
-                if (_Cam != null){ return _Cam; }
+            {
+                if (_Cam != null) { return _Cam; }
 
                 _Cam = MainCam.instance.cam.gameObject;
-                _Cam.GetComponent<Camera>().cullingMask |= (1 << layer);
+                _Cam.GetComponent<Camera>().cullingMask |= 1 << layer;
 
                 return _Cam;
             }
@@ -42,10 +38,10 @@ namespace Unbound.Networking.UI{
         private static GameObject _Group = null;
 
         public static GameObject Group
-       {
+        {
             get
-           {
-                if (_Group != null){ return _Group; }
+            {
+                if (_Group != null) { return _Group; }
 
                 _Group = new GameObject("SpotlightGroup", typeof(SortingGroup));
                 _Group.SetActive(true);
@@ -61,16 +57,16 @@ namespace Unbound.Networking.UI{
         private static GameObject _BG = null;
 
         public static GameObject BG
-       {
+        {
             get
-           {
-                if (_BG != null){ return _BG; }
+            {
+                if (_BG != null) { return _BG; }
 
                 //GameObject bg = UnityEngine.GameObject.Find("Game/UI/UI_Game/Canvas/EscapeMenu/bg");
                 _BG = new GameObject("SpotlightShadow", typeof(SpriteRenderer));
                 _BG.transform.SetParent(_Group.transform);
                 _BG.SetActive(false);
-                _BG.transform.localScale = 100f*Vector3.one;
+                _BG.transform.localScale = 100f * Vector3.one;
                 _BG.GetComponent<SpriteRenderer>().sprite = Sprite.Create(new Texture2D(1920, 1080), new Rect(0f, 0f, 1920f, 1080f), new Vector2(0.5f, 0.5f));
                 _BG.GetComponent<SpriteRenderer>().color = Color.black;//bg.GetComponent<Graphic>().color;
                 _BG.GetComponent<SpriteRenderer>().sortingOrder = 0;
@@ -83,10 +79,10 @@ namespace Unbound.Networking.UI{
 
         private static GameObject _Spot = null;
         public static GameObject Spot
-       {
+        {
             get
-           {
-                if (_Spot != null){ return _Spot; }
+            {
+                if (_Spot != null) { return _Spot; }
 
                 GameObject characterSelect = UnityEngine.GameObject.Find("Game/UI/UI_MainMenu/Canvas/ListSelector/CharacterSelect");
                 GameObject portrait = characterSelect.GetComponentInChildren<CharacterCreatorPortrait>(true).gameObject;
@@ -105,55 +101,55 @@ namespace Unbound.Networking.UI{
             }
         }
         private static float GetShadowOpacity()
-       {
+        {
             return BG.GetComponent<SpriteRenderer>().color.a;
         }
         private static void SetShadowOpacity(float a)
-       {
+        {
             Color color = BG.GetComponent<SpriteRenderer>().color;
             BG.GetComponent<SpriteRenderer>().color = new Color(color.r, color.g, color.b, a);
         }
 
         public static void FadeIn(float time = DefaultFadeInTime, float delay = DefaultFadeInDelay)
-       {
+        {
             CancelFade(false);
             BG.SetActive(true);
             FadeCoroutine = UnboundNetworking.instance.StartCoroutine(FadeToCoroutine(MaxShadowOpacity, time, delay));
         }
 
         public static void FadeOut(float time = DefaultFadeOutTime, float delay = DefaultFadeOutDelay)
-       {
+        {
             CancelFade(false);
             FadeCoroutine = UnboundNetworking.instance.StartCoroutine(FadeToCoroutine(0f, time, delay, true));
         }
 
         private static IEnumerator FadeToCoroutine(float a, float time, float delay = 0f, bool disableWhenComplete = false)
-       {
-            if (time <= 0f || fadeInProgress){ yield break; }
+        {
+            if (time <= 0f || fadeInProgress) { yield break; }
             fadeInProgress = true;
 
             if (delay > 0f)
-           {
+            {
                 yield return new WaitForSecondsRealtime(delay);
             }
 
             float a0 = GetShadowOpacity();
             float totalTime = time;
             while (time > 0f)
-           {
+            {
                 SetShadowOpacity(UnityEngine.Mathf.Lerp(a, a0, time / totalTime));
                 time -= Time.deltaTime;
                 yield return null;
             }
             SetShadowOpacity(a);
-            if (disableWhenComplete){ BG.SetActive(false); }
+            if (disableWhenComplete) { BG.SetActive(false); }
 
             fadeInProgress = false;
             yield break;
         }
 
         public static void AddSpotToPlayer(Player player)
-       {
+        {
             // get the camera to make sure the object is made
             GameObject _ = Cam;
             GameObject Group = PlayerSpotlight.Group;
@@ -163,65 +159,65 @@ namespace Unbound.Networking.UI{
             spotlight.transform.localScale = 25f * Vector3.one;
         }
         public static IEnumerator FadeInHook(float time = DefaultFadeInTime, float delay = DefaultFadeInDelay)
-       {
+        {
             FadeIn(time, delay);
             yield break;
         }
         public static IEnumerator FadeOutHook(float time = DefaultFadeOutTime, float delay = DefaultFadeOutDelay)
-       {
+        {
             FadeOut(time, delay);
             yield break;
         }
         public static IEnumerator BattleStartFailsafe()
-       {
+        {
             CancelFade(true);
             yield break;
         }
         public static void CancelFade(bool disable_shadow = false)
-       {
+        {
             if (FadeCoroutine != null)
-           {
+            {
                 UnboundNetworking.instance.StopCoroutine(FadeCoroutine);
             }
             fadeInProgress = false;
             if (disable_shadow)
-           {
+            {
                 SetShadowOpacity(0f);
                 BG.SetActive(false);
             }
         }
         public static IEnumerator CancelFadeHook(bool disable_shadow = false)
-       {
+        {
             CancelFade(disable_shadow);
             yield break;
         }
 
     }
     public class FollowPlayer : MonoBehaviour
-   {
+    {
         Player player = null;
 
         public void SetPlayer(Player player)
-       {
+        {
             this.player = player;
         }
 
         void Start()
-       {
+        {
             if (this.player == null)
-           {
+            {
                 GameObject.Destroy(this);
             }
         }
         void Update()
-       {
+        {
             if (this.player == null)
-           {
+            {
                 GameObject.Destroy(this);
             }
             this.transform.position = this.player.gameObject.transform.position;
             // scale with player size
-            this.transform.localScale = (this.player.transform.localScale.x / 1.25f) * PlayerSpotlight.SpotlightSizeMult * Vector3.one;
+            this.transform.localScale = this.player.transform.localScale.x / 1.25f * PlayerSpotlight.SpotlightSizeMult * Vector3.one;
         }
     }
 }

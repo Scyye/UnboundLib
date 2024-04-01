@@ -5,9 +5,10 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Unbound.Networking.UI{
+namespace Unbound.Networking.UI
+{
     public class PopUpMenu : MonoBehaviour
-   {
+    {
         public static PopUpMenu instance;
 
         private Action<string> callback;
@@ -18,19 +19,19 @@ namespace Unbound.Networking.UI{
         private bool isOpen = false;
 
         public void Awake()
-       {
+        {
             PopUpMenu.instance = this;
 
-            var layoutGroup = this.gameObject.AddComponent<VerticalLayoutGroup>();
+            VerticalLayoutGroup layoutGroup = this.gameObject.AddComponent<VerticalLayoutGroup>();
             layoutGroup.childAlignment = TextAnchor.MiddleCenter;
 
-            var sizer = this.gameObject.AddComponent<ContentSizeFitter>();
+            ContentSizeFitter sizer = this.gameObject.AddComponent<ContentSizeFitter>();
             sizer.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
             sizer.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
         }
 
         public void Open(List<string> choices, Action<string> callback)
-       {
+        {
             this.callback = callback;
             this.currentChoice = 0;
             this.choices = choices;
@@ -39,27 +40,27 @@ namespace Unbound.Networking.UI{
             this.isOpen = true;
 
             while (this.transform.childCount > 0)
-           {
+            {
                 GameObject.DestroyImmediate(this.transform.GetChild(0).gameObject);
             }
 
             LayoutRebuilder.ForceRebuildLayoutImmediate(this.gameObject.GetComponent<RectTransform>());
 
             for (int i = 0; i < this.choices.Count; i++)
-           {
+            {
                 int index = i;
                 string choice = this.choices[index];
 
-                var go = GameObject.Instantiate(RoundsResources.PopUpMenuText, this.transform);
+                GameObject go = GameObject.Instantiate(RoundsResources.PopUpMenuText, this.transform);
                 go.name = choice;
 
-                var text = go.GetComponent<TextMeshProUGUI>();
+                TextMeshProUGUI text = go.GetComponent<TextMeshProUGUI>();
                 text.text = choice;
                 text.fontSize = 60;
 
                 go.AddComponent<VerticalLayoutGroup>();
-                var sizer = go.AddComponent<ContentSizeFitter>();
-                var layout = go.AddComponent<LayoutElement>();
+                ContentSizeFitter sizer = go.AddComponent<ContentSizeFitter>();
+                LayoutElement layout = go.AddComponent<LayoutElement>();
                 sizer.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
                 layout.preferredHeight = 92;
 
@@ -71,9 +72,9 @@ namespace Unbound.Networking.UI{
         }
 
         private void Update()
-       {
+        {
             if (!this.isOpen)
-           {
+            {
                 return;
             }
 
@@ -82,68 +83,68 @@ namespace Unbound.Networking.UI{
             bool isActionPressed = false;
 
             if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
-           {
+            {
                 isUp = true;
             }
 
             if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
-           {
+            {
                 isDown = true;
             }
 
             if (this.currentChoice != -1 && Input.GetKeyDown(KeyCode.Space))
-           {
+            {
                 isActionPressed = true;
             }
 
-            foreach (var input in InputManager.ActiveDevices)
-           {
+            foreach (InputDevice input in InputManager.ActiveDevices)
+            {
                 if (input.Direction.Up.WasPressed)
-               {
+                {
                     isUp = true;
                 }
 
                 if (input.Direction.Down.WasPressed)
-               {
+                {
                     isDown = true;
                 }
 
                 if (this.currentChoice != -1 && input.Action1.IsPressed)
-               {
+                {
                     isActionPressed = true;
                 }
             }
 
             if (isUp && this.currentChoice > 0)
-           {
+            {
                 this.SetChoice(this.currentChoice - 1);
             }
 
             if (isDown && this.currentChoice < this.choices.Count - 1)
-           {
+            {
                 this.SetChoice(this.currentChoice + 1);
             }
 
             if (isActionPressed)
-           {
+            {
                 this.Choose();
             }
         }
 
         private void SetChoice(int newChoice)
-       {
+        {
             if (newChoice == this.currentChoice)
-           {
+            {
                 return;
             }
 
             if (this.currentChoice != -1)
-           {
+            {
                 this.choiceAnimations[this.currentChoice].PlayOut();
             }
 
             if (newChoice != -1)
-           {
+            {
                 this.choiceAnimations[newChoice].PlayIn();
             }
 
@@ -151,11 +152,11 @@ namespace Unbound.Networking.UI{
         }
 
         private void Choose()
-       {
+        {
             this.isOpen = false;
 
-            foreach (var anim in this.choiceParticleSystems)
-           {
+            foreach (GeneralParticleSystem anim in this.choiceParticleSystems)
+            {
                 anim.loop = false;
             }
 
