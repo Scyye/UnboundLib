@@ -13,13 +13,12 @@ using UnboundLib.Networking.Utils;
 using UnityEngine;
 using static UnboundLib.Networking.Lobbies.ConectionHandler;
 
-namespace UnboundLib.Networking.Lobbies
-{
+namespace UnboundLib.Networking.Lobbies{
     public static class Unbound_Lobby
-    {
+   {
 
         public static void Host()
-        {
+       {
             //there is litteraly no reason for this, it is NEVER set by anything to anything other then 1 Doing it just to be safe. vaniall does the same.
             TimeHandler.instance.gameStartTime = 1f;
 
@@ -27,11 +26,11 @@ namespace UnboundLib.Networking.Lobbies
 
         }
         private static IEnumerator DoHost()
-        {
+       {
             yield return instance.ConectIfDisconected();
             steamLobby.CreateLobby(UnboundNetworking.MaxPlayers, delegate (string roomName) 
-            {
-                Debug.Log($"Created steam lobby: {roomName}");
+           {
+                Debug.Log($"Created steam lobby:{roomName}");
                 var options = RoomOptions.Clone();
                 options.CustomRoomProperties.Add("H",SyncModClients.GetCompatablityHash());
                 PhotonNetwork.CreateRoom(roomName, options, ModdedLobby, null);
@@ -39,12 +38,12 @@ namespace UnboundLib.Networking.Lobbies
         }
 
         public static void Join(string roomCode)
-        {
+       {
             UnboundCore.Instance.StartCoroutine(DoJoin(roomCode));
         }
 
         private static IEnumerator DoJoin(string roomCode)
-        {
+       {
             // uhhh cuz like uhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh god told me to :+1:
             TimeHandler.instance.gameStartTime = 1f;
 
@@ -53,7 +52,5 @@ namespace UnboundLib.Networking.Lobbies
             PhotonNetwork.JoinRoom(roomCode);
             steamLobby.JoinedRoom(roomCode);
         }
-
-
     }
 }

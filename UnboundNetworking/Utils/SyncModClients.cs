@@ -16,10 +16,9 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
-namespace UnboundLib.Networking.Utils
-{
+namespace UnboundLib.Networking.Utils{
     public static class SyncModClients
-    {
+   {
         internal static readonly float timeoutTime = 5f;
 
         private static List<string> clientSideGUIDs = new List<string>();
@@ -42,14 +41,14 @@ namespace UnboundLib.Networking.Utils
         private static List<string> loadedVersions = new List<string>();
 
         internal static void RequestSync()
-        {
+       {
             if (PhotonNetwork.OfflineMode) return;
 
-            NetworkingManager.RPC(typeof(SyncModClients), "SyncLobby", new object[] { });
+            NetworkingManager.RPC(typeof(SyncModClients), "SyncLobby", new object[]{ });
         }
 
         internal static string GetCompatablityHash()
-        {
+       {
             List<string> temp = loadedGUIDs.ToList();
             temp.Sort();
             byte[] bytes;
@@ -62,7 +61,7 @@ namespace UnboundLib.Networking.Utils
 
         [UnboundRPC]
         internal static void SyncLobby()
-        {
+       {
             Reset();
             LocalSetup();
             if (!PhotonNetwork.IsMasterClient) return;
@@ -72,12 +71,12 @@ namespace UnboundLib.Networking.Utils
         }
 
         internal static IEnumerator Check()
-        {
+       {
             float startTime = Time.time;
-            while (clientsServerSideGUIDs.Keys.Count < PhotonNetwork.PlayerList.Except(new List<Photon.Realtime.Player> { PhotonNetwork.LocalPlayer }).ToList().Count)
-            {
+            while (clientsServerSideGUIDs.Keys.Count < PhotonNetwork.PlayerList.Except(new List<Photon.Realtime.Player>{ PhotonNetwork.LocalPlayer }).ToList().Count)
+           {
                 if (Time.time > startTime + timeoutTime)
-                {
+               {
                     break;
                 }
 
@@ -89,11 +88,11 @@ namespace UnboundLib.Networking.Utils
         }
 
         internal static void LocalSetup()
-        {
+       {
             loadedMods = BepInEx.Bootstrap.Chainloader.PluginInfos;
 
             foreach (var modId in loadedMods.Keys.Where(id => !clientSideGUIDs.Contains(loadedMods[id].Metadata.GUID)))
-            {
+           {
                 loadedGUIDs.Add(loadedMods[modId].Metadata.GUID);
                 loadedModNames.Add(loadedMods[modId].Metadata.Name);
                 loadedVersions.Add(loadedMods[modId].Metadata.Version.ToString());
@@ -101,15 +100,15 @@ namespace UnboundLib.Networking.Utils
         }
 
         internal static void CheckLobby()
-        {
+       {
             if (PhotonNetwork.IsMasterClient)
-            {
-                NetworkingManager.RPC(typeof(SyncModClients), "SendModList", new object[] { });
+           {
+                NetworkingManager.RPC(typeof(SyncModClients), "SendModList", new object[]{ });
             }
         }
 
         internal static void Reset()
-        {
+       {
             clientsServerSideMods = new Dictionary<int, string[]>();
             clientsServerSideGUIDs = new Dictionary<int, string[]>();
             clientsModVersions = new Dictionary<int, string[]>();
@@ -127,9 +126,9 @@ namespace UnboundLib.Networking.Utils
         }
 
         internal static void FindDifferences()
-        {
+       {
             foreach (int actorId in clientsServerSideGUIDs.Keys)
-            {
+           {
                 missing[actorId] = hostsServerSideGUIDs.Except(clientsServerSideGUIDs[actorId]).ToArray();
                 extra[actorId] = clientsServerSideGUIDs[actorId].Except(hostsServerSideGUIDs).ToArray();
                 mismatch[actorId] = clientsServerSideGUIDs[actorId].Except(extra[actorId]).Except(missing[actorId]).Where(guid => HostVersionFromGUID(guid) != VersionFromGUID(actorId, guid)).ToArray();
@@ -137,48 +136,48 @@ namespace UnboundLib.Networking.Utils
 
         }
         private static string HostVersionFromGUID(string GUID)
-        {
+       {
             return hostsModVersions.Where((v, i) => hostsServerSideGUIDs[i] == GUID).FirstOrDefault();
         }
         private static string ModIDFromGUID(int actorID, string GUID)
-        {
+       {
             return clientsServerSideMods[actorID].Where((v, i) => clientsServerSideGUIDs[actorID][i] == GUID).FirstOrDefault();
         }
         private static string VersionFromGUID(int actorID, string GUID)
-        {
+       {
             return clientsModVersions[actorID].Where((v, i) => clientsServerSideGUIDs[actorID][i] == GUID).FirstOrDefault();
         }
 
         internal static void RegisterClientSideMod(string GUID)
-        {
-            if (!clientSideGUIDs.Contains(GUID)) { clientSideGUIDs.Add(GUID); }
+       {
+            if (!clientSideGUIDs.Contains(GUID)){ clientSideGUIDs.Add(GUID); }
         }
 
         internal static void MakeFlags()
-        {
-            if (!PhotonNetwork.IsMasterClient) { return; }
+       {
+            if (!PhotonNetwork.IsMasterClient){ return; }
             //UnityEngine.Debug.Log("MAKING FLAGS...");
 
             // add a host flag for the host
-            NetworkingManager.RPC(typeof(SyncModClients), nameof(AddFlags), new object[] { PhotonNetwork.LocalPlayer.ActorNumber, new string[] { "✓ " + PhotonNetwork.CurrentRoom.GetPlayer(PhotonNetwork.LocalPlayer.ActorNumber).NickName, "HOST" }, false });
+            NetworkingManager.RPC(typeof(SyncModClients), nameof(AddFlags), new object[]{ PhotonNetwork.LocalPlayer.ActorNumber, new string[]{ "✓ " + PhotonNetwork.CurrentRoom.GetPlayer(PhotonNetwork.LocalPlayer.ActorNumber).NickName, "HOST" }, false });
 
             // detect unmodded clients
-            foreach (int actorId in PhotonNetwork.CurrentRoom.Players.Values.Select(p => p.ActorNumber).Except(clientsServerSideGUIDs.Keys).Except(new int[] { PhotonNetwork.LocalPlayer.ActorNumber }).ToArray())
-            {
-                NetworkingManager.RPC(typeof(SyncModClients), nameof(AddFlags), new object[] { actorId, new string[] { "✗ " + PhotonNetwork.CurrentRoom.GetPlayer(actorId).NickName, "UNMODDED" }, true });
+            foreach (int actorId in PhotonNetwork.CurrentRoom.Players.Values.Select(p => p.ActorNumber).Except(clientsServerSideGUIDs.Keys).Except(new int[]{ PhotonNetwork.LocalPlayer.ActorNumber }).ToArray())
+           {
+                NetworkingManager.RPC(typeof(SyncModClients), nameof(AddFlags), new object[]{ actorId, new string[]{ "✗ " + PhotonNetwork.CurrentRoom.GetPlayer(actorId).NickName, "UNMODDED" }, true });
             }
 
             foreach (int actorId in clientsServerSideGUIDs.Keys.Intersect(PhotonNetwork.CurrentRoom.Players.Select(kv => kv.Value.ActorNumber)))
-            {
+           {
                 List<string> flags = new List<string>();
 
                 if (missing[actorId].Length == 0 && extra[actorId].Length == 0 && mismatch[actorId].Length == 0)
-                {
+               {
                     flags.Add("✓ " + PhotonNetwork.CurrentRoom.GetPlayer(actorId).NickName);
                     flags.Add("ALL MODS SYNCED");
                     //UnityEngine.Debug.Log(PhotonNetwork.CurrentRoom.GetPlayer(actorID).NickName + " is synced!");
 
-                    NetworkingManager.RPC(typeof(SyncModClients), nameof(AddFlags), new object[] { actorId, flags.ToArray(), false });
+                    NetworkingManager.RPC(typeof(SyncModClients), nameof(AddFlags), new object[]{ actorId, flags.ToArray(), false });
                     continue;
                 }
 
@@ -186,7 +185,7 @@ namespace UnboundLib.Networking.Utils
                 flags.AddRange(missing[actorId].Select(missingGUID => "MISSING: " + ModIDFromGUID(actorId, missingGUID) + " (" + missingGUID + ")"));
                 flags.AddRange(mismatch[actorId].Select(versionGUID => "VERSION: " + ModIDFromGUID(actorId, versionGUID) + " (" + versionGUID + ") Version: " + VersionFromGUID(actorId, versionGUID) + " <b>Host has: " + HostVersionFromGUID(versionGUID) + "</b>"));
                 flags.AddRange(extra[actorId].Select(extraGUID => "EXTRA: " + ModIDFromGUID(actorId, extraGUID) + " (" + extraGUID + ") Version: " + VersionFromGUID(actorId, extraGUID)));
-                NetworkingManager.RPC(typeof(SyncModClients), nameof(AddFlags), new object[] { actorId, flags.ToArray(), true });
+                NetworkingManager.RPC(typeof(SyncModClients), nameof(AddFlags), new object[]{ actorId, flags.ToArray(), true });
             }
 
 
@@ -195,7 +194,7 @@ namespace UnboundLib.Networking.Utils
         public static GameObject uiParent;
         [UnboundRPC]
         private static void AddFlags(int actorID, string[] flags, bool error)
-        {
+       {
             //UnityEngine.Debug.Log("ADDING FLAGS");
             // display the sync status of each player here
             // each player has a unique actorID, which is tied to their Nickname (displayed in the lobby) by PhotonNetwork.CurrentLobby.GetPlayer(actorID).NickName
@@ -212,7 +211,7 @@ namespace UnboundLib.Networking.Utils
 
             // Check if uiHolder has already been made
             if (!UIHandler.instance.transform.Find("Canvas/UIHolder"))
-            {
+           {
                 uiParent = Object.Instantiate(_uiHolder, UIHandler.instance.transform.Find("Canvas"));
                 uiParent.name = "UIHolder";
                 uiParent.GetComponent<RectTransform>().localPosition = new Vector3(-975, 486, 2565);
@@ -221,13 +220,13 @@ namespace UnboundLib.Networking.Utils
                 uiParent.GetComponent<VerticalLayoutGroup>().spacing = -60;
             }
             else
-            {
+           {
                 uiParent = UIHandler.instance.transform.Find("Canvas/UIHolder").gameObject;
             }
 
             GameObject playerObj;
             if (!uiParent.transform.Find(objName))
-            {
+           {
                 playerObj = new GameObject();
                 playerObj.AddComponent<RectTransform>();
                 playerObj.transform.SetParent(uiParent.transform, true);
@@ -235,28 +234,28 @@ namespace UnboundLib.Networking.Utils
                 playerObj.name = objName;
             }
             else
-            {
+           {
                 playerObj = uiParent.transform.Find(objName).gameObject;
             }
 
             // destroy sync object and remake it
             while (playerObj.transform.childCount > 0)
-            {
+           {
                 Object.DestroyImmediate(playerObj.transform.GetChild(0).gameObject);
             }
 
             if (!playerObj.transform.Find(nickName))
-            {
+           {
                 var flag = flags[0];
                 if (flag.Contains("✓ "))
-                {
+               {
                     var check = Object.Instantiate(_checkmark, playerObj.transform);
                     var _hover = check.AddComponent<CheckHover>();
                     _hover.texts = flags;
                     check.transform.localPosition = new Vector3(-15, 25, 0);
                 }
                 else if (flag.Contains("✗ "))
-                {
+               {
                     var redcheck = Object.Instantiate(_redx, playerObj.transform);
                     var _hover = redcheck.AddComponent<CheckHover>();
                     _hover.texts = flags;
@@ -282,36 +281,36 @@ namespace UnboundLib.Networking.Utils
             }
 
             UnboundCore.Instance.ExecuteAfterFrames(5, () =>
-            {
+           {
                 uiParent.GetComponent<VerticalLayoutGroup>().SetLayoutVertical();
             });
         }
 
         public static IEnumerator DisableSyncModUi(GameObject parent)
-        {
+       {
             Object.Destroy(parent);
             yield break;
         }
 
         [UnboundRPC]
         private static void SendModList()
-        {
-            NetworkingManager.RPC(typeof(SyncModClients), "ReceiveModList", new object[] { loadedGUIDs.ToArray(), loadedModNames.ToArray(), loadedVersions.ToArray(), PhotonNetwork.LocalPlayer.ActorNumber });
+       {
+            NetworkingManager.RPC(typeof(SyncModClients), "ReceiveModList", new object[]{ loadedGUIDs.ToArray(), loadedModNames.ToArray(), loadedVersions.ToArray(), PhotonNetwork.LocalPlayer.ActorNumber });
         }
 
         [UnboundRPC]
         private static void ReceiveModList(string[] serverSideGUIDs, string[] serverSideMods, string[] versions, int actorID)
-        {
+       {
             if (!PhotonNetwork.IsMasterClient) return;
 
             if (PhotonNetwork.LocalPlayer.ActorNumber == actorID)
-            {
+           {
                 hostsServerSideGUIDs = serverSideGUIDs.ToList();
                 hostsServerSideMods = serverSideMods.ToList();
                 hostsModVersions = versions.ToList();
             }
             else
-            {
+           {
                 clientsServerSideGUIDs[actorID] = serverSideGUIDs;
                 clientsServerSideMods[actorID] = serverSideMods;
                 clientsModVersions[actorID] = versions;
@@ -320,21 +319,21 @@ namespace UnboundLib.Networking.Utils
     }
 
     internal class PingUpdater : MonoBehaviour
-    {
+   {
         public int actorId;
 
         private TextMeshProUGUI textBox;
         private string text = null;
 
         private void Start()
-        {
+       {
             PingMonitor.instance.PingUpdateAction += OnPingUpdate;
         }
 
         private void OnPingUpdate(int updatedActorId, int ping)
-        {
+       {
             if (!textBox)
-            {
+           {
                 textBox = gameObject.GetComponent<TextMeshProUGUI>();
                 text = textBox.text;
             }
@@ -342,24 +341,24 @@ namespace UnboundLib.Networking.Utils
             var color = PingMonitor.instance.GetPingColors(ping);
 
             if (textBox.color == Color.red)
-            {
+           {
                 color = PingMonitor.instance.GetPingColors(5000);
             }
 
             if (updatedActorId == actorId)
-            {
+           {
                 textBox.text = $"{text} - <color={color.HTMLCode}>{ping}ms</color>";
             }
         }
 
         private void OnDestroy()
-        {
+       {
             PingMonitor.instance.PingUpdateAction -= OnPingUpdate;
         }
     }
 
     internal class DetectUnmodded : MonoBehaviour
-    {
+   {
         private const float BaseDelay = 1f;
         private float delay = 1f;
         private float startTime;
@@ -367,24 +366,24 @@ namespace UnboundLib.Networking.Utils
         private bool update;
 
         private void Start()
-        {
+       {
             startTime = Time.time;
             prevPlayers = PhotonNetwork.CurrentRoom.PlayerCount;
             delay = BaseDelay;
         }
 
         private void Update()
-        {
+       {
             if (Time.time <= startTime + delay) return;
 
             if (update)
-            {
+           {
                 SyncModClients.MakeFlags();
                 update = false;
                 delay = BaseDelay;
             }
             else
-            {
+           {
                 startTime = Time.time;
                 if (prevPlayers == PhotonNetwork.CurrentRoom.PlayerCount) return;
 
@@ -396,45 +395,45 @@ namespace UnboundLib.Networking.Utils
     }
 
     internal class DetectMissingPlayers : MonoBehaviour
-    {
+   {
         private const float BaseDelay = 1f;
         private float delay = BaseDelay;
 
         private void Start()
-        {
+       {
             delay = BaseDelay;
         }
 
         private void Update()
-        {
+       {
             if (delay <= 0f)
-            {
+           {
                 delay = BaseDelay;
 
                 // look through all of the mod syncing objects and make sure there is a photon client with the same actor number
                 List<int> toDestroy = new List<int>();
                 for (int i = 0; i < gameObject.transform.childCount; i++)
-                {
+               {
                     GameObject playerObj = gameObject.transform.GetChild(i).gameObject;
                     if (!PhotonNetwork.CurrentRoom.Players.Keys.Select(aID => aID.ToString()).Contains(playerObj.name))
-                    {
+                   {
                         toDestroy.Add(i);
                     }
                 }
                 foreach (int i in toDestroy)
-                {
+               {
                     Destroy(gameObject.transform.GetChild(i).gameObject);
                 }
             }
             else
-            {
+           {
                 delay -= TimeHandler.deltaTime;
             }
         }
     }
 
     internal class CheckHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
-    {
+   {
         public string[] texts;
         public int actorId;
 
@@ -444,11 +443,11 @@ namespace UnboundLib.Networking.Utils
         private bool inBounds;
 
         private void Start()
-        {
+       {
             guiStyleFore = new GUIStyle
-            {
+           {
                 richText = true,
-                normal = { textColor = Color.white },
+                normal ={ textColor = Color.white },
                 alignment = TextAnchor.UpperLeft,
                 wordWrap = false,
                 stretchWidth = true
@@ -462,7 +461,7 @@ namespace UnboundLib.Networking.Utils
             PingMonitor.instance.PingUpdateAction += OnPingUpdate;
         }
         private void OnGUI()
-        {
+       {
 
             if (!inBounds || texts == Array.Empty<string>() || !(Input.mousePosition.x < Screen.width / 4f)) return;
 
@@ -470,7 +469,7 @@ namespace UnboundLib.Networking.Utils
             GUILayout.BeginArea(new Rect(Input.mousePosition.x + 25, Screen.height - Input.mousePosition.y + 25, size.x + 10, size.y + 10));
             GUILayout.BeginVertical();
             foreach (var t in texts)
-            {
+           {
                 GUILayout.Label(t, guiStyleFore);
             }
 
@@ -479,20 +478,20 @@ namespace UnboundLib.Networking.Utils
         }
 
         public void OnPointerEnter(PointerEventData eventData)
-        {
+       {
             inBounds = true;
         }
         public void OnPointerExit(PointerEventData eventData)
-        {
+       {
             inBounds = false;
         }
 
         private void OnPingUpdate(int updatedActorId, int ping)
-        {
+       {
             if (updatedActorId != actorId) return;
 
             if (pingString == "")
-            {
+           {
                 pingString = texts[0];
             }
 
@@ -502,7 +501,7 @@ namespace UnboundLib.Networking.Utils
         }
 
         private void OnDestroy()
-        {
+       {
             PingMonitor.instance.PingUpdateAction -= OnPingUpdate;
         }
     }
