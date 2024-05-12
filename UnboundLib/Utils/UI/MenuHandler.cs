@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using Jotunn.Utils;
 using TMPro;
+using Unbound.Core.Networking;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
-namespace UnboundLib.Utils.UI
+namespace Unbound.Core.Utils.UI
 {
     public class MenuHandler
     {
@@ -22,6 +24,8 @@ namespace UnboundLib.Utils.UI
 
         public static AssetBundle modOptionsUI;
 
+        public static Dictionary<string, GameObject> modMenus = new Dictionary<string, GameObject>();
+
         private MenuHandler()
         {
             // singleton first time setup
@@ -29,7 +33,7 @@ namespace UnboundLib.Utils.UI
             Instance = this;
 
             // load options ui base objects
-            modOptionsUI = AssetUtils.LoadAssetBundleFromResources("modoptionsui", typeof(Unbound).Assembly);
+            modOptionsUI = AssetUtils.LoadAssetBundleFromResources("modoptionsui", typeof(UnboundCore).Assembly);
             if (modOptionsUI == null)
             {
                 UnityEngine.Debug.LogError("Couldn't find ModOptionsUI AssetBundle?");
@@ -101,6 +105,9 @@ namespace UnboundLib.Utils.UI
             button.GetComponent<Button>().onClick.AddListener(buttonAction);
 
             menuButton = button;
+
+            if (!modMenus.ContainsKey(Name))
+                modMenus.Add(Name, obj);
 
             return obj;
         }
@@ -256,7 +263,7 @@ namespace UnboundLib.Utils.UI
             var newText = new GameObject("Unbound Text Object").AddComponent<TextMeshProUGUI>();
             newText.text = text;
             newText.fontSize = 100;
-            newText.transform.SetParent(Unbound.Instance.canvas.transform);
+            newText.transform.SetParent(UnboundCore.Instance.canvas.transform);
 
             var anchorPoint = new Vector2(0.5f, 0.5f);
             newText.rectTransform.anchorMax = anchorPoint;
@@ -267,7 +274,7 @@ namespace UnboundLib.Utils.UI
             newText.rectTransform.position = position;
             newText.enableWordWrapping = false;
 
-            Unbound.Instance.StartCoroutine(FadeIn(newText.gameObject.AddComponent<CanvasGroup>(), 4));
+            UnboundCore.Instance.StartCoroutine(FadeIn(newText.gameObject.AddComponent<CanvasGroup>(), 4));
 
             return newText;
         }

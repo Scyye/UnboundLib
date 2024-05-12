@@ -1,5 +1,5 @@
 using System.Reflection;
 
-[assembly: AssemblyVersion(UnboundLib.Unbound.Version)]
-[assembly: AssemblyFileVersion(UnboundLib.Unbound.Version)]
-[assembly: AssemblyInformationalVersion(UnboundLib.Unbound.Version)]
+[assembly: AssemblyVersion(Unbound.Core.UnboundCore.Version)]
+[assembly: AssemblyFileVersion(Unbound.Core.UnboundCore.Version)]
+[assembly: AssemblyInformationalVersion(Unbound.Core.UnboundCore.Version)]

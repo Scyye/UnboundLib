@@ -40,7 +40,7 @@ $name = "$TargetAssembly" -Replace('.dll')
 if ($Target.Equals("Debug")) {
     Write-Host "Updating local installation in $RoundsPath"
     
-    $plug = New-Item -Type Directory -Path "$RoundsPath\BepInEx\plugins\$name" -Force
+    $plug = New-Item -Type Directory -Path "$RoundsPath\BepInEx\plugins\UnboundLib" -Force
     Write-Host "Copy $TargetAssembly to $plug"
     Copy-Item -Path "$TargetPath\$name.dll" -Destination "$plug" -Force
 }

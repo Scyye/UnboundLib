@@ -5,9 +5,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using UnboundLib.Networking;
+using Unbound.Core.Networking;
+using Debug = UnityEngine.Debug;
 
-namespace UnboundLib
+namespace Unbound.Core
 {
     public static class NetworkingManager
     {

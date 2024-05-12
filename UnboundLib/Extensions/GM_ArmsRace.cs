@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
-namespace UnboundLib.Extensions
+namespace Unbound.Core.Extensions
 {
     [Serializable]
     public class GM_ArmsRaceAdditionalData

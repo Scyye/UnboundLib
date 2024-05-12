@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-namespace UnboundLib.Utils.UI
+namespace Unbound.Core.Utils.UI
 {
 
     public class Credits
@@ -35,7 +35,7 @@ namespace UnboundLib.Utils.UI
         }
         internal void CreateCreditsMenu(bool firstTime)
         {
-            Unbound.Instance.ExecuteAfterSeconds(firstTime ? 0.1f : 0f, () =>
+            UnboundCore.Instance.ExecuteAfterSeconds(firstTime ? 0.1f : 0f, () =>
             {
                 // Create credits menu
                 CreditsMenu = MenuHandler.CreateMenu("CREDITS", null, MainMenuHandler.instance.transform.Find("Canvas/ListSelector/Main").gameObject, 60, true, false, null,true, 5);
@@ -82,7 +82,7 @@ namespace UnboundLib.Utils.UI
                 // ROUNDS
                 AddModCredits(roundsCredits, RoundsCredits);
                 // UNBOUND
-                AddModCredits(Unbound.modCredits, UnboundCredits);
+                AddModCredits(UnboundCore.modCredits, UnboundCredits);
 
                 foreach (string modName in modCredits.Keys)
                 {

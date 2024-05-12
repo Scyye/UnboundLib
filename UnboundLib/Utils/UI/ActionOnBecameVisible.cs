@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace UnboundLib.Utils.UI
+namespace Unbound.Core.Utils.UI
 {
     public class ActionOnBecameVisible : MonoBehaviour
     {
