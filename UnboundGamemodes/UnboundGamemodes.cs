@@ -7,6 +7,8 @@ using System.Linq;
 using Unbound.Core;
 using Unbound.Core.Networking;
 using Unbound.Core.Utils;
+using Unbound.Gamemodes.Interface;
+using UnityEngine;
 using static Unbound.Core.Networking.NetworkEventCallbacks;
 using static Unbound.Core.UnboundCore;
 
@@ -47,6 +49,8 @@ namespace Unbound.Gamemodes
         void Start()
         {
             gameObject.GetOrAddComponent<NetworkEventCallbacks>().OnPlayerLeftRoomEvent += ReomovePlayer;
+
+            gameObject.AddComponent<InterfaceGameModeHooksManager>();
         }
 
         internal static void ReomovePlayer(PlayerEventArg arg)
