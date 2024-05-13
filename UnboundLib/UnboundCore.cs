@@ -117,6 +117,14 @@ namespace Unbound.Core {
             //Debug.Log("UnboundLib: Loading assets");
 
             LoadAssets();
+
+            Application.quitting += () => {
+                GameObject[] objects = GameObject.FindObjectsOfType<GameObject>();
+                foreach (GameObject obj in objects)
+                {
+                    GameObject.DestroyImmediate(obj);
+                }
+            };
         }
 
         private void Start()
