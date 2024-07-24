@@ -1,7 +1,7 @@
 ﻿using Unbound.Core.Utils;
 using UnityEngine.Localization;
 
-namespace Unbound.Networking.UI
+namespace Unbound.Gamemodes.Networking.UI
 {
     public class LocalizedStrings
     {

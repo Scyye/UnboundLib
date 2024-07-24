@@ -10,9 +10,11 @@ using System.Reflection;
 using TMPro;
 using Unbound.Core;
 using Unbound.Core.Utils.UI;
-using Unbound.Networking;
-using Unbound.Networking.UI;
+using Unbound.Gamemodes;
+using Unbound.Gamemodes.Networking;
+using Unbound.Gamemodes.Networking.UI;
 using UnboundLib.Networking;
+using UnboundLib.Networking.RPCs;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -143,29 +145,37 @@ namespace RWF
         }
 
         // bool that represents if all of the game mode's requirements are fulfilled
-        private bool GameCanStart => NumCharacters > 0 && NumCharactersReady == NumCharacters // is everyone ready?
-                                    && /*UnboundNetworking.DEBUG || */
-                                    PhotonNetwork.CurrentRoom.PlayerCount > 1 // is there more than just one client?
-                                    && PhotonNetwork.CurrentRoom.PlayerCount <= (GameModeManager.CurrentHandler.Settings.TryGetValue(RWFMod.MaxClientsKey, out object maxC) ? (int) maxC : RWFMod.instance.MaxClients) // are there too many clients?
-                                    && PrivateRoomCharacters.Select(p => p.colorID).Distinct().Count() > 1 // is there more than one player?
-                                    && NumCharactersReady >= (GameModeManager.CurrentHandler.Settings.TryGetValue(RWFMod.PlayersRequiredToStartGameKey, out object req) ? (int) req : RWFMod.instance.MinPlayers) // are there enough players for this game mode? 
-                                    && NumCharactersReady <= (GameModeManager.CurrentHandler.Settings.TryGetValue(RWFMod.MaxPlayersKey, out object maxP) ? (int) maxP : RWFMod.MaxPlayersHardLimit) // are there too many players for this game mode?
-                                    && PrivateRoomCharacters.Select(p => p.colorID).Distinct().Count() <= (GameModeManager.CurrentHandler.Settings.TryGetValue(RWFMod.MaxTeamsKey, out object maxT) ? (int) maxT : RWFMod.instance.MaxTeams); // are there too many teams?
-
-
-
-        private static void SaveSettings()
+        private bool GameCanStart
         {
-            PrivateRoomHandler.PrevHandlerID = GameModeManager.CurrentHandlerID;
-            PrivateRoomHandler.PrevSettings = GameModeManager.CurrentHandler.Settings;
+            get
+            {
+                bool enoughCharacters = NumCharacters > 0 && NumCharactersReady == NumCharacters; // Check if all characters are ready
+                bool multipleClients = PhotonNetwork.CurrentRoom.PlayerCount > 1; // Check if there's more than one client
+                bool validClientCount = PhotonNetwork.CurrentRoom.PlayerCount <= GetMaxClients(); // Check if the client count is within limits
+                bool multiplePlayers = PrivateRoomCharacters.Select(p => p.colorID).Distinct().Count() > 1; // Check if there's more than one player
+                bool enoughPlayers = NumCharactersReady >= GetMinPlayers(); // Check if there are enough players for this game mode
+                bool validPlayerCount = NumCharactersReady <= GetMaxPlayers(); // Check if the player count is within limits
+                bool validTeamCount = PrivateRoomCharacters.Select(p => p.colorID).Distinct().Count() <= GetMaxTeams(); // Check if the team count is within limits
+
+                return enoughCharacters && multipleClients && validClientCount &&
+                       multiplePlayers && enoughPlayers && validPlayerCount && validTeamCount;
+            }
         }
 
-        public static void RestoreSettings()
+        // Helper methods to get settings from GameModeManager or default values
+        private int GetMaxClients() => GetSetting("maxClients", UnboundNetworking.MaxClients);
+        private int GetMinPlayers() => GetSetting("playersRequiredToStartGame", UnboundNetworking.MinPlayers);
+        private int GetMaxPlayers() => GetSetting("maxPlayers", UnboundNetworking.MaxPlayers);
+        private int GetMaxTeams() => GetSetting("maxTeams", UnboundNetworking.MaxPlayers);
+
+        private int GetSetting(string key, int defaultValue)
         {
-            PrivateRoomHandler.instance.SyncMethod(nameof(PrivateRoomHandler.SetGameSettings), null, PrivateRoomHandler.PrevHandlerID, PrivateRoomHandler.PrevSettings);
-            PrivateRoomHandler.PrevHandlerID = null;
-            PrivateRoomHandler.PrevSettings = null;
+            if (GameModeManager.CurrentHandler.Settings.TryGetValue(key, out object value) && value is int intValue)
+                return intValue;
+            return defaultValue;
         }
+
+
 
         private void Awake()
         {
@@ -185,7 +195,7 @@ namespace RWF
         {
             devicesToUse = new Dictionary<int, InputDevice>();
             lockReadies = false;
-            PhotonNetwork.LocalPlayer.SetProperty("players", new LobbyCharacter[RWFMod.instance.MaxCharactersPerClient]);
+            PhotonNetwork.LocalPlayer.SetProperty("players", new LobbyCharacter[UnboundNetworking.MaxCharactersPerClient]);
 
             base.OnEnable();
         }
@@ -239,7 +249,7 @@ namespace RWF
             RectTransform gamemodeGoRect = gamemodeHeader.AddComponent<RectTransform>();
             LayoutElement gamemodeGoLayout = gamemodeHeader.AddComponent<LayoutElement>();
             gamemodeHeaderText = gamemodeTextGo.GetComponent<TextMeshProUGUI>();
-            gamemodeHeaderText.text = GameModeManager.CurrentHandler?.Name?.ToUpper() ?? "CONNECTING...";
+            gamemodeHeaderText.text = /*GameModeManager.CurrentHandler?.Name?.ToUpper() */"TESTING..." ?? "CONNECTING...";
             gamemodeHeaderText.fontSize = 60;
             gamemodeHeaderText.fontStyle = FontStyles.Bold;
             gamemodeHeaderText.enableWordWrapping = false;
@@ -434,10 +444,10 @@ namespace RWF
             return textGo;
         }
 
-        public void HandleTeamRules()
+        public void HandleTeamRules(bool teams)
         {
             // prevent players from being on the same team if the new gamemode prohibits it
-            if (!GameModeManager.CurrentHandler.AllowTeams)
+            if (!teams)
             {
                 if (PrivateRoomCharacters.Select(p => p.colorID).Distinct().Count() == NumCharacters)
                 {
@@ -501,22 +511,7 @@ namespace RWF
             }
         }
 
-        public GameObject GetText(string str)
-        {
-            GameObject textGo = new GameObject("Text");
 
-            textGo.AddComponent<CanvasRenderer>();
-            TextMeshProUGUI text = textGo.AddComponent<TextMeshProUGUI>();
-            text.text = str;
-            text.color = new Color32(230, 230, 230, 255);
-            text.font = RoundsResources.MenuFont;
-            text.fontSize = 60;
-            text.fontWeight = FontWeight.Regular;
-            text.alignment = TextAlignmentOptions.Center;
-            text.rectTransform.sizeDelta = new Vector2(2050, 92);
-
-            return textGo;
-        }
 
         private void Update()
         {
@@ -695,7 +690,7 @@ namespace RWF
                 int colorID = PlayerPrefs.GetInt(RWFMod.GetCustomPropertyKey("PreferredColor" + localPlayerNumber.ToString()));
                 if (!GameModeManager.CurrentHandler.AllowTeams && PrivateRoomCharacters.Select(p => p.colorID).Distinct().Contains(colorID))
                 {
-                    colorID = Enumerable.Range(0, RWFMod.MaxColorsHardLimit).Except(PrivateRoomCharacters.Select(p => p.colorID).Distinct()).OrderBy(c => UnityEngine.Mathf.Abs(c - colorID)).FirstOrDefault();
+                    colorID = Enumerable.Range(0, UnboundGamemodes.MaxColorsHardLimit).Except(PrivateRoomCharacters.Select(p => p.colorID).Distinct()).OrderBy(c => UnityEngine.Mathf.Abs(c - colorID)).FirstOrDefault();
                 }
                 localCharacters[localPlayerNumber] = new LobbyCharacter(PhotonNetwork.LocalPlayer, colorID, localPlayerNumber);
 

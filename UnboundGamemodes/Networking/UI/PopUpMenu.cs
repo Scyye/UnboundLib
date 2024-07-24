@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Unbound.Networking.UI
+namespace Unbound.Gamemodes.Networking.UI
 {
     public class PopUpMenu : MonoBehaviour
     {

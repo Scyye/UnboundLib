@@ -5,9 +5,9 @@ using Unbound.Core;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Unbound.Networking.UI
+namespace Unbound.Gamemodes.Networking.UI
 {
-    class PlayerDisplay : MonoBehaviour
+    public class PlayerDisplay : MonoBehaviour
     {
         public static PlayerDisplay instance;
 

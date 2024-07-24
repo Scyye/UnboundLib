@@ -10,7 +10,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UI.ProceduralImage;
 
-namespace Unbound.Networking.UI
+namespace Unbound.Gamemodes.Networking.UI
 {
     static class Colors
     {

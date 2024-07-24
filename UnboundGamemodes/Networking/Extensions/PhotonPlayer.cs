@@ -1,12 +1,10 @@
-﻿using Unbound.Networking;
-
-namespace RWF
+﻿namespace Unbound.Gamemodes.Networking
 {
     public static class PhotonPlayerExtensions
     {
         public static void SetProperty(this Photon.Realtime.Player instance, string key, object value)
         {
-            var propKey = RWFMod.GetCustomPropertyKey(key);
+            var propKey = UnboundNetworking.GetCustomPropertyKey(key);
             ExitGames.Client.Photon.Hashtable props = instance.CustomProperties;
 
             if (!props.ContainsKey(propKey))
@@ -23,7 +21,7 @@ namespace RWF
 
         public static T GetProperty<T>(this Photon.Realtime.Player instance, string key)
         {
-            var propKey = RWFMod.GetCustomPropertyKey(key);
+            var propKey = UnboundNetworking.GetCustomPropertyKey(key);
             ExitGames.Client.Photon.Hashtable props = instance.CustomProperties;
 
             if (!props.ContainsKey(propKey))

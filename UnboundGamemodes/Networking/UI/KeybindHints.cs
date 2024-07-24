@@ -3,7 +3,7 @@ using Unbound.Core;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Unbound.Networking.UI
+namespace Unbound.Gamemodes.Networking.UI
 {
     public static class KeybindHints
     {
@@ -139,7 +139,7 @@ namespace Unbound.Networking.UI
                 if (PlayerPrefs.GetInt(UnboundNetworking.GetCustomPropertyKey("ShowKeybinds"), 1) == 0 && gameObject != null) { UnityEngine.GameObject.Destroy(gameObject); }
             }
         }
-        internal class DisableIfSet : MonoBehaviour
+        public class DisableIfSet : MonoBehaviour
         {
             void Start()
             {
@@ -150,10 +150,10 @@ namespace Unbound.Networking.UI
                 if (PlayerPrefs.GetInt(UnboundNetworking.GetCustomPropertyKey("ShowKeybinds"), 1) == 0 && gameObject != null) { gameObject.SetActive(false); }
             }
         }
-        internal class ControllerBasedHints : MonoBehaviour
+        public class ControllerBasedHints : MonoBehaviour
         {
-            internal string[] hints;
-            internal string action;
+            public string[] hints;
+            public string action;
             private const float timeToWait = 1f;
             private float time = 0f;
             void Start()
