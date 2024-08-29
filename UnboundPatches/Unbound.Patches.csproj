@@ -34,7 +34,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-	  <RoundsFolder>F:\SteamLibrary\steamapps\common\ROUNDS</RoundsFolder>
+	  <RoundsFolder>K:\SteamLibrary\steamapps\common\ROUNDS</RoundsFolder>
 	  <ManagedFolder>$(RoundsFolder)\ROUNDS_Data\Managed</ManagedFolder>
     <BepInFolder>..\Assemblies</BepInFolder>
     <IndirectBuildTask>true</IndirectBuildTask>
@@ -55,7 +55,6 @@
     <ProjectReference Include="..\UnboundCards\Unbound.Cards.csproj" />
     <ProjectReference Include="..\UnboundGamemodes\Unbound.Gamemodes.csproj" />
     <ProjectReference Include="..\UnboundLib\Unbound.Core.csproj" />
-    <ProjectReference Include="..\UnboundNetworking\Unbound.Networking.csproj" />
   </ItemGroup>
 
   <ItemGroup>

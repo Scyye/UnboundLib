@@ -10,15 +10,13 @@ using System.Reflection;
 using TMPro;
 using Unbound.Core;
 using Unbound.Core.Utils.UI;
-using Unbound.Gamemodes;
-using Unbound.Gamemodes.Networking;
 using Unbound.Gamemodes.Networking.UI;
 using UnboundLib.Networking;
 using UnboundLib.Networking.RPCs;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace RWF
+namespace Unbound.Gamemodes.Networking
 {
     public static class PrivateRoomPrefabs
     {
@@ -30,22 +28,22 @@ namespace RWF
             {
                 if (_PrivateRoomCharacterSelectionInstance != null)
                 {
-                    return PrivateRoomPrefabs._PrivateRoomCharacterSelectionInstance;
+                    return _PrivateRoomCharacterSelectionInstance;
                 }
 
                 GameObject orig = UnityEngine.GameObject.Find("Game/UI/UI_MainMenu/Canvas/ListSelector/CharacterSelect/Group").transform.GetChild(0).gameObject;
-                GameObject selector = GameObject.Instantiate(orig);
-                UnityEngine.GameObject.DontDestroyOnLoad(selector);
+                GameObject selector = UnityEngine.Object.Instantiate(orig);
+                UnityEngine.Object.DontDestroyOnLoad(selector);
                 selector.SetActive(true);
                 selector.name = "PrivateRoomCharacterSelector";
                 selector.GetOrAddComponent<RectTransform>();
                 selector.GetOrAddComponent<PhotonView>();
                 ContentSizeFitter sizer = selector.GetOrAddComponent<ContentSizeFitter>();
                 sizer.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
-                UnityEngine.GameObject.Destroy(selector.GetComponent<CharacterSelectionInstance>());
+                UnityEngine.Object.Destroy(selector.GetComponent<CharacterSelectionInstance>());
                 PrivateRoomCharacterSelectionInstance charSelect = selector.GetOrAddComponent<PrivateRoomCharacterSelectionInstance>();
-                UnityEngine.GameObject.Destroy(charSelect.transform.GetChild(2).gameObject);
-                UnityEngine.GameObject.Destroy(charSelect.transform.GetChild(1).gameObject);
+                UnityEngine.Object.Destroy(charSelect.transform.GetChild(2).gameObject);
+                UnityEngine.Object.Destroy(charSelect.transform.GetChild(1).gameObject);
 
                 GameObject playerName = new GameObject("PlayerName", typeof(TextMeshProUGUI));
                 playerName.transform.SetParent(selector.transform);
@@ -59,9 +57,9 @@ namespace RWF
 
                 PhotonNetwork.PrefabPool.RegisterPrefab(selector.name, selector);
 
-                PrivateRoomPrefabs._PrivateRoomCharacterSelectionInstance = selector;
+                _PrivateRoomCharacterSelectionInstance = selector;
 
-                return PrivateRoomPrefabs._PrivateRoomCharacterSelectionInstance;
+                return _PrivateRoomCharacterSelectionInstance;
             }
             private set { }
         }
@@ -76,8 +74,8 @@ namespace RWF
         public static readonly Color enabledTextColor = new Color32(230, 230, 230, 255);
 
         public static PrivateRoomHandler instance;
-        private static string PrevHandlerID;
-        private static GameSettings PrevSettings;
+        private static readonly string PrevHandlerID;
+        private static readonly GameSettings PrevSettings;
 
         private GameObject grid;
         private GameObject header;
@@ -95,7 +93,7 @@ namespace RWF
         {
             get
             {
-                return PrivateRoomHandler.instance._lockReadies;
+                return instance._lockReadies;
             }
             set
             {
@@ -179,7 +177,7 @@ namespace RWF
 
         private void Awake()
         {
-            PrivateRoomHandler.instance = this;
+            instance = this;
 
             // load the prefab just once to make sure it's registered
             GameObject prefab = PrivateRoomPrefabs.PrivateRoomCharacterSelectionInstance;
@@ -223,7 +221,7 @@ namespace RWF
             header = new GameObject("Header");
             header.transform.SetParent(grid.transform);
             header.transform.localScale = Vector3.one;
-            GameObject headerTextGo = GameObject.Instantiate(RoundsResources.FlickeringTextPrefab, header.transform);
+            GameObject headerTextGo = Instantiate(RoundsResources.FlickeringTextPrefab, header.transform);
             headerTextGo.transform.localScale = Vector3.one;
             headerTextGo.transform.localPosition = Vector3.zero;
             RectTransform headerGoRect = header.AddComponent<RectTransform>();
@@ -243,13 +241,13 @@ namespace RWF
             gamemodeHeader = new GameObject("GameModeHeader");
             gamemodeHeader.transform.SetParent(grid.transform);
             gamemodeHeader.transform.localScale = Vector3.one;
-            GameObject gamemodeTextGo = GameObject.Instantiate(RoundsResources.FlickeringTextPrefab, gamemodeHeader.transform);
+            GameObject gamemodeTextGo = Instantiate(RoundsResources.FlickeringTextPrefab, gamemodeHeader.transform);
             gamemodeTextGo.transform.localScale = Vector3.one;
             gamemodeTextGo.transform.localPosition = Vector3.zero;
             RectTransform gamemodeGoRect = gamemodeHeader.AddComponent<RectTransform>();
             LayoutElement gamemodeGoLayout = gamemodeHeader.AddComponent<LayoutElement>();
             gamemodeHeaderText = gamemodeTextGo.GetComponent<TextMeshProUGUI>();
-            gamemodeHeaderText.text = /*GameModeManager.CurrentHandler?.Name?.ToUpper() */"TESTING..." ?? "CONNECTING...";
+            gamemodeHeaderText.text = GameModeManager.CurrentHandler?.Name?.ToUpper() ?? "CONNECTING...";
             gamemodeHeaderText.fontSize = 60;
             gamemodeHeaderText.fontStyle = FontStyles.Bold;
             gamemodeHeaderText.enableWordWrapping = false;
@@ -268,22 +266,22 @@ namespace RWF
             GameObject keybindGo = new GameObject("Keybinds");
             keybindGo.transform.SetParent(grid.transform);
             keybindGo.transform.localScale = Vector3.one;
-            KeybindHints.ControllerBasedHints keybindHints1 = GameObject.Instantiate(KeybindHints.KeybindPrefab, keybindGo.transform).AddComponent<KeybindHints.ControllerBasedHints>();
+            KeybindHints.ControllerBasedHints keybindHints1 = Instantiate(KeybindHints.KeybindPrefab, keybindGo.transform).AddComponent<KeybindHints.ControllerBasedHints>();
             keybindHints1.hints = new[] { "[A/D]", "[LEFT STICK]" };
             keybindHints1.action = "CHANGE TEAM";
             keybindHints1.gameObject.SetActive(true);
             keybindHints1.gameObject.AddComponent<KeybindHints.DisableIfSet>();
-            KeybindHints.ControllerBasedHints keybindHints2 = GameObject.Instantiate(KeybindHints.KeybindPrefab, keybindGo.transform).AddComponent<KeybindHints.ControllerBasedHints>();
+            KeybindHints.ControllerBasedHints keybindHints2 = Instantiate(KeybindHints.KeybindPrefab, keybindGo.transform).AddComponent<KeybindHints.ControllerBasedHints>();
             keybindHints2.hints = new[] { "[SPACE]", "[START]" };
             keybindHints2.action = "JOIN/READY";
             keybindHints2.gameObject.SetActive(true);
             keybindHints2.gameObject.AddComponent<KeybindHints.DisableIfSet>();
-            KeybindHints.ControllerBasedHints keybindHints3 = GameObject.Instantiate(KeybindHints.KeybindPrefab, keybindGo.transform).AddComponent<KeybindHints.ControllerBasedHints>();
+            KeybindHints.ControllerBasedHints keybindHints3 = Instantiate(KeybindHints.KeybindPrefab, keybindGo.transform).AddComponent<KeybindHints.ControllerBasedHints>();
             keybindHints3.hints = new[] { "[ESC]", "[B]" };
             keybindHints3.action = "UNREADY/LEAVE";
             keybindHints3.gameObject.SetActive(true);
             keybindHints3.gameObject.AddComponent<KeybindHints.DisableIfSet>();
-            KeybindHints.ControllerBasedHints keybindHints4 = GameObject.Instantiate(KeybindHints.KeybindPrefab, keybindGo.transform).AddComponent<KeybindHints.ControllerBasedHints>();
+            KeybindHints.ControllerBasedHints keybindHints4 = Instantiate(KeybindHints.KeybindPrefab, keybindGo.transform).AddComponent<KeybindHints.ControllerBasedHints>();
             keybindHints4.hints = new[] { "[Q/E]", "[LB/RB]" };
             keybindHints4.action = "CHANGE FACE";
             keybindHints4.gameObject.SetActive(true);
@@ -308,17 +306,7 @@ namespace RWF
             inviteTextGo.transform.SetParent(inviteGo.transform);
             inviteTextGo.transform.localScale = Vector3.one;
             inviteText = inviteTextGo.GetComponent<TextMeshProUGUI>();
-            inviteText.color = (PhotonNetwork.CurrentRoom != null) ? PrivateRoomHandler.enabledTextColor : PrivateRoomHandler.disabledTextColor;
-
-            // gameModeListObject = new GameObject("GameMode");
-            // gameModeListObject.transform.SetParent(grid.transform);
-            // gameModeListObject.transform.localScale = Vector3.one;
-
-            // var gameModeTextGo = GetText(GameModeManager.CurrentHandler?.Name?.ToUpper() ?? "GAMEMODE");
-            // gameModeTextGo.transform.SetParent(gameModeListObject.transform);
-            // gameModeTextGo.transform.localScale = Vector3.one;
-
-            // GamemodeScrollView.Create(grid.transform);
+            inviteText.color = (PhotonNetwork.CurrentRoom != null) ? enabledTextColor : disabledTextColor;
 
             gameModeButton = MenuHandler.CreateButton("select game mode", grid, () => { });
             LayoutElement gmLayoutElement = gameModeButton.GetComponent<LayoutElement>();
@@ -345,44 +333,12 @@ namespace RWF
             ListMenuButton inviteListButton = inviteGo.AddComponent<ListMenuButton>();
             inviteListButton.setBarHeight = 92f;
 
-            inviteButton.onClick.AddListener(() =>
-           {
+            inviteButton.onClick.AddListener(() => {
                if (PhotonNetwork.CurrentRoom == null) { return; }
                FieldInfo field = typeof(NetworkConnectionHandler).GetField("m_SteamLobby", BindingFlags.Static | BindingFlags.NonPublic);
                ClientSteamLobby lobby = (ClientSteamLobby) field.GetValue(null);
                lobby.ShowInviteScreenWhenConnected();
-           });
-            // TODO: Remove
-
-            // gameModeListObject.AddComponent<RectTransform>();
-            // gameModeListObject.AddComponent<CanvasRenderer>();
-            // var gameModeLayout = gameModeListObject.AddComponent<LayoutElement>();
-            // gameModeLayout.minHeight = 92;
-            // var gameModeButton = gameModeListObject.AddComponent<Button>();
-            // var gameModeListButton = gameModeListObject.AddComponent<ListMenuButton>();
-            // gameModeListButton.setBarHeight = 92f;
-            //
-            // gameModeButton.onClick.AddListener(() =>
-            //{
-            //     if (PhotonNetwork.CurrentRoom == null){ return; }
-            //     if (PhotonNetwork.IsMasterClient)
-            //    {
-            //         // cycle through gamemodes alphabetically, skipping Sandbox and ArmsRace
-            //         string[] gameModes = GameModeManager.Handlers.Keys.Where(k=> k != GameModeManager.SandBoxID && k != GameModeManager.ArmsRaceID).OrderBy(k => GameModeManager.Handlers[k].Name).ToArray();
-            //         string nextGameMode = gameModes[Math.mod(Array.IndexOf(gameModes, GameModeManager.CurrentHandlerID) + 1, gameModes.Count())];
-            //         GameModeManager.SetGameMode(nextGameMode);
-            //         UnreadyAllPlayers();
-            //         ExecuteAfterGameModeInitialized(nextGameMode, () =>
-            //        {
-            //             SyncMethod(nameof(PrivateRoomHandler.SetGameSettings), null, GameModeManager.CurrentHandlerID, GameModeManager.CurrentHandler.Settings);
-            //             HandleTeamRules();
-            //         });
-            //     }
-            // });
-            //
-            // gameModeText = gameModeTextGo.GetComponent<TextMeshProUGUI>();
-            // gameModeText.color = (PhotonNetwork.CurrentRoom != null) ? PrivateRoomHandler.enabledTextColor : PrivateRoomHandler.disabledTextColor;
-
+            });
 
             // Gamemode ui menu
             GameObject gamemodeMenu = GameObject.Instantiate(UnboundNetworking.gmUIBundle.LoadAsset<GameObject>("GamemodeMenu"), grid.transform.parent);
@@ -463,7 +419,7 @@ namespace RWF
                     int newColorID = character.colorID;
                     while (PrivateRoomCharacters.Where(p => p.uniqueID != character.uniqueID && p.colorID == newColorID).Any())
                     {
-                        newColorID = Math.Mod(newColorID + sgn, RWFMod.MaxColorsHardLimit);
+                        newColorID = Unbound.Core.Utils.Math.mod(newColorID + sgn, UnboundGamemodes.MaxColorsHardLimit);
                         if (newColorID == orig)
                         {
                             // make sure its impossible to get stuck in an infinite loop here,
@@ -565,11 +521,11 @@ namespace RWF
             // must be reverted to MostFront when leaving the lobby
             gameObject.GetComponentInParent<Canvas>().sortingLayerName = "UI";
 
-            PhotonNetwork.LocalPlayer.SetProperty("players", new LobbyCharacter[RWFMod.instance.MaxCharactersPerClient]);
+            PhotonNetwork.LocalPlayer.SetProperty("players", new LobbyCharacter[Unbound.Gamemodes.NetworkingMod.instance.MaxCharactersPerClient]);
 
-            if (RWFMod.DEBUG && PhotonNetwork.IsMasterClient)
+            if (Unbound.Gamemodes.NetworkingMod.DEBUG && PhotonNetwork.IsMasterClient)
             {
-                RWFMod.Log($"\n\n\tRoom join command:\n\tjoin:{PhotonNetwork.CloudRegion}:{PhotonNetwork.CurrentRoom.Name}\n");
+                Unbound.Gamemodes.NetworkingMod.Log($"\n\n\tRoom join command:\n\tjoin:{PhotonNetwork.CloudRegion}:{PhotonNetwork.CurrentRoom.Name}\n");
             }
 
             if (PhotonNetwork.IsMasterClient)
@@ -577,7 +533,7 @@ namespace RWF
                 if (GameModeManager.CurrentHandler == null)
                 {
                     // default to TDM
-                    GameModeManager.SetGameMode(RWF.GameModes.TeamDeathmatchHandler.GameModeID);
+                    GameModeManager.SetGameMode(Unbound.Gamemodes.Networking.GameModes.TeamDeathmatchHandler.GameModeID);
                 }
 
                 // GamemodeScrollView.SetGameMode(GameModeManager.CurrentHandler?.Name);
@@ -588,7 +544,7 @@ namespace RWF
             /* The local player's nickname is also set in NetworkConnectionHandler::OnJoinedRoom, but we'll do it here too so we don't
              * need to worry about timing issues
              */
-            if (RWFMod.IsSteamConnected)
+            if (Unbound.Gamemodes.NetworkingMod.IsSteamConnected)
             {
                 PhotonNetwork.LocalPlayer.NickName = SteamFriends.GetPersonaName();
             }
@@ -616,9 +572,9 @@ namespace RWF
             {
                 NetworkingManager.RPC_Others(typeof(PrivateRoomHandler), nameof(PrivateRoomHandler.SetGameSettings), GameModeManager.CurrentHandlerID, GameModeManager.CurrentHandler.Settings);
 
-                if (RWFMod.DEBUG && RWFMod.instance.gameObject.GetComponent<DebugWindow>().enabled)
+                if (Unbound.Gamemodes.NetworkingMod.DEBUG && Unbound.Gamemodes.NetworkingMod.instance.gameObject.GetComponent<DebugWindow>().enabled)
                 {
-                    RWFMod.instance.SyncDebugOptions();
+                    Unbound.Gamemodes.NetworkingMod.instance.SyncDebugOptions();
                 }
 
                 lockReadies = false;
@@ -677,21 +633,21 @@ namespace RWF
             bool newDevice = !devicesToUse.Where(kv => kv.Value == deviceReadied).Any();
 
             // handle the case of a new device
-            if (newDevice && !(localCharacters.Where(p => p != null).Count() < RWFMod.instance.MaxCharactersPerClient))
+            if (newDevice && !(localCharacters.Where(p => p != null).Count() < Unbound.Gamemodes.NetworkingMod.instance.MaxCharactersPerClient))
             {
                 // there is no room for another local player
                 yield break;
             }
             else if (newDevice)
             {
-                int localPlayerNumber = Enumerable.Range(0, RWFMod.instance.MaxCharactersPerClient).Where(i => localCharacters[i] == null).First();
+                int localPlayerNumber = Enumerable.Range(0, Unbound.Gamemodes.NetworkingMod.instance.MaxCharactersPerClient).Where(i => localCharacters[i] == null).First();
 
                 // add a new local player to the first available slot with either their preferred color if its available, if it is not, pick the nearest valid color
                 // preferred colors are NOT set in the online lobby, but instead in the local lobby - that way they don't change every match a player doesn't get their preferred color
-                int colorID = PlayerPrefs.GetInt(RWFMod.GetCustomPropertyKey("PreferredColor" + localPlayerNumber.ToString()));
+                int colorID = PlayerPrefs.GetInt(Unbound.Gamemodes.NetworkingMod.GetCustomPropertyKey("PreferredColor" + localPlayerNumber.ToString()));
                 if (!GameModeManager.CurrentHandler.AllowTeams && PrivateRoomCharacters.Select(p => p.colorID).Distinct().Contains(colorID))
                 {
-                    colorID = Enumerable.Range(0, RWFMod.MaxColorsHardLimit).Except(PrivateRoomCharacters.Select(p => p.colorID).Distinct()).OrderBy(c => UnityEngine.Mathf.Abs(c - colorID)).FirstOrDefault();
+                    colorID = Enumerable.Range(0, Unbound.Gamemodes.NetworkingMod.MaxColorsHardLimit).Except(PrivateRoomCharacters.Select(p => p.colorID).Distinct()).OrderBy(c => UnityEngine.Mathf.Abs(c - colorID)).FirstOrDefault();
                 }
                 localCharacters[localPlayerNumber] = new LobbyCharacter(PhotonNetwork.LocalPlayer, colorID, localPlayerNumber);
 
@@ -878,9 +834,9 @@ namespace RWF
             MainPage.Close();
             MainMenuHandler.instance.Close();
 
-            RWFMod.instance.SetSoundEnabled("PlayerAdded", false);
+            Unbound.Gamemodes.NetworkingMod.instance.SetSoundEnabled("PlayerAdded", false);
             yield return PlayerAssigner.instance.CreatePlayer(lobbyCharacter, devicesToUse[lobbyCharacter.localID]);
-            RWFMod.instance.SetSoundEnabled("PlayerAdded", true);
+            Unbound.Gamemodes.NetworkingMod.instance.SetSoundEnabled("PlayerAdded", true);
 
             NetworkingManager.RPC(typeof(PrivateRoomHandler), nameof(PrivateRoomHandler.CreatePlayerResponse), PhotonNetwork.LocalPlayer.ActorNumber);
         }

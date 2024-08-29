@@ -1,13 +1,6 @@
 ﻿using UnityEngine.Localization;
-using UnityEngine.Localization.Settings;
-using System.Collections;
-using UnityEngine.AddressableAssets;
 using UnityEngine.Localization.Tables;
-using System.Xml.Linq;
-using System.Collections.Generic;
-using System;
 using Unbound.Core;
-using Unbound = Unbound.Core.UnboundCore;
 using Unbound.Core.Utils;
 
 namespace Unbound.Cards.Extensions

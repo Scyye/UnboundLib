@@ -2,7 +2,7 @@
 using System.Linq;
 using UnityEngine;
 
-namespace RWF
+namespace Unbound.Gamemodes.Networking
 {
     public class LobbyCharacter
     {

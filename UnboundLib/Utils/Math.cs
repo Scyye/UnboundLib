@@ -1,6 +1,6 @@
 ﻿namespace Unbound.Core.Utils
 {
-    static class Math
+    public static class Math
     {
         public static int mod(int x, int m)
         {

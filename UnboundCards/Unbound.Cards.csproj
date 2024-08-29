@@ -34,9 +34,9 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <RoundsFolder>F:\SteamLibrary\steamapps\common\ROUNDS</RoundsFolder>
+    <RoundsFolder>K:\SteamLibrary\steamapps\common\ROUNDS</RoundsFolder>
     <ManagedFolder>$(RoundsFolder)\ROUNDS_Data\Managed</ManagedFolder>
-    <BepInFolder>F:\SteamLibrary\steamapps\common\ROUNDS\BepInEx</BepInFolder>
+    <BepInFolder>K:\SteamLibrary\steamapps\common\ROUNDS\BepInEx</BepInFolder>
     <IndirectBuildTask>true</IndirectBuildTask>
     <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
     <LangVersion>7.1</LangVersion>
@@ -53,7 +53,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\UnboundLib\Unbound.Core.csproj" />
-    <ProjectReference Include="..\UnboundNetworking\Unbound.Networking.csproj" />
   </ItemGroup>
 
   <ItemGroup>
