@@ -3,7 +3,7 @@ using System.Linq;
 using UnityEngine;
 
 
-namespace Unbound.Gamemodes.Networking.UI
+namespace Unbound.Networking.UI
 {
     public class CharacterSelectionMenuLayoutGroup : MonoBehaviour
     {

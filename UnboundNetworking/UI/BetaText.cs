@@ -2,7 +2,7 @@
 using Unbound.Core;
 using UnityEngine;
 
-namespace Unbound.Gamemodes.Networking.UI{
+namespace Unbound.Networking.UI{
     public static class BetaTextHandler
     {
 

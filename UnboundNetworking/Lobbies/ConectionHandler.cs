@@ -4,7 +4,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using Steamworks;
 using System.Collections;
-using Unbound.Gamemodes.Networking;
+using Unbound.Networking;
 using UnityEngine;
 
 namespace UnboundLib.Networking.Lobbies{

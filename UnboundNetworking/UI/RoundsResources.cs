@@ -6,9 +6,9 @@ using Unbound.Core;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Unbound.Gamemodes.Networking.UI
+namespace Unbound.Networking.UI
 {
-    public static class RoundsResources
+    static class RoundsResources
     {
         private static TMP_FontAsset _menuFont;
         private static GameObject _staticTextPrefab;

@@ -3,7 +3,7 @@ using Unbound.Core;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace Unbound.Gamemodes.Networking.UI
+namespace Unbound.Networking.UI
 {
     class CharacterSelectButton : MonoBehaviour//, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
     {

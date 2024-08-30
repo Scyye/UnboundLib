@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
-namespace Unbound.Gamemodes.Networking.UI
+namespace Unbound.Networking.UI
 {
     // TODO: Move this to Unbound.Gamemodes
     public class GamemodeMenuManager : MonoBehaviour

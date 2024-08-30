@@ -1,6 +1,6 @@
 ﻿using UnityEngine.UI;
 
-namespace Unbound.Gamemodes.Networking.UI
+namespace Unbound.Networking.UI
 {
     public class PrivateRoomSimulatedSelection : SimulatedSelection
     {

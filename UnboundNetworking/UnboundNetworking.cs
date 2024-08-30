@@ -9,21 +9,21 @@ using System.Reflection;
 using TMPro;
 using Unbound.Core;
 using Unbound.Core.Utils.UI;
-using Unbound.Gamemodes.Networking.UI;
+using Unbound.Networking.UI;
 using UnboundLib.Networking;
 using UnboundLib.Networking.Lobbies;
 using UnboundLib.Networking.Utils;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Unbound.Gamemodes.Networking
+namespace Unbound.Networking
 {
 
     [BepInDependency("dev.rounds.unbound.core")]
     [BepInPlugin(ModId, ModName, Version)]
     public class UnboundNetworking : BaseUnityPlugin
     {
-        public const string ModId = "dev.rounds.Unbound.Gamemodes.Networking";
+        public const string ModId = "dev.rounds.unbound.networking";
         public const string ModName = "Unbound Lib Networking";
         public const string Version = "1.0.0";
 
@@ -58,15 +58,14 @@ namespace Unbound.Gamemodes.Networking
 
         internal static List<Action> handShakeActions = new List<Action>();
 
-        public const int MaxPlayers = 32; //gonna try making this 32 or 64 at someponit.
-        public const int MaxClients = 16;
-        public const int MaxCharactersPerClient = 2;
+        public const int MaxPlayers = 16; //gonna try making this 32 or 64 at someponit.
+
         public const int MinPlayers = 2;
 
         private void Awake()
         {
             instance = this;
-            //PatchAll();
+            PatchAll();
         }
 
         private void Start()
