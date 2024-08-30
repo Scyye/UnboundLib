@@ -246,18 +246,18 @@ namespace Unbound.Gamemodes.Networking.UI
             for (int i = 0; i < buttons.Length; i++)
             {
                 buttons[i].transform.GetChild(4).gameObject.SetActive(true);
-                buttons[i].transform.GetChild(4).GetChild(0).gameObject.SetActive(isReady || created);
-                buttons[i].transform.GetChild(4).GetChild(1).gameObject.SetActive(isReady || created);
+                buttons[i].transform.GetChild(4).GetChild(0).gameObject.SetActive(GetFieldValue<bool>("isReady") || created);
+                buttons[i].transform.GetChild(4).GetChild(1).gameObject.SetActive(GetFieldValue<bool>("isReady") || created);
                 foreach (Graphic graphic in buttons[i].transform.GetChild(4).GetChild(0).GetComponentsInChildren<Graphic>(true))
                 {
-                    graphic.color = created ? Colors.Transparent(Colors.createdColor) : isReady ? Colors.Transparent(Colors.readycolor) : Color.clear;
+                    graphic.color = created ? Colors.Transparent(Colors.createdColor) : GetFieldValue<bool>("isReady") ? Colors.Transparent(Colors.readycolor) : Color.clear;
                 }
                 foreach (Graphic graphic in buttons[i].transform.GetChild(4).GetChild(1).GetComponentsInChildren<Graphic>(true))
                 {
-                    graphic.color = created ? Colors.Transparent(Colors.createdColor) : isReady ? Colors.Transparent(Colors.readycolor) : Color.clear;
+                    graphic.color = created ? Colors.Transparent(Colors.createdColor) : GetFieldValue<bool>("isReady") ? Colors.Transparent(Colors.readycolor) : Color.clear;
                 }
-                buttons[i].transform.GetChild(4).GetChild(2).GetComponent<TextMeshProUGUI>().text = created ? "IN GAME" : isReady ? "READY" : "";
-                buttons[i].transform.GetChild(4).GetChild(2).GetComponent<TextMeshProUGUI>().color = created ? Colors.createdColor : isReady ? Colors.readycolor : Colors.joinedcolor;
+                buttons[i].transform.GetChild(4).GetChild(2).GetComponent<TextMeshProUGUI>().text = created ? "IN GAME" : GetFieldValue<bool>("isReady") ? "READY" : "";
+                buttons[i].transform.GetChild(4).GetChild(2).GetComponent<TextMeshProUGUI>().color = created ? Colors.createdColor : GetFieldValue<bool>("isReady") ? Colors.readycolor : Colors.joinedcolor;
             }
         }
         public void Created()
@@ -293,7 +293,7 @@ namespace Unbound.Gamemodes.Networking.UI
                     ChangeToTeam(colorID);
                 }
             }
-            if (!currentPlayer.IsMine || !enableInput || isReady) { return; }
+            if (!currentPlayer.IsMine || !enableInput || GetFieldValue<bool>("isReady")) { return; }
 
             HoverEvent component = buttons[currentlySelectedFace].GetComponent<HoverEvent>();
             if (currentButton != component)
