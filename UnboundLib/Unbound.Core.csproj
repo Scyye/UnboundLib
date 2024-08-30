@@ -45,7 +45,6 @@
 
   <ItemGroup>
     <None Remove="Assets\togglemenuui" />
-    <None Remove="Assets\unboundui" />
     <None Remove="UnboundLib.csproj.user.dist" />
     <None Remove="PostBuild.msbuild" />
     <None Remove="unboundlinks" />
@@ -54,10 +53,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="..\AssetsEmbedded\unboundui" Link="Assets\unboundui" />
     <EmbeddedResource Include="..\AssetsEmbedded\modoptionsui" Link="Assets\modoptionsui" />
     <EmbeddedResource Include="..\AssetsEmbedded\unboundlinks" Link="Assets\unboundlinks" />
     <EmbeddedResource Include="Assets\togglemenuui" />
-    <EmbeddedResource Include="Assets\unboundui" />
   </ItemGroup>
 
 	<ItemGroup>
