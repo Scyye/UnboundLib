@@ -5,7 +5,6 @@ using TMPro;
 using Unbound.Core;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.Video;
 using Object = UnityEngine.Object;
 
 namespace Unbound.Gamemodes.Networking.UI

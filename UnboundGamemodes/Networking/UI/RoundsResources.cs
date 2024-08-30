@@ -11,7 +11,7 @@ namespace Unbound.Gamemodes.Networking.UI
     public static class RoundsResources
     {
         private static TMP_FontAsset _menuFont;
-        private static GameObject _staticTextPrefab;    
+        private static GameObject _staticTextPrefab;
         private static GameObject _flickeringTextPrefab;
         private static GameObject _popUpMenuTextPrefab;
         private static readonly Dictionary<string, SoundEvent> _soundCache = new Dictionary<string, SoundEvent>();

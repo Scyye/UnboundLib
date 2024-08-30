@@ -73,9 +73,6 @@
     <Reference Include="com.rlabrecque.steamworks.net">
       <HintPath>$(ManagedFolder)\com.rlabrecque.steamworks.net.dll</HintPath>
     </Reference>
-    <Reference Include="SonigonAudioEngine.Runtime">
-      <HintPath>$(ManagedFolder)\SonigonAudioEngine.Runtime.dll</HintPath>
-    </Reference>
     <Reference Include="Platforms">
       <HintPath>$(ManagedFolder)\Platforms.dll</HintPath>
     </Reference>
@@ -120,9 +117,6 @@
     </Reference>
     <Reference Include="UnityEngine.InputModule">
       <HintPath>$(ManagedFolder)\UnityEngine.InputModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.VideoModule">
-      <HintPath>$(ManagedFolder)\UnityEngine.VideoModule.dll</HintPath>
     </Reference>
     <Reference Include="Unity.ResourceManager">
       <HintPath>$(ManagedFolder)\Unity.ResourceManager.dll</HintPath>

@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 
 using UnityEngine;
 
-namespace Unbound.Gamemodes.Networking.RPCs{
+namespace Unbound.Networking.RPCs{
     // stolen from Unbound.Gamemodes.Networking
     public static class MonoBehaviourExtensions
     {
