@@ -8,10 +8,10 @@ using Unbound.Core.Utils;
 using Unbound.Core.Utils.UI;
 using Unbound.Gamemodes.Utils;
 using UnityEngine;
-using static Unbound.Networking.Utils.NetworkEventCallbacks;
+using static Unbound.Gamemodes.Networking.Utils.NetworkEventCallbacks;
 using static Unbound.Gamemodes.Networking.UnboundNetworking;
-using Unbound.Networking.Utils;
-using Unbound.Networking;
+using Unbound.Gamemodes.Networking.Utils;
+using Unbound.Gamemodes.Networking;
 using Unbound.Core;
 
 namespace Unbound.Gamemodes

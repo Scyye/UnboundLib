@@ -114,7 +114,7 @@ namespace Unbound.Gamemodes.Networking.UI
             // update the layout
             float scale = UnityEngine.Mathf.Lerp(maxSize, minSize, players / (float) maxCols);
             float Hspacing = UnityEngine.Mathf.Lerp(maxHSpacing, minHSpacing, players / (float) maxCols);
-            float Vspacing = UnityEngine.Mathf.Lerp(maxVSpacing, minVSpacing, (float) (float) UnityEngine.Mathf.FloorToInt((players - 1) / maxCols) / (float) UnityEngine.Mathf.Ceil(UnboundNetworking.instance.MaxPlayers / maxCols));
+            float Vspacing = UnityEngine.Mathf.Lerp(maxVSpacing, minVSpacing, (float) (float) UnityEngine.Mathf.FloorToInt((players - 1) / maxCols) / (float) UnityEngine.Mathf.Ceil(UnboundNetworking.MaxPlayers / maxCols));
 
             if (scale != scale || Hspacing != hspace || Vspacing != vspace)
             {

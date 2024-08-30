@@ -11,8 +11,8 @@ using TMPro;
 using Unbound.Core;
 using Unbound.Core.Utils.UI;
 using Unbound.Gamemodes.Networking.UI;
-using Unbound.Networking;
-using Unbound.Networking.RPCs;
+using Unbound.Gamemodes.Networking;
+using Unbound.Gamemodes.Networking.RPCs;
 using UnityEngine;
 using UnityEngine.UI;
 

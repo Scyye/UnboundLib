@@ -4,10 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Unbound.Core;
-using Unbound.Networking.RPCs;
+using Unbound.Gamemodes.Networking.RPCs;
 using UnityEngine;
 
-namespace Unbound.Networking.Utils{
+namespace Unbound.Gamemodes.Networking.Utils{
     [DisallowMultipleComponent]
     public class PingMonitor : MonoBehaviourPunCallbacks
     {

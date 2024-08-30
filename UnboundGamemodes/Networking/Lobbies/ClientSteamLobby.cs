@@ -2,7 +2,7 @@
 using Landfall.Network;
 using Steamworks;
 
-namespace Unbound.Networking.Lobbies{
+namespace Unbound.Gamemodes.Networking.Lobbies{
     [HarmonyPatch(typeof(ClientSteamLobby), "ShowInviteScreenWhenConnected")]
     class ClientSteamLobby_Patch_ShowInviteScreenWhenConnected
     {

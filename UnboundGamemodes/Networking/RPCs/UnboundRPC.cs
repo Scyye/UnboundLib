@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Unbound.Networking.RPCs{
+namespace Unbound.Gamemodes.Networking.RPCs{
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
     public class UnboundRPC : Attribute
     {

@@ -9,13 +9,13 @@ using System.Text;
 using TMPro;
 using Unbound.Core;
 using Unbound.Core.Utils.UI;
-using Unbound.Networking.RPCs;
+using Unbound.Gamemodes.Networking.RPCs;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
-namespace Unbound.Networking.Utils{
+namespace Unbound.Gamemodes.Networking.Utils{
     public static class SyncModClients
     {
         internal static readonly float timeoutTime = 5f;
