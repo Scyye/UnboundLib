@@ -8,7 +8,7 @@ using System.Linq;
 using Unbound.Core.Utils;
 using Unbound.Core.Extensions;
 using Unbound.Core;
-using Unbound.Extensions;
+using Unbound.Cards.Extensions;
 using Unbound.Cards.Utils;
 
 namespace Unbound.Cards

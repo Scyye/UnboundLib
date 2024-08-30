@@ -6,8 +6,8 @@ using System.Linq;
 using TMPro;
 using Unbound.Core;
 using Unbound.Core.Utils;
-using UnboundLib.Networking;
-using UnboundLib.Networking.RPCs;
+using Unbound.Networking;
+using Unbound.Networking.RPCs;
 using UnityEngine;
 using UnityEngine.UI;
 

@@ -1,7 +1,7 @@
 ﻿using Photon.Realtime;
 using System.Linq;
 
-namespace UnboundLib.Networking.Extensions{
+namespace Unbound.Networking.Extensions{
     public static class RoomOptionsExtentions
     {
 

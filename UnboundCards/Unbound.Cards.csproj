@@ -53,6 +53,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\UnboundLib\Unbound.Core.csproj" />
+    <ProjectReference Include="..\UnboundLib\Unbound.Gamemodes.csproj" />
   </ItemGroup>
 
   <ItemGroup>
