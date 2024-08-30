@@ -6,6 +6,7 @@ using Steamworks;
 using System.Collections;
 using Unbound.Networking;
 using UnityEngine;
+using UnityEngine.Localization;
 
 namespace UnboundLib.Networking.Lobbies {
     public class ConectionHandler:MonoBehaviourPunCallbacks {
@@ -69,7 +70,10 @@ namespace UnboundLib.Networking.Lobbies {
                 //TODO: figure out if this is actually feasable.
             }
 
+            GameManager.instance.GoToMenu();
+
         }
+
     }
     [HarmonyPatch(typeof(NetworkConnectionHandler), "Awake")]
     public static class DiableVanillaNetworkConnectionHandler {
@@ -83,4 +87,5 @@ namespace UnboundLib.Networking.Lobbies {
             UnityEngine.Object.DestroyImmediate(__instance);
         }
     }
+
 }

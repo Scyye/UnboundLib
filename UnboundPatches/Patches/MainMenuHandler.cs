@@ -32,27 +32,6 @@ namespace Unbound.Core.Patches {
             Credits.Instance.CreateCreditsMenu(firstTime);
             MainMenuLinks.AddLinks(firstTime);
 
-            UnboundCore.Instance.ExecuteAfterSeconds(firstTime ? 0.4f : 0, () => {
-                var resumeButton = UIHandler.instance.transform.Find("Canvas/EscapeMenu/Main/Group/Resume").gameObject;
-                // Create options button in escapeMenu
-                var optionsMenu = Object.Instantiate(MainMenuHandler.instance.transform.Find("Canvas/ListSelector/Options").gameObject, UIHandler.instance.transform.Find("Canvas/EscapeMenu/Main"));
-                var menuBut = optionsMenu.transform.Find("Group/Back").GetComponent<Button>();
-                menuBut.onClick = new Button.ButtonClickedEvent();
-                menuBut.onClick.AddListener(() => {
-                    optionsMenu.transform.Find("Group").gameObject.SetActive(false);
-                    UIHandler.instance.transform.Find("Canvas/EscapeMenu/Main/Group").gameObject.SetActive(true);
-                });
-
-                var optionsButton = Object.Instantiate(resumeButton, UIHandler.instance.transform.Find("Canvas/EscapeMenu/Main/Group"));
-                optionsButton.transform.SetSiblingIndex(2);
-                optionsButton.GetComponentInChildren<TextMeshProUGUI>().text = "OPTIONS";
-                optionsButton.GetComponent<Button>().onClick = new Button.ButtonClickedEvent();
-                optionsButton.GetComponent<Button>().onClick.AddListener((() => {
-                    optionsMenu.transform.Find("Group").gameObject.SetActive(true);
-                    UIHandler.instance.transform.Find("Canvas/EscapeMenu/Main/Group").gameObject.SetActive(false);
-                }));
-            });
-
             firstTime = false;
         }
 

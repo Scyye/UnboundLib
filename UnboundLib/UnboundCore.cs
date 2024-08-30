@@ -114,18 +114,6 @@ namespace Unbound.Core {
 
             GameManager.lockInput = ModOptions.showModUi ||
                                     DevConsole.isTyping ||
-
-                                    (UIHandler.instance.transform.Find("Canvas/EscapeMenu/Main/Options(Clone)/Group") &&
-                                     UIHandler.instance.transform.Find("Canvas/EscapeMenu/Main/Options(Clone)/Group")
-                                         .gameObject.activeInHierarchy) ||
-
-                                    (UIHandler.instance.transform.Find("Canvas/EscapeMenu/Main/Group") &&
-                                     UIHandler.instance.transform.Find("Canvas/EscapeMenu/Main/Group").gameObject
-                                         .activeInHierarchy) ||
-
-                                    (
-                                    UIHandler.instance.transform.Find("Canvas/EscapeMenu/MOD OPTIONS/Group") &&
-                                    UIHandler.instance.transform.Find("Canvas/EscapeMenu/MOD OPTIONS/Group").gameObject.activeInHierarchy) ||
                                     lockInputBools.Values.Any(b => b);
         }
         private void OnGUI() {

@@ -88,7 +88,6 @@ namespace Unbound.Core.Utils.UI {
             // create mod options
             UnboundCore.Instance.ExecuteAfterSeconds(firstTime ? 0.1f : 0, () => {
                 CreateModOptionsMenu(MainMenuHandler.instance.transform.Find("Canvas/ListSelector/Main").gameObject, null, false);
-                //CreateModOptionsMenu(UIHandler.instance.transform.Find("Canvas/EscapeMenu/Main").gameObject, UIHandler.instance.transform.Find("Canvas/EscapeMenu").gameObject, true);
             });
         }
 
