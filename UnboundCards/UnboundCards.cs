@@ -4,7 +4,7 @@ using Unbound.Cards.Utils;
 using Unbound.Core;
 using Unbound.Core.Utils;
 using Unbound.Core.Utils.UI;
-using Unbound.Game.Utils;
+using UnboundLib.Networking.Utils;
 using UnityEngine;
 
 namespace Unbound.Cards
@@ -27,7 +27,8 @@ namespace Unbound.Cards
             templateCard.allowMultiple = true;
         }
 
-        void Start() {
+        void Start()
+        {
             CardManager.defaultCards = CardChoice.instance.cards;
 
             // register default cards with toggle menu

@@ -5,11 +5,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Unbound.Networking.RPCs;
+using UnboundLib.Networking.RPCs;
 using Debug = UnityEngine.Debug;
 
-namespace Unbound.Networking
-{
+namespace UnboundLib.Networking{
     public static class NetworkingManager
     {
         private static readonly RaiseEventOptions raiseEventOptionsAll = new RaiseEventOptions

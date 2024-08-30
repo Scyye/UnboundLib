@@ -2,12 +2,12 @@
 using System.Collections;
 using Unbound.Core;
 using Unbound.Gamemodes.Networking;
-using Unbound.Networking.Extensions;
-using Unbound.Networking.Utils;
+using UnboundLib.Networking.Extensions;
+using UnboundLib.Networking.Utils;
 using UnityEngine;
-using static Unbound.Networking.Lobbies.ConectionHandler;
+using static UnboundLib.Networking.Lobbies.ConectionHandler;
 
-namespace Unbound.Networking.Lobbies
+namespace UnboundLib.Networking.Lobbies
 {
     public static class Unbound_Lobby
     {

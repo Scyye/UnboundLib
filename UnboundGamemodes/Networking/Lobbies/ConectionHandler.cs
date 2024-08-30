@@ -7,7 +7,7 @@ using System.Collections;
 using Unbound.Gamemodes.Networking;
 using UnityEngine;
 
-namespace Unbound.Networking.Lobbies{
+namespace UnboundLib.Networking.Lobbies{
     public class ConectionHandler : MonoBehaviourPunCallbacks
     {
         private void Awake()

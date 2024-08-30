@@ -10,9 +10,9 @@ using TMPro;
 using Unbound.Core;
 using Unbound.Core.Utils.UI;
 using Unbound.Gamemodes.Networking.UI;
-using Unbound.Networking;
-using Unbound.Networking.Lobbies;
-using Unbound.Networking.Utils;
+using UnboundLib.Networking;
+using UnboundLib.Networking.Lobbies;
+using UnboundLib.Networking.Utils;
 using UnityEngine;
 using UnityEngine.UI;
 

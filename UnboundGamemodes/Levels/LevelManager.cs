@@ -10,8 +10,8 @@ using ExitGames.Client.Photon.StructWrapping;
 using Photon.Pun;
 
 using Unbound.Gamemodes.Utils;
-using Unbound.Networking;
-using Unbound.Networking.RPCs;
+using UnboundLib.Networking;
+using UnboundLib.Networking.RPCs;
 using UnityEngine;
 
 namespace Unbound.Core.Utils

@@ -1,7 +1,7 @@
 ﻿using Photon.Pun;
 using System;
 
-namespace Unbound.Networking.Utils{
+namespace UnboundLib.Networking.Utils{
 
     public class NetworkEventCallbacks : MonoBehaviourPunCallbacks
     {
