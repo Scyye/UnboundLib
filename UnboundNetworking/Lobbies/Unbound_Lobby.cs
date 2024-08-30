@@ -54,6 +54,9 @@ namespace UnboundLib.Networking.Lobbies
             steamLobby.JoinedRoom(roomCode);
         }
 
-
+        public static void StartGame(GameObject gamemode) {
+            gamemode.SetActive(true);
+            MainMenuHandler.instance.Close();
+        }
     }
 }

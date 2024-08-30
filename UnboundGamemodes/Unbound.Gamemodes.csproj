@@ -34,7 +34,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-	  <RoundsFolder>F:\SteamLibrary\steamapps\common\ROUNDS</RoundsFolder>
+	  <RoundsFolder>K:\SteamLibrary\steamapps\common\ROUNDS</RoundsFolder>
 	  <ManagedFolder>$(RoundsFolder)\ROUNDS_Data\Managed</ManagedFolder>
     <BepInFolder>..\Assemblies</BepInFolder>
     <IndirectBuildTask>true</IndirectBuildTask>
