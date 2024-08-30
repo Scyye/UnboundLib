@@ -10,7 +10,7 @@ using Unbound.Core;
 using Unbound = Unbound.Core.UnboundCore;
 using Unbound.Core.Utils;
 
-namespace Unbound.Cards.Extensions
+namespace Unbound.Extensions
 {
     // for testing
     internal static class CardInfoExt
