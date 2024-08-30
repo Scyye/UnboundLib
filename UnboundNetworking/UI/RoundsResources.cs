@@ -1,28 +1,27 @@
-﻿using Sonigon;
-using Sonigon.Internal;
-using System.Collections.Generic;
-using TMPro;
-using Unbound.Core;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Sonigon;
+using System.Collections.Generic;
+using Unbound.Core;
+using Sonigon.Internal;
 
-namespace Unbound.Networking.UI
-{
+namespace Unbound.Networking.UI{
     static class RoundsResources
-    {
+   {
         private static TMP_FontAsset _menuFont;
         private static GameObject _staticTextPrefab;
         private static GameObject _flickeringTextPrefab;
         private static GameObject _popUpMenuTextPrefab;
-        private static readonly Dictionary<string, SoundEvent> _soundCache = new Dictionary<string, SoundEvent>();
+        private static Dictionary<string, SoundEvent> _soundCache = new Dictionary<string, SoundEvent>();
 
         public static TMP_FontAsset MenuFont
-        {
+       {
             get
-            {
+           {
                 if (!_menuFont && MainMenuHandler.instance)
-                {
-                    GameObject localGo = MainMenuHandler.instance.transform.Find("Canvas").Find("ListSelector").Find("Main").Find("Group").Find("Local").gameObject;
+               {
+                    var localGo = MainMenuHandler.instance.transform.Find("Canvas").Find("ListSelector").Find("Main").Find("Group").Find("Local").gameObject;
                     _menuFont = localGo.GetComponentInChildren<TextMeshProUGUI>().font;
                 }
 
@@ -31,19 +30,19 @@ namespace Unbound.Networking.UI
         }
 
         public static GameObject StaticTextPrefab
-        {
+       {
             get
-            {
+           {
                 if (!_staticTextPrefab)
-                {
-                    GameObject go = GameObject.Find("/Game/UI/UI_Game/Canvas/Join");
+               {
+                    var go = GameObject.Find("/Game/UI/UI_Game/Canvas/Join");
 
                     if (go)
-                    {
+                   {
                         _staticTextPrefab = GameObject.Instantiate(go);
                         _staticTextPrefab.name = "Text";
 
-                        GeneralParticleSystem ps = _staticTextPrefab.GetComponentInChildren<GeneralParticleSystem>();
+                        var ps = _staticTextPrefab.GetComponentInChildren<GeneralParticleSystem>();
                         ps.loop = false;
                         ps.playOnEnablee = false;
                         ps.playOnAwake = false;
@@ -60,19 +59,19 @@ namespace Unbound.Networking.UI
         }
 
         public static GameObject FlickeringTextPrefab
-        {
+       {
             get
-            {
+           {
                 if (!_flickeringTextPrefab)
-                {
-                    GameObject go = GameObject.Find("/Game/UI/UI_Game/Canvas/Join");
+               {
+                    var go = GameObject.Find("/Game/UI/UI_Game/Canvas/Join");
 
                     if (go)
-                    {
+                   {
                         _flickeringTextPrefab = GameObject.Instantiate(go);
                         _flickeringTextPrefab.name = "Text";
 
-                        GeneralParticleSystem ps = _flickeringTextPrefab.GetComponentInChildren<GeneralParticleSystem>();
+                        var ps = _flickeringTextPrefab.GetComponentInChildren<GeneralParticleSystem>();
                         ps.loop = true;
                         ps.playOnEnablee = true;
                         ps.playOnAwake = true;
@@ -88,11 +87,11 @@ namespace Unbound.Networking.UI
         }
 
         class RemoveExtraObjectPool : MonoBehaviour
-        {
+       {
             void Update()
-            {
+           {
                 if (this.gameObject.activeInHierarchy && this.gameObject.transform.childCount > 1)
-                {
+               {
                     Destroy(this.gameObject.transform.GetChild(0).gameObject);
                     Destroy(this);
                 }
@@ -100,24 +99,24 @@ namespace Unbound.Networking.UI
         }
 
         internal class InitStaticText : MonoBehaviour
-        {
+       {
             private const int numParts = 20;
             GeneralParticleSystem particleSystem;
             void Start()
-            {
+           {
                 this.particleSystem = this.gameObject.GetComponent<GeneralParticleSystem>();
-                if (this.particleSystem == null) { return; }
+                if (this.particleSystem == null){ return; }
                 this.particleSystem.loop = false;
                 this.particleSystem.playOnEnablee = false;
                 this.particleSystem.playOnAwake = false;
             }
             void OnEnable()
-            {
+           {
                 this.particleSystem = this.gameObject.GetComponent<GeneralParticleSystem>();
-                if (this.particleSystem == null) { return; }
-                this.particleSystem.InvokeMethod("Init", new object[] { });
+                if (this.particleSystem == null){ return; }
+                this.particleSystem.InvokeMethod("Init", new object[]{ });
                 for (int i = 0; i < InitStaticText.numParts; i++)
-                {
+               {
                     InitStaticText.CreateParticleStatic(this.particleSystem, i / this.particleSystem.duration);
                 }
             }
@@ -125,7 +124,7 @@ namespace Unbound.Networking.UI
             private const float staticRandomXPos = 100f;
             private const float staticRandomYPos = 200f;
             private static void CreateParticleStatic(GeneralParticleSystem instance, float currentAnimationTime)
-            {
+           {
                 GameObject spawned = ((ObjectPool) instance.GetFieldValue("particlePool")).GetObject();
                 float counter = UnityEngine.Random.Range(0f, instance.particleSettings.lifetime);
                 float t = instance.particleSettings.lifetime;
@@ -134,34 +133,34 @@ namespace Unbound.Networking.UI
                 Image img = spawned.GetComponent<Image>();
                 Color startColor = Color.magenta;
                 if (img)
-                {
+               {
                     startColor = img.color;
                 }
                 if (img)
-                {
+               {
                     float value = UnityEngine.Random.value;
                     if (instance.particleSettings.color != Color.magenta)
-                    {
+                   {
                         img.color = instance.particleSettings.color;
                     }
                     if (instance.particleSettings.randomColor != Color.magenta)
-                    {
+                   {
                         img.color = Color.Lerp(img.color, instance.particleSettings.randomColor, value);
                     }
                     if (!instance.particleSettings.singleRandomValueColor)
-                    {
+                   {
                         value = UnityEngine.Random.value;
                     }
                     if (instance.particleSettings.randomAddedColor != Color.black)
-                    {
+                   {
                         img.color += Color.Lerp(Color.black, instance.particleSettings.randomAddedColor, value);
                     }
                     if (!instance.particleSettings.singleRandomValueColor)
-                    {
+                   {
                         value = UnityEngine.Random.value;
                     }
                     if (instance.particleSettings.randomAddedSaturation != 0f || instance.saturationMultiplier != 1f)
-                    {
+                   {
                         float h;
                         float num;
                         float v;
@@ -178,12 +177,12 @@ namespace Unbound.Networking.UI
                 spawned.transform.localPosition += instance.transform.right * UnityEngine.Random.Range(-staticRandomXPos, staticRandomXPos);
                 spawned.transform.localPosition += instance.transform.forward * UnityEngine.Random.Range(-0.1f, 0.1f);
                 if (instance.particleSettings.sizeOverTime.keys.Length > 1)
-                {
+               {
                     spawned.transform.localScale = modifiedStartSize * instance.particleSettings.sizeOverTime.Evaluate(counter / t * (float) instance.GetFieldValue("sizeOverTimeAnimationCurveLength"));
                 }
                 float num2 = instance.particleSettings.alphaOverTime.Evaluate(counter / t * (float) instance.GetFieldValue("alphaOverTimeAnimationCurveLength"));
                 if (img && img.color.a != num2)
-                {
+               {
                     img.color = new Color(img.color.r, img.color.g, img.color.b, num2);
                 }
                 return;
@@ -191,19 +190,19 @@ namespace Unbound.Networking.UI
         }
 
         public static GameObject PopUpMenuText
-        {
+       {
             get
-            {
+           {
                 if (!_popUpMenuTextPrefab)
-                {
-                    GameObject go = GameObject.Find("Game/UI/UI_Game/Canvas/PopUpHandler/Yes");
+               {
+                    var go = GameObject.Find("Game/UI/UI_Game/Canvas/PopUpHandler/Yes");
 
                     if (go)
-                    {
+                   {
                         _popUpMenuTextPrefab = GameObject.Instantiate(go);
                         _popUpMenuTextPrefab.name = "Text";
 
-                        GeneralParticleSystem ps = _popUpMenuTextPrefab.GetComponentInChildren<GeneralParticleSystem>();
+                        var ps = _popUpMenuTextPrefab.GetComponentInChildren<GeneralParticleSystem>();
                         ps.loop = true;
                         ps.playOnEnablee = true;
                         ps.playOnAwake = true;
@@ -216,10 +215,10 @@ namespace Unbound.Networking.UI
         }
 
         public static SoundEvent GetSound(string name)
-        {
+       {
             if (!RoundsResources._soundCache.ContainsKey(name))
-            {
-                SoundEvent soundEvent = GameObject.Find("/SonigonSoundEventPool").transform.Find(name).gameObject?.GetComponent<InstanceSoundEvent>().soundEvent;
+           {
+                var soundEvent = GameObject.Find("/SonigonSoundEventPool").transform.Find(name).gameObject?.GetComponent<InstanceSoundEvent>().soundEvent;
                 RoundsResources._soundCache.Add(name, soundEvent);
             }
 

@@ -1,18 +1,19 @@
-﻿using TMPro;
-using Unbound.Core;
+﻿using System;
 using UnityEngine;
+using TMPro;
+using Unbound.Core;
 
 namespace Unbound.Networking.UI{
     public static class BetaTextHandler
-    {
+   {
 
         private static GameObject _BetaText = null;
 
         public static GameObject BetaText
-        {
+       {
             get
-            {
-                if (_BetaText != null) { return _BetaText; }
+           {
+                if (_BetaText != null){ return _BetaText; }
 
                 _BetaText = new GameObject("RWF Beta");
                 _BetaText.transform.SetParent(MainMenuHandler.instance.transform.Find("Canvas/"));
@@ -40,14 +41,14 @@ namespace Unbound.Networking.UI{
         public static GameObject ROUNDSThunderstore => BetaText.transform.GetChild(1).gameObject;
 
         public static void AddBetaText(bool firstTime)
-        {
+       {
             UnboundNetworking.instance.ExecuteAfterSeconds(firstTime ? 0.2f : 0f, () =>
            {
-               BetaText.SetActive(true);
-           });
+                BetaText.SetActive(true);
+            });
         }
         public static void HideBetaText()
-        {
+       {
             BetaText.SetActive(false);
         }
     }

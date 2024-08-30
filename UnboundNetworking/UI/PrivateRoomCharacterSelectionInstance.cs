@@ -1,21 +1,25 @@
-﻿using InControl;
-using Photon.Pun;
-using RWF;
-using System.Collections;
-using System.Linq;
+﻿using System;
 using TMPro;
-using Unbound.Core;
-using Unbound.Core.Utils;
 using UnityEngine;
 using UnityEngine.UI;
+
+using InControl;
+using System.Linq;
+using Photon.Pun;
+
+using System.Collections;
 using UnityEngine.UI.ProceduralImage;
+using System.Reflection;
+using Unbound.Core;
+using Unbound.Core.Utils;
+using RWF;
 
 namespace Unbound.Networking.UI
 {
     static class Colors
-    {
+   {
         public static Color Transparent(Color color, float a = 0.5f)
-        {
+       {
             return new Color(color.r, color.g, color.b, a);
         }
         public static Color readycolor = new Color(0.2f, 0.8f, 0.1f, 1f);
@@ -26,15 +30,15 @@ namespace Unbound.Networking.UI
     }
     [RequireComponent(typeof(PhotonView))]
     public class PrivateRoomCharacterSelectionInstance : MonoBehaviour, IPunInstantiateMagicCallback
-    {
+   {
         private PhotonView view => gameObject.GetComponent<PhotonView>();
 
         public void OnPhotonInstantiate(Photon.Pun.PhotonMessageInfo info)
-        {
+       {
             UnboundNetworking.instance.StartCoroutine(Instantiate(info));
         }
         private IEnumerator Instantiate(Photon.Pun.PhotonMessageInfo info)
-        {
+       {
             // info[0] will be the actorID of the player and info[1] will be the localID of the player
             // info[2] will be the name of the player picking, purely to assign this gameobject's new name
             object[] instantiationData = info.photonView.InstantiationData;
@@ -45,24 +49,24 @@ namespace Unbound.Networking.UI
 
             yield return new WaitUntil(() =>
            {
-               return PhotonNetwork.CurrentRoom != null
-                   && PhotonNetwork.CurrentRoom.GetPlayer(actorID).GetProperty<LobbyCharacter[]>("players") != null
-                   && PhotonNetwork.CurrentRoom.GetPlayer(actorID).GetProperty<LobbyCharacter[]>("players").Count() > localID
-                   && PhotonNetwork.CurrentRoom.GetPlayer(actorID).GetProperty<LobbyCharacter[]>("players")[localID] != null
-                   && (PhotonNetwork.LocalPlayer.ActorNumber != actorID || PrivateRoomHandler.instance.devicesToUse.Count() > localID);
-           });
+                return PhotonNetwork.CurrentRoom != null
+                    && PhotonNetwork.CurrentRoom.GetPlayer(actorID).GetProperty<LobbyCharacter[]>("players") != null
+                    && PhotonNetwork.CurrentRoom.GetPlayer(actorID).GetProperty<LobbyCharacter[]>("players").Count() > localID
+                    && PhotonNetwork.CurrentRoom.GetPlayer(actorID).GetProperty<LobbyCharacter[]>("players")[localID] != null
+                    && (PhotonNetwork.LocalPlayer.ActorNumber != actorID || PrivateRoomHandler.instance.devicesToUse.Count() > localID);
+            });
 
             LobbyCharacter lobbyCharacter = PhotonNetwork.CurrentRoom.GetPlayer(actorID).GetProperty<LobbyCharacter[]>("players")[localID];
 
             if (lobbyCharacter == null)
-            {
+           {
                 yield break;
             }
 
             gameObject.name += " " + name;
 
             if (lobbyCharacter.IsMine && !PrivateRoomHandler.instance.devicesToUse.ContainsKey(localID))
-            {
+           {
                 PhotonNetwork.Destroy(gameObject);
                 yield break;
             }
@@ -79,9 +83,9 @@ namespace Unbound.Networking.UI
 
             buttons = transform.GetComponentsInChildren<HoverEvent>(true);
             for (int i = 0; i < buttons.Length; i++)
-            {
+           {
                 if (buttons[i].GetComponent<SimulatedSelection>() != null)
-                {
+               {
                     UnityEngine.GameObject.DestroyImmediate(buttons[i].GetComponent<SimulatedSelection>());
                 }
                 buttons[i].gameObject.GetOrAddComponent<PrivateRoomSimulatedSelection>().InvokeMethod("Start");
@@ -94,15 +98,15 @@ namespace Unbound.Networking.UI
             yield break;
         }
         private void Start()
-        {
+       {
 
             transform.GetChild(0).localPosition = Vector2.zero;
 
             buttons = transform.GetComponentsInChildren<HoverEvent>(true);
             for (int i = 0; i < buttons.Length; i++)
-            {
+           {
                 if (buttons[i].GetComponent<SimulatedSelection>() != null)
-                {
+               {
                     UnityEngine.GameObject.DestroyImmediate(buttons[i].GetComponent<SimulatedSelection>());
                 }
                 buttons[i].gameObject.GetOrAddComponent<PrivateRoomSimulatedSelection>().InvokeMethod("Start");
@@ -110,39 +114,39 @@ namespace Unbound.Networking.UI
         }
 
         public void ResetMenu()
-        {
+       {
             base.transform.GetChild(0).gameObject.SetActive(false);
             uniqueID = 1;
 
         }
 
         private void OnEnable()
-        {
+       {
 
         }
 
         public void StartPicking(int uniqueID, InputDevice device)
-        {
+       {
             uniqueID = uniqueID;
             colorID = currentPlayer.colorID;
             device = device;
             currentlySelectedFace = currentPlayer.faceID;
             if (!currentPlayer.IsMine)
-            {
+           {
                 view.RPC(nameof(RPCS_RequestSelectedFace), currentPlayer.networkPlayer, PhotonNetwork.LocalPlayer.ActorNumber);
             }
             try
-            {
+           {
                 GetComponentInChildren<GeneralParticleSystem>(true).gameObject.SetActive(false);
                 GetComponentInChildren<GeneralParticleSystem>(true).Stop();
             }
-            catch { }
+            catch{ }
 
             transform.GetChild(0).gameObject.SetActive(true);
 
             buttons = transform.GetComponentsInChildren<HoverEvent>(true);
             for (int i = 0; i < buttons.Length; i++)
-            {
+           {
 
                 buttons[i].gameObject.GetOrAddComponent<PrivateRoomSimulatedSelection>().InvokeMethod("Start");
 
@@ -177,7 +181,7 @@ namespace Unbound.Networking.UI
                 buttons[i].transform.GetChild(1).GetComponent<ProceduralImage>().FalloffDistance = 3f;
 
                 if (currentPlayer.IsMine)
-                {
+               {
                     // set "playerID" so that preferences will be updated when changed
                     buttons[i].GetComponentInChildren<CharacterCreatorPortrait>().playerId = currentPlayer.localID;
                 }
@@ -186,7 +190,7 @@ namespace Unbound.Networking.UI
             }
 
             if (transform.GetChild(0).Find("CharacterSelectButtons") != null)
-            {
+           {
                 GameObject go1 = transform.GetChild(0).Find("CharacterSelectButtons")?.gameObject;
 
                 UnityEngine.GameObject.Destroy(go1);
@@ -216,45 +220,45 @@ namespace Unbound.Networking.UI
 
             // disable all the buttons, except for the currently selected one
             for (int i = 0; i < buttons.Length; i++)
-            {
-                if (i == currentlySelectedFace) { continue; }
+           {
+                if (i == currentlySelectedFace){ continue; }
                 buttons[i].gameObject.SetActive(false);
             }
             buttons[currentlySelectedFace].transform.GetChild(4).gameObject.SetActive(true);
             buttons[currentlySelectedFace].gameObject.SetActive(true);
             buttons[currentlySelectedFace].GetComponent<PrivateRoomSimulatedSelection>().Select();
-            if (currentPlayer.IsMine) { buttons[currentlySelectedFace].GetComponent<Button>().onClick.Invoke(); }
+            if (currentPlayer.IsMine){ buttons[currentlySelectedFace].GetComponent<Button>().onClick.Invoke(); }
             buttons[currentlySelectedFace].transform.GetChild(3).GetChild(0).GetComponent<TextMeshProUGUI>().Rebuild(CanvasUpdate.Prelayout);
 
             StartCoroutine(FinishSetup());
         }
         private IEnumerator FinishSetup()
-        {
+       {
             yield return new WaitUntil(() => this?.buttons == null || buttons[currentlySelectedFace]?.gameObject == null || buttons[currentlySelectedFace].gameObject.activeInHierarchy);
             yield return new WaitForSecondsRealtime(0.1f);
             if (this?.buttons == null || buttons[currentlySelectedFace]?.gameObject == null || currentPlayer == null)
-            {
+           {
                 yield break;
             }
             buttons[currentlySelectedFace].GetComponent<PrivateRoomSimulatedSelection>().Select();
-            if (currentPlayer.IsMine) { buttons[currentlySelectedFace].GetComponent<Button>().onClick.Invoke(); }
+            if (currentPlayer.IsMine){ buttons[currentlySelectedFace].GetComponent<Button>().onClick.Invoke(); }
             buttons[currentlySelectedFace].transform.GetChild(3).GetChild(0).GetComponent<TextMeshProUGUI>().Rebuild(CanvasUpdate.Prelayout);
 
             yield break;
         }
         public void UpdateReadyVisuals()
-        {
+       {
             for (int i = 0; i < buttons.Length; i++)
-            {
+           {
                 buttons[i].transform.GetChild(4).gameObject.SetActive(true);
                 buttons[i].transform.GetChild(4).GetChild(0).gameObject.SetActive(GetFieldValue<bool>("isReady") || created);
                 buttons[i].transform.GetChild(4).GetChild(1).gameObject.SetActive(GetFieldValue<bool>("isReady") || created);
                 foreach (Graphic graphic in buttons[i].transform.GetChild(4).GetChild(0).GetComponentsInChildren<Graphic>(true))
-                {
+               {
                     graphic.color = created ? Colors.Transparent(Colors.createdColor) : GetFieldValue<bool>("isReady") ? Colors.Transparent(Colors.readycolor) : Color.clear;
                 }
                 foreach (Graphic graphic in buttons[i].transform.GetChild(4).GetChild(1).GetComponentsInChildren<Graphic>(true))
-                {
+               {
                     graphic.color = created ? Colors.Transparent(Colors.createdColor) : GetFieldValue<bool>("isReady") ? Colors.Transparent(Colors.readycolor) : Color.clear;
                 }
                 buttons[i].transform.GetChild(4).GetChild(2).GetComponent<TextMeshProUGUI>().text = created ? "IN GAME" : GetFieldValue<bool>("isReady") ? "READY" : "";
@@ -262,53 +266,53 @@ namespace Unbound.Networking.UI
             }
         }
         public void Created()
-        {
+       {
             created = true;
-            if (currentPlayer.IsMine) { view.RPC(nameof(RPCA_Created), RpcTarget.All); }
+            if (currentPlayer.IsMine){ view.RPC(nameof(RPCA_Created), RpcTarget.All); }
         }
 
         [PunRPC]
         public void RPCA_Created()
-        {
+       {
             created = true;
         }
         private void Update()
-        {
+       {
             if (PrivateRoomHandler.instance == null || PhotonNetwork.CurrentRoom == null || currentPlayer == null)
-            {
+           {
                 return;
             }
 
             UpdateReadyVisuals();
 
             if (!currentPlayer.IsMine)
-            {
+           {
                 colorID = currentPlayer.colorID;
                 UpdateFaceColors();
                 return;
             }
-            else if (lastChangedTeams > 0f && Time.realtimeSinceStartup - lastChangedTeams >= 2f * PhotonNetwork.GetPing() * 0.001f)
-            {
+            else if (lastChangedTeams > 0f && Time.realtimeSinceStartup - lastChangedTeams >= 2f * PhotonNetwork.GetPing()*0.001f)
+           {
                 if (colorID != currentPlayer.colorID)
-                {
+               {
                     ChangeToTeam(colorID);
                 }
             }
-            if (!currentPlayer.IsMine || !enableInput || GetFieldValue<bool>("isReady")) { return; }
+            if (!currentPlayer.IsMine || !enableInput || GetFieldValue<bool>("isReady")){ return; }
 
             HoverEvent component = buttons[currentlySelectedFace].GetComponent<HoverEvent>();
             if (currentButton != component)
-            {
+           {
                 if (currentButton)
-                {
+               {
                     currentButton.GetComponent<PrivateRoomSimulatedSelection>().Deselect();
                     currentButton.gameObject.SetActive(false);
                 }
                 else
-                {
+               {
                     for (int i = 0; i < buttons.Length; i++)
-                    {
-                        if (i == currentlySelectedFace) { continue; }
+                   {
+                        if (i == currentlySelectedFace){ continue; }
                         buttons[i].GetComponent<PrivateRoomSimulatedSelection>().Deselect();
                         buttons[i].gameObject.SetActive(false);
                     }
@@ -317,37 +321,37 @@ namespace Unbound.Networking.UI
                 currentButton.transform.GetChild(4).gameObject.SetActive(true);
                 currentButton.gameObject.SetActive(true);
                 currentButton.GetComponent<PrivateRoomSimulatedSelection>().Select();
-                if (currentPlayer.IsMine) { currentButton.GetComponent<Button>().onClick.Invoke(); }
+                if (currentPlayer.IsMine){ currentButton.GetComponent<Button>().onClick.Invoke(); }
                 currentButton.transform.GetChild(3).GetChild(0).GetComponent<TextMeshProUGUI>().Rebuild(CanvasUpdate.Prelayout);
             }
             int previouslySelectedFace = currentlySelectedFace;
-            if ((device != null && (device.DeviceClass == InputDeviceClass.Controller) && (device.Direction.Left.WasPressed || device.Direction.Right.WasPressed || device.DPadLeft.WasPressed || device.DPadRight.WasPressed || device.RightBumper.WasPressed || device.LeftBumper.WasPressed)) || (device == null && (Input.GetKeyDown(KeyCode.Q) || Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.LeftArrow))))
-            {
+            if (((device != null && (device.DeviceClass == InputDeviceClass.Controller) && (device.Direction.Left.WasPressed || device.Direction.Right.WasPressed || device.DPadLeft.WasPressed || device.DPadRight.WasPressed|| device.RightBumper.WasPressed || device.LeftBumper.WasPressed)) || (device == null && (Input.GetKeyDown(KeyCode.Q) || Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.LeftArrow)))))
+           {
                 // change face
                 if ((device != null && (device.DeviceClass == InputDeviceClass.Controller) && device.RightBumper.WasPressed) || (device == null && (Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.UpArrow))))
-                {
+               {
                     currentlySelectedFace++;
                 }
                 else if ((device != null && (device.DeviceClass == InputDeviceClass.Controller) && device.LeftBumper.WasPressed) || (device == null && (Input.GetKeyDown(KeyCode.Q) || Input.GetKeyDown(KeyCode.DownArrow))))
-                {
+               {
                     currentlySelectedFace--;
                 }
                 bool colorChanged = false;
                 int colorIDDelta = 0;
                 // change team
-                if ((device != null && (device.DeviceClass == InputDeviceClass.Controller) && (device.Direction.Right.WasPressed || device.DPadRight.WasPressed)) || ((device == null) && (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))))
-                {
+                if (device != null && ((device.DeviceClass == InputDeviceClass.Controller) && (device.Direction.Right.WasPressed || device.DPadRight.WasPressed)) || ((device == null) && (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))))
+               {
                     colorIDDelta = +1;
                     colorChanged = true;
                 }
-                else if ((device != null && (device.DeviceClass == InputDeviceClass.Controller) && (device.Direction.Left.WasPressed || device.DPadLeft.WasPressed)) || ((device == null) && (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))))
-                {
+                else if (device != null && ((device.DeviceClass == InputDeviceClass.Controller) && (device.Direction.Left.WasPressed || device.DPadLeft.WasPressed)) || ((device == null) && (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))))
+               {
                     colorIDDelta = -1;
                     colorChanged = true;
                 }
 
                 if (colorChanged)
-                {
+               {
                     // ask the host client for permission to change team
                     //view.RPC(nameof(RPCH_RequestChangeTeam), RpcTarget.MasterClient, colorIDDelta);
                     ChangeTeam(colorIDDelta);
@@ -356,7 +360,7 @@ namespace Unbound.Networking.UI
             }
             currentlySelectedFace %= buttons.Length;
             if (currentlySelectedFace != previouslySelectedFace)
-            {
+           {
                 currentPlayer.faceID = currentlySelectedFace;
                 LobbyCharacter[] characters = PhotonNetwork.LocalPlayer.GetProperty<LobbyCharacter[]>("players");
                 characters[currentPlayer.localID] = currentPlayer;
@@ -366,37 +370,37 @@ namespace Unbound.Networking.UI
             }
         }
         public void SetInputEnabled(bool enabled)
-        {
+       {
             enableInput = enabled;
         }
-
+        
         [PunRPC]
         private void RPCS_RequestSelectedFace(int askerID)
-        {
+       {
             PlayerFace faceToSend = CharacterCreatorHandler.instance.GetFacePreset(currentlySelectedFace);
             view.RPC(nameof(RPCO_SelectFace), PhotonNetwork.CurrentRoom.GetPlayer(askerID), currentlySelectedFace, faceToSend.eyeID, faceToSend.eyeOffset, faceToSend.mouthID, faceToSend.mouthOffset, faceToSend.detailID, faceToSend.detailOffset, faceToSend.detail2ID, faceToSend.detail2Offset);
         }
         [PunRPC]
         private void RPCO_SelectFace(int faceID, int eyeID, Vector2 eyeOffset, int mouthID, Vector2 mouthOffset, int detailID, Vector2 detailOffset, int detail2ID, Vector2 detail2Offset)
-        {
+       {
             currentPlayer.faceID = faceID;
             buttons = transform.GetComponentsInChildren<HoverEvent>(true);
             for (int i = 0; i < buttons.Length; i++)
-            {
+           {
                 if (i == faceID)
-                {
+               {
                     buttons[i].gameObject.SetActive(true);
                     StartCoroutine(SelectFaceCoroutine(buttons[i], eyeID, eyeOffset, mouthID, mouthOffset, detailID, detailOffset, detail2ID, detail2Offset));
                 }
                 else
-                {
+               {
                     buttons[i].GetComponent<PrivateRoomSimulatedSelection>().Deselect();
                     buttons[i].gameObject.SetActive(false);
                 }
             }
         }
         private IEnumerator SelectFaceCoroutine(HoverEvent button, int eyeID, Vector2 eyeOffset, int mouthID, Vector2 mouthOffset, int detailID, Vector2 detailOffset, int detail2ID, Vector2 detail2Offset)
-        {
+       {
             yield return new WaitUntil(() => button.gameObject.activeInHierarchy);
 
             button.GetComponent<PrivateRoomSimulatedSelection>().Select();
@@ -404,24 +408,24 @@ namespace Unbound.Networking.UI
             button.transform.GetChild(4).gameObject.SetActive(true);
             button.transform.GetChild(3).GetChild(0).GetComponent<TextMeshProUGUI>().Rebuild(CanvasUpdate.Prelayout);
             button.GetComponent<CharacterCreatorItemEquipper>().RPCA_SetFace(eyeID, eyeOffset, mouthID, mouthOffset, detailID, detailOffset, detail2ID, detail2Offset);
-
+            
 
             yield break;
         }
 
         private void ChangeTeam(int colorIDDelta)
-        {
+       {
             int newColorID = colorID + colorIDDelta;
             int orig = colorID;
 
             if (!GameModeManager.CurrentHandler.AllowTeams)
-            {
+           {
                 // teams not allowed, continue to next colorID
                 while (PrivateRoomHandler.instance.PrivateRoomCharacters.Where(p => p != null && p.uniqueID != currentPlayer.uniqueID && p.colorID == newColorID).Any() && newColorID < UnboundNetworking.MaxColorsHardLimit && newColorID >= 0)
-                {
+               {
                     newColorID = newColorID + colorIDDelta;
                     if (newColorID == orig || newColorID >= UnboundNetworking.MaxColorsHardLimit || newColorID < 0)
-                    {
+                   {
                         // make sure it's impossible to get stuck in an infinite loop here,
                         // even though prior logic limiting the number of players should prevent this
                         break;
@@ -432,15 +436,15 @@ namespace Unbound.Networking.UI
             bool fail = newColorID == orig || newColorID >= UnboundNetworking.MaxColorsHardLimit || newColorID < 0;
 
             if (!fail)
-            {
+           {
                 ChangeToTeam(newColorID);
             }
         }
 
         private void ChangeToTeam(int newColorID)
-        {
+       {
             // send the team change to all clients
-            if (!currentPlayer.IsMine) { return; }
+            if (!currentPlayer.IsMine){ return; }
 
             lastChangedTeams = Time.realtimeSinceStartup;
 
@@ -457,13 +461,13 @@ namespace Unbound.Networking.UI
         }
 
         public void UpdateFaceColors()
-        {
+       {
             // set player color
             if (transform.GetComponentsInChildren<HoverEvent>(true).Any())
-            {
+           {
                 buttons = transform.GetComponentsInChildren<HoverEvent>(true);
                 for (int i = 0; i < buttons.Length; i++)
-                {
+               {
                     buttons[i].transform.GetChild(2).GetChild(0).GetComponent<SpriteRenderer>().color = ExtraPlayerSkins.GetPlayerSkinColors(colorID).color;
                 }
             }
@@ -471,8 +475,8 @@ namespace Unbound.Networking.UI
 
         [PunRPC]
         internal void RPCA_ChangeTeam(int newColorID)
-        {
-            if (currentPlayer.IsMine) { ChangeToTeam(newColorID); }
+       {
+            if (currentPlayer.IsMine){ ChangeToTeam(newColorID); }
 
             return;
 
@@ -485,13 +489,13 @@ namespace Unbound.Networking.UI
         public int uniqueID = 1;
         private int _colorID = -1;
         public int colorID
-        {
+       {
             get
-            {
+           {
                 return _colorID;
             }
             private set
-            {
+           {
                 _colorID = value;
             }
         }
@@ -505,15 +509,15 @@ namespace Unbound.Networking.UI
         private HoverEvent[] buttons;
 
         public bool isReady
-        {
+       {
             get
-            {
+           {
                 if (currentPlayer != null)
-                {
+               {
                     return currentPlayer.ready;
                 }
                 else
-                {
+               {
                     return false;
                 }
             }
