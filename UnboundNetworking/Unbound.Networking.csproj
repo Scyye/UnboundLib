@@ -34,21 +34,19 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <RoundsFolder>K:\SteamLibrary\steamapps\common\ROUNDS</RoundsFolder>
+    <RoundsFolder>F:\SteamLibrary\steamapps\common\ROUNDS</RoundsFolder>
     <ManagedFolder>$(RoundsFolder)\ROUNDS_Data\Managed</ManagedFolder>
-    <BepInFolder>K:\SteamLibrary\steamapps\common\ROUNDS\BepInEx</BepInFolder>
+    <BepInFolder>F:\SteamLibrary\steamapps\common\ROUNDS\BepInEx</BepInFolder>
     <IndirectBuildTask>true</IndirectBuildTask>
     <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
     <LangVersion>7.1</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Assets\rwf_lobbyui" />
-    <None Remove="UI\PlayerSpotlight.cs~RF1ec6da15.TMP" />
+    <None Remove="Assets\togglemenuui" />
     <None Remove="UnboundLib.csproj.user.dist" />
     <None Remove="PostBuild.msbuild" />
     <None Remove="unboundlinks" />
-    <EmbeddedResource Include="Assets\rwf_lobbyui" />
     <None Include="..\README.md" />
     <None Include="..\.gitignore" />
   </ItemGroup>
@@ -112,21 +110,6 @@
     <Reference Include="UnityEngine.InputModule">
       <HintPath>$(ManagedFolder)\UnityEngine.InputModule.dll</HintPath>
     </Reference>
-    <Reference Include="InControl">
-      <HintPath>$(ManagedFolder)\InControl.dll</HintPath>
-    </Reference>
-    <Reference Include="Photon3Unity3D">
-      <HintPath>$(ManagedFolder)\Photon3Unity3D.dll</HintPath>
-    </Reference>
-    <Reference Include="PhotonRealtime">
-      <HintPath>$(ManagedFolder)\PhotonRealtime.dll</HintPath>
-    </Reference>
-    <Reference Include="PhotonUnityNetworking">
-      <HintPath>$(ManagedFolder)\PhotonUnityNetworking.dll</HintPath>
-    </Reference>
-    <Reference Include="PhotonUnityNetworking.Utilities">
-      <HintPath>$(ManagedFolder)\PhotonUnityNetworking.Utilities.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.ResourceManager">
       <HintPath>$(ManagedFolder)\Unity.ResourceManager.dll</HintPath>
     </Reference>
@@ -147,9 +130,6 @@
     </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>$(ManagedFolder)\UnityEngine.UI.dll</HintPath>
-    </Reference>
-    <Reference Include="SonigonAudioEngine.Runtime">
-      <HintPath>$(ManagedFolder)\SonigonAudioEngine.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UIElementsModule">
       <HintPath>$(ManagedFolder)\UnityEngine.UIElementsModule.dll</HintPath>

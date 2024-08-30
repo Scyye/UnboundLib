@@ -14,11 +14,12 @@ using UnityEngine;
 
 using static NetworkConnectionHandler;
 
-namespace UnboundLib.Networking.Lobbies{
+namespace UnboundLib.Networking.Lobbies
+{
     public class ConectionHandler : MonoBehaviourPunCallbacks
-   {
+    {
         private void Awake()
-       {
+        {
             instance = this;
             PhotonNetwork.ServerPortOverrides = PhotonPortDefinition.AlternativeUdpPorts;
             PhotonNetwork.CrcCheckEnabled = true;
@@ -26,13 +27,13 @@ namespace UnboundLib.Networking.Lobbies{
         }
 
         private void Start()
-       {
+        {
             if (steamLobby == null)
-           {
+            {
                 steamLobby = new ClientSteamLobby();
             }
             else
-           {
+            {
                 steamLobby.LeaveLobby();
             }
         }
@@ -43,9 +44,9 @@ namespace UnboundLib.Networking.Lobbies{
         public static ClientSteamLobby steamLobby;
         public static readonly TypedLobby ModdedLobby = new TypedLobby("RoundsModdedLobby", LobbyType.SqlLobby);
         private static RoomOptions _roomOptions;
-        public static RoomOptions RoomOptions{ get{
+        public static RoomOptions RoomOptions { get {
                 if (_roomOptions == null)
-               {
+                {
                     _roomOptions = new RoomOptions();
                     _roomOptions.MaxPlayers = UnboundNetworking.MaxPlayers;
                     _roomOptions.IsOpen = true;
@@ -57,18 +58,18 @@ namespace UnboundLib.Networking.Lobbies{
                 return _roomOptions;
             } }
         public IEnumerator ConectIfDisconected( string region = "")
-       {
+        {
             if (!PhotonNetwork.IsConnectedAndReady)
-           {
+            {
                 PhotonNetwork.LocalPlayer.NickName = "PlayerName";
                 PhotonNetwork.ConnectUsingSettings();
                 PhotonNetwork.AuthValues = new AuthenticationValues($"Steam={SteamUser.GetSteamID().m_SteamID}");
                 if (region != "")
-               {
+                {
                     PhotonNetwork.ConnectToRegion(region);
                 }
                 else
-               {
+                {
                     PhotonNetwork.ConnectToBestCloudServer();
                 }
             }
@@ -77,14 +78,14 @@ namespace UnboundLib.Networking.Lobbies{
             Debug.Log("Conected!");
         }
         public override void OnConnectedToMaster()
-       {
+        {
             isConnectedToMaster = true;
         }
         public override void OnDisconnected(DisconnectCause cause)
-       {
+        {
             isConnectedToMaster = false;
             if(cause == DisconnectCause.ClientTimeout)
-           {
+            {
                 //attempt reconect.
                 //TODO: figure out if this is actually feasable.
             }
@@ -93,17 +94,17 @@ namespace UnboundLib.Networking.Lobbies{
     }
     [HarmonyPatch(typeof(NetworkConnectionHandler),"Awake")]
     public static class DiableVanillaNetworkConnectionHandler
-   {
+    {
         public static void Prefix(NetworkConnectionHandler __instance)
-       {
+        {
             UnityEngine.Object.DestroyImmediate(__instance);
         }
     }
     [HarmonyPatch(typeof(NetworkData), "Start")]
     public static class DiableMasterDebugCheck
-   {
+    {
         public static void Prefix(NetworkData __instance)
-       {
+        {
             UnityEngine.Object.DestroyImmediate(__instance);
         }
     }

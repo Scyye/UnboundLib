@@ -6,12 +6,13 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace UnboundLib.Networking.Extensions{
+namespace UnboundLib.Networking.Extensions
+{
     public static class RoomOptionsExtentions
-   {
+    {
 
         public static RoomOptions Clone(this RoomOptions original)
-       {
+        {
             RoomOptions copy = new RoomOptions();
             copy.MaxPlayers = original.MaxPlayers;
             copy.PlayerTtl = original.PlayerTtl;
