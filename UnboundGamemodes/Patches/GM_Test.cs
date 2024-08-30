@@ -1,9 +1,4 @@
-﻿using HarmonyLib;
-using System.Linq;
-using System.Collections.Generic;
-
-namespace Unbound.Core.Patches
-{
+﻿namespace Unbound.Core.Patches {
     /*
     [HarmonyPatch(typeof(GM_Test), "Start")]
     class GM_Test_Patch_Start

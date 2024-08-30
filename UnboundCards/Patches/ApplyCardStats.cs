@@ -1,13 +1,9 @@
 using HarmonyLib;
-using Unbound.Cards;
 
-namespace Unbound.Cards.Patches
-{
+namespace Unbound.Cards.Patches {
     [HarmonyPatch(typeof(ApplyCardStats), "ApplyStats")]
-    class ApplyCardStats_Patch
-    {
-        static void Prefix(ApplyCardStats __instance, Player ___playerToUpgrade)
-        {
+    class ApplyCardStats_Patch {
+        static void Prefix(ApplyCardStats __instance, Player ___playerToUpgrade) {
             var player = ___playerToUpgrade.GetComponent<Player>();
             var gun = ___playerToUpgrade.GetComponent<Holding>().holdable.GetComponent<Gun>();
             var characterData = ___playerToUpgrade.GetComponent<CharacterData>();
@@ -18,8 +14,7 @@ namespace Unbound.Cards.Patches
             var characterStatModifiers = player.GetComponent<CharacterStatModifiers>();
 
             CustomCard customAbility = __instance.gameObject.GetComponent<CustomCard>();
-            if (customAbility != null)
-            {
+            if(customAbility != null) {
                 customAbility.OnAddCard(player, gun, gunAmmo, characterData, healthHandler, gravity, block, characterStatModifiers);
             }
         }

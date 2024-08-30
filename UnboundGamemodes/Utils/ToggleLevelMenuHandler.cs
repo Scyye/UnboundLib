@@ -1,5 +1,4 @@
-﻿using BepInEx;
-using HarmonyLib;
+﻿using HarmonyLib;
 using Photon.Pun;
 using System;
 using System.Collections;
@@ -15,10 +14,8 @@ using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-namespace Unbound.Gamemodes.Utils
-{
-    public class ToggleLevelMenuHandler : MonoBehaviour
-    {
+namespace Unbound.Gamemodes.Utils {
+    public class ToggleLevelMenuHandler:MonoBehaviour {
         public static ToggleLevelMenuHandler instance;
 
         // Draw level
@@ -73,8 +70,7 @@ namespace Unbound.Gamemodes.Utils
 
         private static TextMeshProUGUI mapAmountText;
 
-        public void Start()
-        {
+        public void Start() {
             instance = this;
 
             var mainCamera = GameObject.Find("MainCamera").GetComponent<Camera>();
@@ -111,12 +107,9 @@ namespace Unbound.Gamemodes.Utils
 
             // Create and set searchbar
             var searchBar = mapMenuCanvas.transform.Find("MapMenu/Top/InputField").gameObject;
-            searchBar.GetComponent<TMP_InputField>().onValueChanged.AddListener(value =>
-            {
-                foreach (var level in ScrollViews.SelectMany(scrollViewPair => scrollViewPair.Value.GetComponentsInChildren<Button>(true)))
-                {
-                    if (value == "")
-                    {
+            searchBar.GetComponent<TMP_InputField>().onValueChanged.AddListener(value => {
+                foreach(var level in ScrollViews.SelectMany(scrollViewPair => scrollViewPair.Value.GetComponentsInChildren<Button>(true))) {
+                    if(value == "") {
                         level.gameObject.SetActive(true);
                         continue;
                     }
@@ -129,11 +122,9 @@ namespace Unbound.Gamemodes.Utils
             mapAmountText = mapAmountObject.GetComponentInChildren<TextMeshProUGUI>();
 
             var cardAmountSlider = mapAmountObject.GetComponentsInChildren<Slider>();
-            foreach (Slider slider in cardAmountSlider)
-            {
-                slider.onValueChanged.AddListener(amount =>
-                {
-                    int integerAmount = (int) amount;
+            foreach(Slider slider in cardAmountSlider) {
+                slider.onValueChanged.AddListener(amount => {
+                    int integerAmount = (int)amount;
                     ChangeMapColumnAmountMenus(integerAmount);
                 });
             }
@@ -141,28 +132,22 @@ namespace Unbound.Gamemodes.Utils
             // Create and set toggle all button
             var toggleAllButton = mapMenuCanvas.transform.Find("MapMenu/Top/ToggleAll").GetComponent<Button>();
             buttonsToDisable.Add(toggleAllButton);
-            toggleAllButton.onClick.AddListener(() =>
-            {
-                if (CurrentCategory == null) return;
+            toggleAllButton.onClick.AddListener(() => {
+                if(CurrentCategory == null) return;
 
                 toggledAll = !toggledAll;
 
                 var levelsInCategory = LevelManager.GetLevelsInCategory(CurrentCategory);
-                if (toggledAll)
-                {
+                if(toggledAll) {
                     LevelManager.DisableLevels(levelsInCategory);
 
-                    foreach (var lvlObj in lvlObjs.Where(lvlObj => levelsInCategory.Contains(lvlObj.name)))
-                    {
+                    foreach(var lvlObj in lvlObjs.Where(lvlObj => levelsInCategory.Contains(lvlObj.name))) {
                         UpdateVisualsLevelObj(lvlObj);
                     }
-                }
-                else
-                {
+                } else {
                     LevelManager.EnableLevels(levelsInCategory);
 
-                    foreach (var lvlObj in lvlObjs.Where(lvlObj => levelsInCategory.Contains(lvlObj.name)))
-                    {
+                    foreach(var lvlObj in lvlObjs.Where(lvlObj => levelsInCategory.Contains(lvlObj.name))) {
                         UpdateVisualsLevelObj(lvlObj);
                     }
                 }
@@ -172,8 +157,7 @@ namespace Unbound.Gamemodes.Utils
             var redrawAllButton = mapMenuCanvas.transform.Find("MapMenu/Top/RedrawAll").GetComponent<Button>();
             buttonsToDisable.Add(redrawAllButton);
             redrawAllText = redrawAllButton.GetComponentInChildren<TextMeshProUGUI>();
-            redrawAllButton.onClick.AddListener(() =>
-            {
+            redrawAllButton.onClick.AddListener(() => {
                 mapMenuCanvas.SetActive(true);
                 levelsThatNeedToRedrawn.AddRange(redrawAllText.text == "Draw Thumbnails"
                     ? LevelManager.levels.Select(lvlObj => lvlObj.Key)
@@ -186,32 +170,26 @@ namespace Unbound.Gamemodes.Utils
             // get and set info button
             var infoButton = mapMenuCanvas.transform.Find("MapMenu/Top/Help").GetComponent<Button>();
             var infoMenu = mapMenuCanvas.transform.Find("MapMenu/InfoMenu").gameObject;
-            infoButton.onClick.AddListener(() =>
-            {
+            infoButton.onClick.AddListener(() => {
                 infoMenu.SetActive(!infoMenu.activeInHierarchy);
             });
 
-            this.ExecuteAfterSeconds(0.5f, () =>
-            {
+            this.ExecuteAfterSeconds(0.5f, () => {
                 mapMenuCanvas.SetActive(true);
 
                 // Create category scrollViews
-                foreach (var category in LevelManager.categories)
-                {
+                foreach(var category in LevelManager.categories) {
                     var newScrollView = Instantiate(scrollView, scrollViewTrans);
                     newScrollView.name = category;
                     ScrollViews.Add(category, newScrollView.transform);
-                    if (category == "Vanilla")
-                    {
+                    if(category == "Vanilla") {
                         newScrollView.SetActive(true);
                     }
 
                 }
                 // Create lvlObjs
-                foreach (var level in LevelManager.levels)
-                {
-                    if (!File.Exists(Path.Combine("./LevelImages", LevelManager.GetVisualName(level.Key) + ".png")))
-                    {
+                foreach(var level in LevelManager.levels) {
+                    if(!File.Exists(Path.Combine("./LevelImages", LevelManager.GetVisualName(level.Key) + ".png"))) {
                         levelsThatNeedToRedrawn.Add(level.Key);
                     }
 
@@ -223,24 +201,19 @@ namespace Unbound.Gamemodes.Utils
 
                     mapObject.GetComponentInChildren<TextMeshProUGUI>().text = LevelManager.GetVisualName(level.Value.name);
                     mapObject.AddComponent<LvlObj>();
-                    mapObject.GetComponent<Button>().onClick.AddListener(() =>
-                    {
-                        if (Input.GetKey(KeyCode.LeftShift))
-                        {
+                    mapObject.GetComponent<Button>().onClick.AddListener(() => {
+                        if(Input.GetKey(KeyCode.LeftShift)) {
                             level.Value.selected = !level.Value.selected;
 
                             UpdateVisualsLevelObj(mapObject);
                             return;
                         }
 
-                        if (level.Value.enabled)
-                        {
+                        if(level.Value.enabled) {
                             LevelManager.DisableLevel(level.Key);
                             level.Value.enabled = false;
                             UpdateVisualsLevelObj(mapObject);
-                        }
-                        else
-                        {
+                        } else {
                             LevelManager.EnableLevel(level.Key);
                             level.Value.enabled = true;
                             UpdateVisualsLevelObj(mapObject);
@@ -250,8 +223,7 @@ namespace Unbound.Gamemodes.Utils
 
                     lvlObjs.Add(mapObject);
                     UpdateVisualsLevelObj(mapObject);
-                    if (!UnboundCore.BindConfig("Levels: " + level.Value.category, LevelManager.GetVisualName(level.Key), true).Value)
-                    {
+                    if(!UnboundCore.BindConfig("Levels: " + level.Value.category, LevelManager.GetVisualName(level.Key), true).Value) {
                         LevelManager.DisableLevel(level.Key);
                         UpdateVisualsLevelObj(mapObject);
                     }
@@ -262,16 +234,13 @@ namespace Unbound.Gamemodes.Utils
 
                 // Create category buttons
                 List<string> sortedCategories = new[] { "Vanilla", "Default physics" }.Concat(LevelManager.categories.OrderBy(c => c).Except(new[] { "Vanilla", "Default physics" })).ToList();
-                foreach (var category in sortedCategories)
-                {
+                foreach(var category in sortedCategories) {
                     var categoryObj = Instantiate(categoryButton, categoryContent);
                     categoryObj.SetActive(true);
                     categoryObj.name = category;
                     categoryObj.GetComponentInChildren<TextMeshProUGUI>().text = category;
-                    categoryObj.GetComponent<Button>().onClick.AddListener(() =>
-                    {
-                        foreach (var scroll in ScrollViews)
-                        {
+                    categoryObj.GetComponent<Button>().onClick.AddListener(() => {
+                        foreach(var scroll in ScrollViews) {
                             scroll.Value.gameObject.SetActive(false);
                         }
 
@@ -284,30 +253,21 @@ namespace Unbound.Gamemodes.Utils
                     togglesToDisable.Add(toggle);
                     toggle.onValueChanged.AddListener(UpdateCategoryVisuals);
 
-                    void UpdateCategoryVisuals(bool enabledVisuals)
-                    {
-                        foreach (var obj in ScrollViews.Where(obj => obj.Key == category))
-                        {
+                    void UpdateCategoryVisuals(bool enabledVisuals) {
+                        foreach(var obj in ScrollViews.Where(obj => obj.Key == category)) {
                             obj.Value.Find("Darken").gameObject.SetActive(!enabledVisuals);
-                            if (enabledVisuals)
-                            {
+                            if(enabledVisuals) {
                                 LevelManager.categoryBools[category].Value = true;
-                                foreach (Transform trs in obj.Value.Find("Viewport/Content"))
-                                {
-                                    if (trs.name != "MapObj" && trs.GetComponentsInChildren<Image>()[1].color == Color.white)
-                                    {
+                                foreach(Transform trs in obj.Value.Find("Viewport/Content")) {
+                                    if(trs.name != "MapObj" && trs.GetComponentsInChildren<Image>()[1].color == Color.white) {
                                         LevelManager.EnableLevel(trs.name, false);
                                     }
                                 }
-                            }
-                            else
-                            {
+                            } else {
                                 LevelManager.categoryBools[category].Value = false;
-                                foreach (Transform trs in obj.Value.Find("Viewport/Content"))
-                                {
-                                    if (trs.name != "MapObj" &&
-                                        trs.GetComponentsInChildren<Image>()[1].color == Color.white)
-                                    {
+                                foreach(Transform trs in obj.Value.Find("Viewport/Content")) {
+                                    if(trs.name != "MapObj" &&
+                                        trs.GetComponentsInChildren<Image>()[1].color == Color.white) {
                                         LevelManager.DisableLevel(trs.name, false);
                                     }
                                 }
@@ -328,17 +288,13 @@ namespace Unbound.Gamemodes.Utils
         }
 
         // Update the visuals of a mapObject
-        public static void UpdateVisualsLevelObj(GameObject lvlObj)
-        {
-            if (!LevelManager.levels.ContainsKey(lvlObj.name)) return;
-            if (LevelManager.levels[lvlObj.name].enabled)
-            {
+        public static void UpdateVisualsLevelObj(GameObject lvlObj) {
+            if(!LevelManager.levels.ContainsKey(lvlObj.name)) return;
+            if(LevelManager.levels[lvlObj.name].enabled) {
                 lvlObj.transform.Find("Image").GetComponent<Image>().color = Color.white;
                 lvlObj.transform.Find("Background").GetComponent<Image>().color = new Color(0.2352941f, 0.2352941f, 0.2352941f, 0.8470588f);
                 lvlObj.GetComponentInChildren<TextMeshProUGUI>().color = Color.white;
-            }
-            else
-            {
+            } else {
                 lvlObj.transform.Find("Image").GetComponent<Image>().color = new Color(0.25f, 0.25f, 0.25f);
                 lvlObj.transform.Find("Background").GetComponent<Image>().color = new Color(0.15f, 0.15f, 0.15f);
                 lvlObj.GetComponentInChildren<TextMeshProUGUI>().color = new Color(0.25f, 0.25f, 0.25f);
@@ -346,9 +302,8 @@ namespace Unbound.Gamemodes.Utils
         }
 
         // Update the image of a mapObject
-        private static void UpdateImage(GameObject mapObject, string imagePath)
-        {
-            if (!File.Exists(imagePath)) return;
+        private static void UpdateImage(GameObject mapObject, string imagePath) {
+            if(!File.Exists(imagePath)) return;
 
             var image = mapObject.transform.Find("Image").gameObject;
             var fileData = File.ReadAllBytes(imagePath);
@@ -357,12 +312,10 @@ namespace Unbound.Gamemodes.Utils
             image.GetComponent<Image>().sprite = Sprite.Create(img, new Rect(0, 0, img.width, img.height), new Vector2(0.5f, 0.5f));
         }
 
-        private IEnumerator LoadScenesForRedrawing(IEnumerable<string> sceneNames)
-        {
+        private IEnumerator LoadScenesForRedrawing(IEnumerable<string> sceneNames) {
             isDrawingLevels = true;
 
-            foreach (var sceneName in sceneNames)
-            {
+            foreach(var sceneName in sceneNames) {
                 ArtHandler.instance.NextArt();
                 yield return LoadScene(sceneName);
                 levelsThatHaveBeenRedrawn.Add(sceneName);
@@ -372,31 +325,25 @@ namespace Unbound.Gamemodes.Utils
             NetworkConnectionHandler.instance.NetworkRestart();
             isDrawingLevels = false;
 
-            foreach (var map in LevelManager.levels.Where(lvl => lvl.Value.selected))
-            {
+            foreach(var map in LevelManager.levels.Where(lvl => lvl.Value.selected)) {
                 map.Value.selected = false;
             }
 
-            foreach (var mapObject in lvlObjs)
-            {
+            foreach(var mapObject in lvlObjs) {
                 UpdateVisualsLevelObj(mapObject);
                 UpdateImage(mapObject, Path.Combine("./LevelImages", LevelManager.GetVisualName(mapObject.name) + ".png"));
             }
 
-            foreach (var obj in mapMenuCanvas.scene.GetRootGameObjects())
-            {
-                if (obj.name == "UnboundLib Canvas")
-                {
+            foreach(var obj in mapMenuCanvas.scene.GetRootGameObjects()) {
+                if(obj.name == "UnboundLib Canvas") {
                     obj.SetActive(false);
                 }
             }
 
             RemoveAllRightClickMenus();
 
-            if (manualRedraw)
-            {
-                this.ExecuteAfterFrames(5, () =>
-                {
+            if(manualRedraw) {
+                this.ExecuteAfterFrames(5, () => {
                     SetActive(true);
                 });
             }
@@ -404,73 +351,59 @@ namespace Unbound.Gamemodes.Utils
             manualRedraw = false;
         }
 
-        private static void ChangeMapColumnAmountMenus(int amount)
-        {
+        private static void ChangeMapColumnAmountMenus(int amount) {
             Vector2 cellSize = new Vector2(158, 115);
             float localScale;
-            switch (amount)
-            {
-                case 3:
-                    {
-                        localScale = 1.4f;
-                        break;
-                    }
-                default:
-                    {
-                        localScale = 1f;
-                        break;
-                    }
-                case 5:
-                    {
-                        localScale = 0.85f;
-                        break;
-                    }
-                case 6:
-                    {
-                        localScale = 0.7f;
-                        break;
-                    }
-                case 7:
-                    {
-                        localScale = 0.6f;
-                        break;
-                    }
-                case 8:
-                    {
-                        localScale = 0.525f;
-                        break;
-                    }
+            switch(amount) {
+                case 3: {
+                    localScale = 1.4f;
+                    break;
+                }
+                default: {
+                    localScale = 1f;
+                    break;
+                }
+                case 5: {
+                    localScale = 0.85f;
+                    break;
+                }
+                case 6: {
+                    localScale = 0.7f;
+                    break;
+                }
+                case 7: {
+                    localScale = 0.6f;
+                    break;
+                }
+                case 8: {
+                    localScale = 0.525f;
+                    break;
+                }
             }
             cellSize *= localScale;
 
             mapAmountText.text = "Maps Per Line: " + amount;
-            foreach (GridLayoutGroup gridLayout in from category in LevelManager.categories select ScrollViews[category].Find("Viewport/Content") into categoryMenu where categoryMenu != null select categoryMenu.gameObject.GetComponent<GridLayoutGroup>())
-            {
+            foreach(GridLayoutGroup gridLayout in from category in LevelManager.categories select ScrollViews[category].Find("Viewport/Content") into categoryMenu where categoryMenu != null select categoryMenu.gameObject.GetComponent<GridLayoutGroup>()) {
                 gridLayout.cellSize = cellSize;
                 gridLayout.constraintCount = amount;
                 gridLayout.spacing = new Vector2(0, 20 * localScale);
             }
         }
 
-        private IEnumerator LoadScene(string sceneName)
-        {
+        private IEnumerator LoadScene(string sceneName) {
             bool isDone = false;
 
-            void NewSceneLoaded(Scene scene, LoadSceneMode mode)
-            {
+            void NewSceneLoaded(Scene scene, LoadSceneMode mode) {
                 SceneManager.sceneLoaded -= NewSceneLoaded;
 
                 scene.GetRootGameObjects()[0].transform.position = Vector3.zero;
 
-                this.ExecuteAfterSeconds(0.05f, () =>
-                {
+                this.ExecuteAfterSeconds(0.05f, () => {
                     TakeScreenshot(sceneName);
                     var unloadSceneAsync = SceneManager.UnloadSceneAsync(scene);
                     scene.GetRootGameObjects()[0].transform.position = new Vector3(100, 100, 0);
-                    unloadSceneAsync.completed += operation =>
-                    {
-                        this.ExecuteAfterFrames(30, () =>
-                        {
+                    unloadSceneAsync.completed += operation => {
+                        this.ExecuteAfterFrames(30, () => {
                             isDone = true;
                         });
                     };
@@ -478,20 +411,18 @@ namespace Unbound.Gamemodes.Utils
             }
 
             var sceneLoadedMethod = AccessTools.Method(typeof(MapManager), "OnLevelFinishedLoading");
-            var existingSceneLoaded = (UnityAction<Scene, LoadSceneMode>) Delegate.CreateDelegate(typeof(UnityAction<Scene, LoadSceneMode>), MapManager.instance, sceneLoadedMethod);
+            var existingSceneLoaded = (UnityAction<Scene, LoadSceneMode>)Delegate.CreateDelegate(typeof(UnityAction<Scene, LoadSceneMode>), MapManager.instance, sceneLoadedMethod);
 
             MapManager.instance.RPCA_LoadLevel(sceneName);
             SceneManager.sceneLoaded -= existingSceneLoaded;
             SceneManager.sceneLoaded += NewSceneLoaded;
 
-            while (!isDone)
-            {
+            while(!isDone) {
                 yield return null;
             }
         }
 
-        private static void TakeScreenshot(string levelName)
-        {
+        private static void TakeScreenshot(string levelName) {
             // Get camera to take picture from
             var camObj = MainMenuHandler.instance.gameObject.transform.parent.parent.GetComponentInChildren<MainCam>().gameObject;
             var camera = camObj.GetComponent<Camera>();
@@ -528,19 +459,15 @@ namespace Unbound.Gamemodes.Utils
             // Combine the two screenshots if alpha is zero on screenshot 1
             var pixels = screenShot.GetPixels(0, 0, screenShot.width, screenShot.height);
             var pixels1 = screenShot1.GetPixels(0, 0, screenShot.width, screenShot.height);
-            for (var i = 0; i < pixels.Length; i++)
-            {
-                if (pixels[i].a != 0)
-                {
+            for(var i = 0; i < pixels.Length; i++) {
+                if(pixels[i].a != 0) {
                     pixels[i].a = 1;
                 }
-                if (pixels1[i].a != 0)
-                {
+                if(pixels1[i].a != 0) {
                     pixels1[i].a = 1;
                 }
 
-                if (pixels[i].a == 0)
-                {
+                if(pixels[i].a == 0) {
                     pixels[i] = pixels1[i];
                 }
             }
@@ -557,9 +484,8 @@ namespace Unbound.Gamemodes.Utils
         }
 
         // This is executed when right Clicking on a mapObject
-        public void RightClickedAt(Vector2 position, GameObject obj)
-        {
-            if (GameManager.instance.isPlaying) return;
+        public void RightClickedAt(Vector2 position, GameObject obj) {
+            if(GameManager.instance.isPlaying) return;
             RemoveAllRightClickMenus();
             mousePosOnRightClickMenu = position;
             justRightClicked = true;
@@ -570,18 +496,13 @@ namespace Unbound.Gamemodes.Utils
 
             // get and set redraw button
             var redrawButton = rightMenu.transform.Find("Redraw").GetComponent<Button>();
-            if (selectedCount > 0)
-            {
+            if(selectedCount > 0) {
                 redrawButton.GetComponentInChildren<TextMeshProUGUI>().text = "Redraw Selected Map Thumbnails";
             }
-            redrawButton.onClick.AddListener(() =>
-            {
-                if (selectedCount > 0)
-                {
+            redrawButton.onClick.AddListener(() => {
+                if(selectedCount > 0) {
                     levelsThatNeedToRedrawn.AddRange(from lvl in LevelManager.levels where lvl.Value.selected select lvl.Key);
-                }
-                else
-                {
+                } else {
                     levelsThatHaveBeenRedrawn.Add(levelKey);
                 }
 
@@ -591,20 +512,16 @@ namespace Unbound.Gamemodes.Utils
 
         }
 
-        private void RemoveAllRightClickMenus()
-        {
+        private void RemoveAllRightClickMenus() {
             mousePosOnRightClickMenu = Vector2.zero;
-            foreach (Transform obj in mapMenuCanvas.transform.Find("MapMenu").transform)
-            {
-                if (obj.name.Contains("RightClickMenu"))
-                {
+            foreach(Transform obj in mapMenuCanvas.transform.Find("MapMenu").transform) {
+                if(obj.name.Contains("RightClickMenu")) {
                     Destroy(obj.gameObject);
                 }
             }
         }
 
-        public void SetActive(bool active)
-        {
+        public void SetActive(bool active) {
             // Main camera changes when going back to menu and glow disappears if we don't se the camera again to the canvas
             Camera mainCamera = GameObject.Find("MainCamera").GetComponent<Camera>();
             Canvas canvas = mapMenuCanvas.GetComponent<Canvas>();
@@ -615,8 +532,7 @@ namespace Unbound.Gamemodes.Utils
             mapMenuCanvas.SetActive(true);
         }
 
-        private void Update()
-        {
+        private void Update() {
             UnboundCore.lockInputBools["mapMenuCanvas.activeInHierarchy"] = mapMenuCanvas.activeInHierarchy;
             // // Activate and deactivate the menu
             // if (Input.GetKeyDown(KeyCode.F2))
@@ -624,38 +540,30 @@ namespace Unbound.Gamemodes.Utils
             //     SetActive(!mapMenuCanvas.activeInHierarchy);
             // }
 
-            if (PhotonNetwork.IsConnected && !PhotonNetwork.IsMasterClient && !disabled)
-            {
-                foreach (var button in buttonsToDisable)
-                {
+            if(PhotonNetwork.IsConnected && !PhotonNetwork.IsMasterClient && !disabled) {
+                foreach(var button in buttonsToDisable) {
                     button.interactable = false;
                 }
-                foreach (var toggle in togglesToDisable)
-                {
+                foreach(var toggle in togglesToDisable) {
                     toggle.interactable = false;
                 }
                 disabled = true;
             }
-            if ((!PhotonNetwork.IsConnected || PhotonNetwork.IsMasterClient) && disabled)
-            {
-                foreach (var button in buttonsToDisable)
-                {
+            if((!PhotonNetwork.IsConnected || PhotonNetwork.IsMasterClient) && disabled) {
+                foreach(var button in buttonsToDisable) {
                     button.interactable = true;
                 }
-                foreach (var toggle in togglesToDisable)
-                {
+                foreach(var toggle in togglesToDisable) {
                     toggle.interactable = true;
                 }
                 disabled = false;
             }
 
-            if (isDrawingLevels)
-            {
+            if(isDrawingLevels) {
                 mapMenuCanvas.SetActive(false);
             }
 
-            switch (GameManager.instance.isPlaying)
-            {
+            switch(GameManager.instance.isPlaying) {
                 case true when !redrawDisabled:
                     mapMenuCanvas.transform.Find("MapMenu/Top/RedrawAll").gameObject.SetActive(false);
                     redrawDisabled = true;
@@ -666,28 +574,23 @@ namespace Unbound.Gamemodes.Utils
                     break;
             }
 
-            if (redrawAllText.text != "Draw Thumbnails" &&
-                !Directory.Exists("./LevelImages"))
-            {
+            if(redrawAllText.text != "Draw Thumbnails" &&
+                !Directory.Exists("./LevelImages")) {
                 redrawAllText.text = "Draw Thumbnails";
-            }
-            else if (redrawAllText.text == "Draw Thumbnails" &&
-                     Directory.Exists("./LevelImages"))
-            {
+            } else if(redrawAllText.text == "Draw Thumbnails" &&
+                       Directory.Exists("./LevelImages")) {
                 redrawAllText.text = "Redraw All";
             }
 
             // Remove right click menu when mouse gets too far away
-            if (mousePosOnRightClickMenu != Vector2.zero)
-            {
+            if(mousePosOnRightClickMenu != Vector2.zero) {
                 //staticMousePos = Vector2.zero;
-                if (justRightClicked) { staticMousePos = new Vector2(Input.mousePosition.x, Screen.height - Input.mousePosition.y); }
+                if(justRightClicked) { staticMousePos = new Vector2(Input.mousePosition.x, Screen.height - Input.mousePosition.y); }
                 var trueMousePos = new Vector2(Input.mousePosition.x, Screen.height - Input.mousePosition.y);
-                if (trueMousePos.x < staticMousePos.x - 5 * (Screen.width / 50) ||
+                if(trueMousePos.x < staticMousePos.x - 5 * (Screen.width / 50) ||
                     trueMousePos.x > staticMousePos.x + 10 * (Screen.width / 50) ||
                     trueMousePos.y < staticMousePos.y - 4 * (Screen.width / 50) ||
-                    trueMousePos.y > staticMousePos.y + 8 * (Screen.width / 50))
-                {
+                    trueMousePos.y > staticMousePos.y + 8 * (Screen.width / 50)) {
                     RemoveAllRightClickMenus();
                 }
 
@@ -695,15 +598,13 @@ namespace Unbound.Gamemodes.Utils
             }
 
             // Remove right click menu when scrolling
-            if (Input.GetAxisRaw("Mouse ScrollWheel") > 0 || Input.GetAxisRaw("Mouse ScrollWheel") < 0)
-            {
+            if(Input.GetAxisRaw("Mouse ScrollWheel") > 0 || Input.GetAxisRaw("Mouse ScrollWheel") < 0) {
                 RemoveAllRightClickMenus();
             }
         }
 
-        private void OnGUI()
-        {
-            if (!isDrawingLevels) return;
+        private void OnGUI() {
+            if(!isDrawingLevels) return;
 
             var boxStyle = guiStyle;
             var background = new Texture2D(1, 1);
@@ -711,16 +612,13 @@ namespace Unbound.Gamemodes.Utils
             background.Apply();
             boxStyle.normal.background = background;
             GUI.Box(new Rect(0, 0, Screen.width, Screen.height), "", boxStyle);
-            GUI.Label(new Rect(Screen.width / 3.8f, Screen.height / 2.5f, 300, 300), "Drawing map thumbnails.\nThis may take a while.\n " + (levelsThatHaveBeenRedrawn.Count / (float) levelsThatNeedToRedrawn.Count).ToString("P1"), guiStyle);
+            GUI.Label(new Rect(Screen.width / 3.8f, Screen.height / 2.5f, 300, 300), "Drawing map thumbnails.\nThis may take a while.\n " + (levelsThatHaveBeenRedrawn.Count / (float)levelsThatNeedToRedrawn.Count).ToString("P1"), guiStyle);
         }
     }
 
-    public class LvlObj : MonoBehaviour, IPointerClickHandler
-    {
-        public void OnPointerClick(PointerEventData eventData)
-        {
-            if (eventData.button == PointerEventData.InputButton.Right)
-            {
+    public class LvlObj:MonoBehaviour, IPointerClickHandler {
+        public void OnPointerClick(PointerEventData eventData) {
+            if(eventData.button == PointerEventData.InputButton.Right) {
                 ToggleLevelMenuHandler.instance.RightClickedAt(eventData.position, gameObject);
             }
         }

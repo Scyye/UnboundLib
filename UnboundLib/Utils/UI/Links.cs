@@ -3,24 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-namespace Unbound.Core.Utils.UI
-{
-    public static class MainMenuLinks
-    {
+namespace Unbound.Core.Utils.UI {
+    public static class MainMenuLinks {
         private static GameObject links;
-        public static GameObject Links
-        {
-            get
-            {
-                if (links != null) { return links; }
-                
+        public static GameObject Links {
+            get {
+                if(links != null) { return links; }
+
                 links = UnityEngine.Object.Instantiate(UnboundCore.linkAssets.LoadAsset<GameObject>("Links"), MainMenuHandler.instance.transform.Find("Canvas/"));
                 UnityEngine.Object.DontDestroyOnLoad(links);
                 // do setup like placement and adding components
-                links.transform.position = MainCam.instance.transform.GetComponent<Camera>().ScreenToWorldPoint(new Vector3(Screen.height*16f/9f, 0, 0f));
+                links.transform.position = MainCam.instance.transform.GetComponent<Camera>().ScreenToWorldPoint(new Vector3(Screen.height * 16f / 9f, 0, 0f));
                 links.transform.position = new Vector3(-16f, -20f, 0);
 
                 Link discordLink = links.transform.GetChild(0).gameObject.AddComponent<Link>();
@@ -33,21 +28,17 @@ namespace Unbound.Core.Utils.UI
         public static GameObject ROUNDSModding => Links.transform.GetChild(0).gameObject;
         public static GameObject ROUNDSThunderstore => Links.transform.GetChild(1).gameObject;
 
-        public static void AddLinks(bool firstTime)
-        {
-            UnboundCore.Instance.ExecuteAfterSeconds(firstTime ? 0.1f : 0, () =>
-            {
+        public static void AddLinks(bool firstTime) {
+            UnboundCore.Instance.ExecuteAfterSeconds(firstTime ? 0.1f : 0, () => {
                 Links.SetActive(true);
             });
         }
-        public static void HideLinks()
-        {
+        public static void HideLinks() {
             Links.SetActive(false);
         }
     }
 
-    public class Link : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
-    {
+    public class Link:MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler {
         public string _Links = "";
         private const float HoverScale = 1.05f;
         private const float ClickScale = 0.95f;
@@ -55,51 +46,40 @@ namespace Unbound.Core.Utils.UI
         private bool inBounds = false;
         private bool pressed = false;
 
-        private void Start()
-        {
+        private void Start() {
             defaultScale = gameObject.transform.localScale;
         }
-        public void OnPointerDown(PointerEventData eventData)
-        {
-            if (!inBounds) return;
+        public void OnPointerDown(PointerEventData eventData) {
+            if(!inBounds) return;
 
             pressed = true;
             gameObject.transform.localScale = defaultScale * ClickScale;
         }
-        public void OnPointerUp(PointerEventData eventData)
-        {
-            if (inBounds && pressed)
-            {
+        public void OnPointerUp(PointerEventData eventData) {
+            if(inBounds && pressed) {
                 Application.OpenURL(_Links);
             }
             pressed = false;
-            if (!inBounds)
-            {
+            if(!inBounds) {
                 gameObject.transform.localScale = defaultScale;
-            }
-            else
-            {
+            } else {
                 gameObject.transform.localScale = defaultScale * HoverScale;
             }
         }
-        public void OnPointerEnter(PointerEventData eventData)
-        {
+        public void OnPointerEnter(PointerEventData eventData) {
             inBounds = true;
             gameObject.transform.localScale = defaultScale * HoverScale;
         }
-        public void OnPointerExit(PointerEventData eventData)
-        {
+        public void OnPointerExit(PointerEventData eventData) {
             inBounds = false;
-            if (!pressed)
-            {
+            if(!pressed) {
                 gameObject.transform.localScale = defaultScale;
             }
         }
     }
 
     [RequireComponent(typeof(TextMeshProUGUI))]
-    public class OpenHyperlinks : MonoBehaviour, IPointerClickHandler
-    {
+    public class OpenHyperlinks:MonoBehaviour, IPointerClickHandler {
         public bool doesColorChangeOnHover = true;
         public Color hoverColor = new Color(60f / 255f, 120f / 255f, 1f);
 
@@ -112,8 +92,7 @@ namespace Unbound.Core.Utils.UI
         private int pCurrentLink = -1;
         private List<Color32[]> pOriginalVertexColors = new List<Color32[]>();
 
-        protected virtual void Awake()
-        {
+        protected virtual void Awake() {
             pTextMeshPro = GetComponent<TextMeshProUGUI>();
             pCanvas = GetComponentInParent<Canvas>();
 
@@ -121,16 +100,14 @@ namespace Unbound.Core.Utils.UI
             pCamera = pCanvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : pCanvas.worldCamera;
         }
 
-        private void LateUpdate()
-        {
+        private void LateUpdate() {
             // is the cursor in the correct region (above the text area) and furthermore, in the _Links region?
             var isHoveringOver = TMP_TextUtilities.IsIntersectingRectTransform(pTextMeshPro.rectTransform, Input.mousePosition, pCamera);
             int linkIndex = isHoveringOver ? TMP_TextUtilities.FindIntersectingLink(pTextMeshPro, Input.mousePosition, pCamera)
                 : -1;
 
             // Clear previous _Links selection if one existed.
-            if (pCurrentLink != -1 && linkIndex != pCurrentLink)
-            {
+            if(pCurrentLink != -1 && linkIndex != pCurrentLink) {
                 // Debug.Log("Clear old selection");
                 SetLinkToColor(pCurrentLink, (linkIdx, vertIdx) => pOriginalVertexColors[linkIdx][vertIdx]);
                 pOriginalVertexColors.Clear();
@@ -138,22 +115,21 @@ namespace Unbound.Core.Utils.UI
             }
 
             // Handle new _Links selection.
-            if (linkIndex == -1 || linkIndex == pCurrentLink) return;
-            
+            if(linkIndex == -1 || linkIndex == pCurrentLink) return;
+
             // Debug.Log("New selection");
             pCurrentLink = linkIndex;
-            if (doesColorChangeOnHover)
+            if(doesColorChangeOnHover)
                 pOriginalVertexColors = SetLinkToColor(linkIndex, (_linkIdx, _vertIdx) => hoverColor);
 
             // Debug.Log(string.Format("isHovering: {0}, _Links: {1}", isHoveringOver, linkIndex));
         }
 
-        public void OnPointerClick(PointerEventData eventData)
-        {
+        public void OnPointerClick(PointerEventData eventData) {
             // Debug.Log("Click at POS: " + eventData.position + "  World POS: " + eventData.worldPosition);
 
             int linkIndex = TMP_TextUtilities.FindIntersectingLink(pTextMeshPro, Input.mousePosition, pCamera);
-            if (linkIndex == -1) return;
+            if(linkIndex == -1) return;
 
             // was a _Links clicked?
             TMP_LinkInfo linkInfo = pTextMeshPro.textInfo.linkInfo[linkIndex];
@@ -163,14 +139,12 @@ namespace Unbound.Core.Utils.UI
             Application.OpenURL(linkInfo.GetLinkID());
         }
 
-        private List<Color32[]> SetLinkToColor(int linkIndex, Func<int, int, Color32> colorForLinkAndVert)
-        {
+        private List<Color32[]> SetLinkToColor(int linkIndex, Func<int, int, Color32> colorForLinkAndVert) {
             TMP_LinkInfo linkInfo = pTextMeshPro.textInfo.linkInfo[linkIndex];
 
             var oldVertColors = new List<Color32[]>(); // store the old character colors
 
-            for (int i = 0; i < linkInfo.linkTextLength; i++)
-            { // for each character in the _Links string
+            for(int i = 0; i < linkInfo.linkTextLength; i++) { // for each character in the _Links string
                 int characterIndex = linkInfo.linkTextfirstCharacterIndex + i; // the character index into the entire text
                 var charInfo = pTextMeshPro.textInfo.characterInfo[characterIndex];
                 int meshIndex = charInfo.materialReferenceIndex; // Get the index of the material / sub text object used by this character.
@@ -179,7 +153,7 @@ namespace Unbound.Core.Utils.UI
                 Color32[] vertexColors = pTextMeshPro.textInfo.meshInfo[meshIndex].colors32; // the colors for this character
                 oldVertColors.Add(vertexColors.ToArray());
 
-                if (!charInfo.isVisible) continue;
+                if(!charInfo.isVisible) continue;
 
                 vertexColors[vertexIndex + 0] = colorForLinkAndVert(i, vertexIndex + 0);
                 vertexColors[vertexIndex + 1] = colorForLinkAndVert(i, vertexIndex + 1);

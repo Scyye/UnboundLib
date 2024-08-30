@@ -2,16 +2,13 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Unbound.Core
-{
+namespace Unbound.Core {
     [RequireComponent(typeof(VerticalLayoutGroup), typeof(ContentSizeFitter), typeof(CanvasGroup))]
-    public class InfoPopup : Image
-    {
+    public class InfoPopup:Image {
         Text text;
         CanvasGroup group;
 
-        protected override void Awake()
-        {
+        protected override void Awake() {
             base.Start();
             color = new Color(0, 0, 0, 125f / 255f);
 
@@ -37,21 +34,18 @@ namespace Unbound.Core
 
             group = GetComponent<CanvasGroup>();
         }
-        public void Build(string message)
-        {
+        public void Build(string message) {
             text.text = message;
             StartCoroutine(DisplayPopup());
         }
-        private IEnumerator DisplayPopup()
-        {
+        private IEnumerator DisplayPopup() {
             float time = 0;
             float damp = 0;
             float val = 0;
 
             rectTransform.position = new Vector2(Screen.width / 2, Screen.height / 2);
 
-            while (time < 3f)
-            {
+            while(time < 3f) {
                 rectTransform.anchoredPosition += Vector2.up;
                 val = Mathf.SmoothDamp(val, 1.25f, ref damp, 2f);
                 group.alpha = 1 - val;

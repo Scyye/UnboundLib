@@ -1,10 +1,8 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Unbound.Core.Utils
-{
-    public struct TimeSince : IEquatable<TimeSince>
-    {
+namespace Unbound.Core.Utils {
+    public struct TimeSince:IEquatable<TimeSince> {
         private float time;
 
         public static implicit operator float(TimeSince ts) => Time.realtimeSinceStartup - ts.time;
@@ -15,7 +13,7 @@ namespace Unbound.Core.Utils
 
         public float Relative => this;
 
-        public override string ToString() => string.Format("{0}", (object) this.Relative);
+        public override string ToString() => string.Format("{0}", (object)this.Relative);
 
         public static bool operator ==(TimeSince left, TimeSince right) => left.Equals(right);
 
@@ -23,7 +21,7 @@ namespace Unbound.Core.Utils
 
         public override bool Equals(object obj) => obj is TimeSince o && this.Equals(o);
 
-        public bool Equals(TimeSince o) => (double) this.time == (double) o.time;
+        public bool Equals(TimeSince o) => (double)this.time == (double)o.time;
 
         public override int GetHashCode() => time.GetHashCode();
     }

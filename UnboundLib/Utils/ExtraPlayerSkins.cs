@@ -1,16 +1,14 @@
 ﻿using System.Linq;
-using UnityEngine;
 using System.Reflection;
-using UnityEngine.Localization;
 using Unbound.Core.Utils.UI;
+using UnityEngine;
+using UnityEngine.Localization;
 
-namespace Unbound.Core.Utils
-{
-    public static class ExtraPlayerSkins
-    {
+namespace Unbound.Core.Utils {
+    public static class ExtraPlayerSkins {
         public const int NumSkins = 32;
 
-        public static PlayerSkin[] skins = ((PlayerSkinBank) typeof(PlayerSkinBank).GetProperty("Instance", BindingFlags.NonPublic | BindingFlags.Static)?.GetValue(null, null))?.skins.Select(s => s.currentPlayerSkin).Concat(new PlayerSkin[NumSkins - ((PlayerSkinBank) typeof(PlayerSkinBank).GetProperty("Instance", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null, null)).skins.Length]).ToArray();
+        public static PlayerSkin[] skins = ((PlayerSkinBank)typeof(PlayerSkinBank).GetProperty("Instance", BindingFlags.NonPublic | BindingFlags.Static)?.GetValue(null, null))?.skins.Select(s => s.currentPlayerSkin).Concat(new PlayerSkin[NumSkins - ((PlayerSkinBank)typeof(PlayerSkinBank).GetProperty("Instance", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null, null)).skins.Length]).ToArray();
         public static int numberOfSkins => skins.Length;
 
         private static readonly PlayerSkin[] extraSkinBases = {
@@ -276,12 +274,10 @@ namespace Unbound.Core.Utils
         /// <summary>
         /// Legacy code for getting names. Always returns english names. Use GetLocalizedTeamColorName when posible.
         /// </summary>
-        public static string GetTeamColorName(int teamID)
-        {
+        public static string GetTeamColorName(int teamID) {
             // team names as colors
 
-            switch (teamID)
-            {
+            switch(teamID) {
                 case 0:
                     return "Orange";
                 case 1:
@@ -352,21 +348,19 @@ namespace Unbound.Core.Utils
         }
 
 
-        
-        public static LocalizedString GetLocalizedTeamColorName(int teamID)
-        {
+
+        public static LocalizedString GetLocalizedTeamColorName(int teamID) {
             return TranslationStrings.TeamColorNames.GenerateString(TableRefHelper.stringTableDefault, $"Team_{teamID}_Name");
         }
 
-        public static PlayerSkin GetPlayerSkinColors(int colorID)
-        {
+        public static PlayerSkin GetPlayerSkinColors(int colorID) {
             // if somehow the requested id is greater than the total number of extra skins, just loop it
             colorID = Math.mod(colorID, numberOfSkins);
 
             // if the skin gameobject hasn't been made yet, make it
-            if (skins[colorID] != null) return skins[colorID];
+            if(skins[colorID] != null) return skins[colorID];
 
-            PlayerSkin skin = ((PlayerSkinBank) typeof(PlayerSkinBank).GetProperty("Instance", BindingFlags.NonPublic | BindingFlags.Static)?.GetValue(null, null))?.skins[colorID % 4].currentPlayerSkin;
+            PlayerSkin skin = ((PlayerSkinBank)typeof(PlayerSkinBank).GetProperty("Instance", BindingFlags.NonPublic | BindingFlags.Static)?.GetValue(null, null))?.skins[colorID % 4].currentPlayerSkin;
 
             PlayerSkin newSkin = Object.Instantiate(skin).gameObject.GetComponent<PlayerSkin>();
             Object.DontDestroyOnLoad(newSkin);

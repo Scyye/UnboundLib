@@ -1,22 +1,16 @@
 ﻿using HarmonyLib;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TMPro;
-using Unbound.Core.Utils.UI;
-using Unbound.Core.Utils;
 using System.Collections;
-using UnityEngine.UI;
+using System.Linq;
+using TMPro;
+using Unbound.Core.Utils;
+using Unbound.Core.Utils.UI;
 using UnityEngine;
+using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
-namespace Unbound.Core.Patches
-{
+namespace Unbound.Core.Patches {
     [HarmonyPatch(typeof(MainMenuHandler))]
-    public class MainMenuHandlerPatch
-    {
+    public class MainMenuHandlerPatch {
         public static bool firstTime = true;
         private static TextMeshProUGUI text;
 
@@ -24,11 +18,9 @@ namespace Unbound.Core.Patches
         [HarmonyPatch("Awake")]
         [HarmonyPriority(Priority.Last)]
         [HarmonyPrefix]
-        internal static void MainMenuHandlerAwake()
-        {
+        internal static void MainMenuHandlerAwake() {
             // reapply cards and levels
-            UnboundCore.Instance.ExecuteAfterFrames(5, () =>
-            {
+            UnboundCore.Instance.ExecuteAfterFrames(5, () => {
                 MapManager.instance.levels = LevelManager.activeLevels.ToArray();
             });
 
@@ -36,19 +28,17 @@ namespace Unbound.Core.Patches
             UnboundCore.Instance.StartCoroutine(AddTextWhenReady(firstTime ? 2f : 0.1f));
 
             Debug.Log("1");
-            ModOptions.instance.CreateModOptions(firstTime?firstTime:!firstTime);
+            ModOptions.instance.CreateModOptions(firstTime ? firstTime : !firstTime);
             Credits.Instance.CreateCreditsMenu(firstTime);
             MainMenuLinks.AddLinks(firstTime);
 
-            UnboundCore.Instance.ExecuteAfterSeconds(firstTime ? 0.4f : 0, () =>
-            {
+            UnboundCore.Instance.ExecuteAfterSeconds(firstTime ? 0.4f : 0, () => {
                 var resumeButton = UIHandler.instance.transform.Find("Canvas/EscapeMenu/Main/Group/Resume").gameObject;
                 // Create options button in escapeMenu
                 var optionsMenu = Object.Instantiate(MainMenuHandler.instance.transform.Find("Canvas/ListSelector/Options").gameObject, UIHandler.instance.transform.Find("Canvas/EscapeMenu/Main"));
                 var menuBut = optionsMenu.transform.Find("Group/Back").GetComponent<Button>();
                 menuBut.onClick = new Button.ButtonClickedEvent();
-                menuBut.onClick.AddListener(() =>
-                {
+                menuBut.onClick.AddListener(() => {
                     optionsMenu.transform.Find("Group").gameObject.SetActive(false);
                     UIHandler.instance.transform.Find("Canvas/EscapeMenu/Main/Group").gameObject.SetActive(true);
                 });
@@ -57,8 +47,7 @@ namespace Unbound.Core.Patches
                 optionsButton.transform.SetSiblingIndex(2);
                 optionsButton.GetComponentInChildren<TextMeshProUGUI>().text = "OPTIONS";
                 optionsButton.GetComponent<Button>().onClick = new Button.ButtonClickedEvent();
-                optionsButton.GetComponent<Button>().onClick.AddListener((() =>
-                {
+                optionsButton.GetComponent<Button>().onClick.AddListener((() => {
                     optionsMenu.transform.Find("Group").gameObject.SetActive(true);
                     UIHandler.instance.transform.Find("Canvas/EscapeMenu/Main/Group").gameObject.SetActive(false);
                 }));
@@ -69,26 +58,22 @@ namespace Unbound.Core.Patches
 
         [HarmonyPatch("Close")]
         [HarmonyPrefix]
-        internal static void MainMenuHandlerClose()
-        {
-            if (text != null) 
+        internal static void MainMenuHandlerClose() {
+            if(text != null)
                 Object.Destroy(text.gameObject);
         }
 
 
 
-        private static IEnumerator AddTextWhenReady(float delay = 0f, float maxTimeToWait = 10f)
-        {
-            if (delay > 0f) { yield return new WaitForSecondsRealtime(delay); }
+        private static IEnumerator AddTextWhenReady(float delay = 0f, float maxTimeToWait = 10f) {
+            if(delay > 0f) { yield return new WaitForSecondsRealtime(delay); }
 
             float time = maxTimeToWait;
-            while (time > 0f && MainMenuHandler.instance?.transform?.Find("Canvas/ListSelector/Main/Group") == null)
-            {
+            while(time > 0f && MainMenuHandler.instance?.transform?.Find("Canvas/ListSelector/Main/Group") == null) {
                 time -= Time.deltaTime;
                 yield return null;
             }
-            if (MainMenuHandler.instance?.transform?.Find("Canvas/ListSelector/Main/Group") == null)
-            {
+            if(MainMenuHandler.instance?.transform?.Find("Canvas/ListSelector/Main/Group") == null) {
                 yield break;
             }
             text = MenuHandler.CreateTextAt("UNBOUND", Vector2.zero);

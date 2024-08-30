@@ -2,20 +2,17 @@
 using System;
 using Unbound.Cards.Utils;
 using Unbound.Core;
-using Unbound.Core.Utils;
 using Unbound.Core.Utils.UI;
 using UnboundLib.Networking.Utils;
 using UnityEngine;
 
-namespace Unbound.Cards
-{
+namespace Unbound.Cards {
     [BepInDependency("dev.rounds.unbound.core")]
     [BepInPlugin("dev.rounds.unbound.cards", "Unbound Lib Cards", "1.0.0")]
-    public class UnboundCards : BaseUnityPlugin {
+    public class UnboundCards:BaseUnityPlugin {
         public static UnboundCards instance;
         public static CardInfo templateCard;
-        void Awake()
-        {
+        void Awake() {
             instance = this;
             this.PatchAll();
 
@@ -27,13 +24,11 @@ namespace Unbound.Cards
             templateCard.allowMultiple = true;
         }
 
-        void Start()
-        {
+        void Start() {
             CardManager.defaultCards = CardChoice.instance.cards;
 
             // register default cards with toggle menu
-            foreach (var card in CardManager.defaultCards)
-            {
+            foreach(var card in CardManager.defaultCards) {
                 CardManager.cards.Add(card.name,
                     new Card("Vanilla", UnboundCore.config.Bind("Cards: Vanilla", card.name, true), card));
             }
@@ -46,10 +41,10 @@ namespace Unbound.Cards
         void Update() {
             UnboundCore.lockInputBools["ToggleCardsMenuHandler.menuOpenFromOutside"] = ToggleCardsMenuHandler.menuOpenFromOutside;
 
-            if (reg) {
+            if(reg) {
                 Debug.Log("Already registered");
                 return;
-            } else if (!ToggleCardsMenuHandler.cardMenuCanvas) {
+            } else if(!ToggleCardsMenuHandler.cardMenuCanvas) {
                 Debug.Log("No card menu canvas");
                 return;
             }
@@ -60,8 +55,7 @@ namespace Unbound.Cards
                 });
         }
 
-        public static void AddAllCardsCallback(Action<CardInfo[]> callback)
-        {
+        public static void AddAllCardsCallback(Action<CardInfo[]> callback) {
             CardManager.AddAllCardsCallback(callback);
         }
     }
