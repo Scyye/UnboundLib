@@ -14,7 +14,7 @@ namespace Unbound.Gamemodes.Networking.UI{
             {
                 if (_BetaText != null) { return _BetaText; }
 
-                _BetaText = new GameObject("Unbound.Gamemodes.Networking Beta");
+                _BetaText = new GameObject("RWF Beta");
                 _BetaText.transform.SetParent(MainMenuHandler.instance.transform.Find("Canvas/"));
                 //UnityEngine.GameObject.DontDestroyOnLoad(_BetaText);
                 // do setup like placement and adding components
@@ -24,7 +24,7 @@ namespace Unbound.Gamemodes.Networking.UI{
                 _BetaText.transform.localScale = Vector3.one;
                 TextMeshProUGUI text = _BetaText.AddComponent<TextMeshProUGUI>();
 
-                text.text = $"Unbound.Gamemodes.Networking v{UnboundNetworking.Version} (BETA)";
+                text.text = $"RWF v{UnboundNetworking.Version} (BETA)";
                 text.color = new Color32(230, 230, 230, 64);
                 text.font = RoundsResources.MenuFont;
                 text.fontSize = 30;

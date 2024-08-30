@@ -8,7 +8,7 @@ using System.Runtime.CompilerServices;
 using UnityEngine;
 
 namespace UnboundLib.Networking.RPCs{
-    // stolen from Unbound.Gamemodes.Networking
+    // stolen from RWF
     public static class MonoBehaviourExtensions
     {
         private static readonly ConditionalWeakTable<MonoBehaviour, HashSet<Tuple<int, string>>> pendingRequests = new ConditionalWeakTable<MonoBehaviour, HashSet<Tuple<int, string>>>();

@@ -2,7 +2,7 @@
 using Landfall.Network;
 using Photon.Pun;
 using SoundImplementation;
-using System;
+using Steamworks;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -352,7 +352,6 @@ namespace RWF
                ClientSteamLobby lobby = (ClientSteamLobby) field.GetValue(null);
                lobby.ShowInviteScreenWhenConnected();
            });
-            // TODO: Remove
 
             // gameModeListObject.AddComponent<RectTransform>();
             // gameModeListObject.AddComponent<CanvasRenderer>();
@@ -425,7 +424,7 @@ namespace RWF
             mainPageGo.AddComponent<RectTransform>();
             MainPage = mainPageGo.AddComponent<ListMenuPage>();
             MainPage.SetFieldValue("firstSelected", inviteListButton);
-            MainPage.Close();
+            MainPage.Hide();
         }
 
         public GameObject GetText(string str)
@@ -463,7 +462,7 @@ namespace RWF
                     int newColorID = character.colorID;
                     while (PrivateRoomCharacters.Where(p => p.uniqueID != character.uniqueID && p.colorID == newColorID).Any())
                     {
-                        newColorID = Math.Mod(newColorID + sgn, RWFMod.MaxColorsHardLimit);
+                        newColorID = Math.mod(newColorID + sgn, RWFMod.MaxColorsHardLimit);
                         if (newColorID == orig)
                         {
                             // make sure its impossible to get stuck in an infinite loop here,
@@ -691,7 +690,7 @@ namespace RWF
                 int colorID = PlayerPrefs.GetInt(RWFMod.GetCustomPropertyKey("PreferredColor" + localPlayerNumber.ToString()));
                 if (!GameModeManager.CurrentHandler.AllowTeams && PrivateRoomCharacters.Select(p => p.colorID).Distinct().Contains(colorID))
                 {
-                    colorID = Enumerable.Range(0, RWFMod.MaxColorsHardLimit).Except(PrivateRoomCharacters.Select(p => p.colorID).Distinct()).OrderBy(c => UnityEngine.Mathf.Abs(c - colorID)).FirstOrDefault();
+                    colorID = Enumerable.Range(0, UnboundGamemodes.MaxColorsHardLimit).Except(PrivateRoomCharacters.Select(p => p.colorID).Distinct()).OrderBy(c => UnityEngine.Mathf.Abs(c - colorID)).FirstOrDefault();
                 }
                 localCharacters[localPlayerNumber] = new LobbyCharacter(PhotonNetwork.LocalPlayer, colorID, localPlayerNumber);
 

@@ -93,7 +93,7 @@ namespace Unbound.Gamemodes
 
                 Object.DestroyImmediate(origGameModeGo.gameObject);
 
-                // do not destroy local button since Unbound.Gamemodes.Networking relies on it
+                // do not destroy local button since RWF relies on it
                 MainMenuHandler.instance.transform.Find("Canvas/ListSelector/Main/Group/Local").gameObject.SetActive(false);
 
                 var newVersusGo = MenuHandler.CreateButton("VERSUS", newLocalMenu, () => { characterSelectGo_.GetComponent<ListMenuPage>().Open(); SetGameMode(ArmsRaceID); });
@@ -439,19 +439,6 @@ namespace Unbound.Gamemodes
             if (id == SandBoxID || id == ArmsRaceID) { return; }
             var gameMode = GameObject.Find("/Game/Code/Game Modes").transform.Find($"[GameMode] {id}")?.gameObject;
             if (gameMode != null) { Object.Destroy(gameMode); }
-        }
-
-        private static void SaveSettings()
-        {
-            PrivateRoomHandler.PrevHandlerID = GameModeManager.CurrentHandlerID;
-            PrivateRoomHandler.PrevSettings = GameModeManager.CurrentHandler.Settings;
-        }
-
-        public static void RestoreSettings()
-        {
-            PrivateRoomHandler.instance.SyncMethod(nameof(PrivateRoomHandler.SetGameSettings), null, PrivateRoomHandler.PrevHandlerID, PrivateRoomHandler.PrevSettings);
-            PrivateRoomHandler.PrevHandlerID = null;
-            PrivateRoomHandler.PrevSettings = null;
         }
     }
 }

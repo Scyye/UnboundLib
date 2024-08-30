@@ -34,7 +34,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-	  <RoundsFolder>K:\SteamLibrary\steamapps\common\ROUNDS</RoundsFolder>
+	  <RoundsFolder>F:\SteamLibrary\steamapps\common\ROUNDS</RoundsFolder>
 	  <ManagedFolder>$(RoundsFolder)\ROUNDS_Data\Managed</ManagedFolder>
     <BepInFolder>..\Assemblies</BepInFolder>
     <IndirectBuildTask>true</IndirectBuildTask>
@@ -44,17 +44,16 @@
 
   <ItemGroup>
     <None Remove="Assets\togglemenuui" />
-    <None Remove="Networking\Assets\Unbound.Gamemodes.Networking_lobbyui" />
     <None Remove="UnboundLib.csproj.user.dist" />
     <None Remove="PostBuild.msbuild" />
     <None Remove="unboundlinks" />
-    <EmbeddedResource Include="Networking\Assets\Unbound.Gamemodes.Networking_lobbyui" />
-    <None Include="..\README.md" Link="Networking\README.md" />
-    <None Include="..\.gitignore" Link="Networking\.gitignore" />
+    <None Include="..\README.md" />
+    <None Include="..\.gitignore" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\UnboundLib\Unbound.Core.csproj" />
+    <ProjectReference Include="..\UnboundNetworking\Unbound.Networking.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -66,12 +65,6 @@
     </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>$(ManagedFolder)\Assembly-CSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="InControl">
-      <HintPath>$(ManagedFolder)\InControl.dll</HintPath>
-    </Reference>
-    <Reference Include="com.rlabrecque.steamworks.net">
-      <HintPath>$(ManagedFolder)\com.rlabrecque.steamworks.net.dll</HintPath>
     </Reference>
     <Reference Include="Platforms">
       <HintPath>$(ManagedFolder)\Platforms.dll</HintPath>

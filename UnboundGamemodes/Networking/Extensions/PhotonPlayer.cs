@@ -69,7 +69,7 @@
 
             if (!props.ContainsKey(PhotonPlayerExtensions.charkey))
             {
-                instance.SetProperty(charkey, new LobbyCharacter[2]);
+                instance.SetProperty(PhotonPlayerExtensions.charkey, new LobbyCharacter[RWFMod.MaxCharactersPerClientHardLimit]);
             }
 
             LobbyCharacter[] characters = instance.GetCharacters();

@@ -2,7 +2,7 @@
 using Jotunn.Utils;
 using Landfall.Network;
 using Photon.Pun;
-using Unbound.Gamemodes.Networking;
+using RWF;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -79,7 +79,7 @@ namespace Unbound.Gamemodes.Networking
             NetworkEventCallbacks.OnJoinedRoomEvent += SyncModClients.RequestSync;
 
             // Asset bundles
-            gmUIBundle = AssetUtils.LoadAssetBundleFromResources("Unbound.Gamemodes.Networking_lobbyui", typeof(UnboundNetworking).Assembly);
+            gmUIBundle = AssetUtils.LoadAssetBundleFromResources("rwf_lobbyui", typeof(UnboundNetworking).Assembly);
             if (gmUIBundle == null)
             {
                 Debug.LogError("Could not load gamemode UI bundle!");
