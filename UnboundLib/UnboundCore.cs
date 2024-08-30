@@ -187,8 +187,8 @@ namespace Unbound.Core {
 
             if (UIAssets != null)
             {
-                //modalPrefab = UIAssets.LoadAsset<GameObject>("Modal");
-                //Instantiate(UIAssets.LoadAsset<GameObject>("Card Toggle Menu"), canvas.transform).AddComponent<CardToggleMenuHandler>();
+                modalPrefab = UIAssets.LoadAsset<GameObject>("Modal");
+                // Instantiate(UIAssets.LoadAsset<GameObject>("Card Toggle Menu"), canvas.transform).AddComponent<CardToggleMenuHandler>();
             }
         }
 
