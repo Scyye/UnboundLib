@@ -27,7 +27,7 @@ namespace Unbound.Core.Utils.UI {
 
         internal static bool showModUi;
         internal static bool showingModOptions;
-        internal static bool inPauseMenu;
+        public static bool inPauseMenu { get; internal set; }
         internal static bool noDeprecatedMods;
 
         public static ModOptions instance = new ModOptions();
