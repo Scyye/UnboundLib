@@ -33,15 +33,8 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
-  <PropertyGroup>
-	  <RoundsFolder>C:\Program Files (x86)\Steam\steamapps\common\ROUNDS</RoundsFolder>
-	  <ManagedFolder>$(RoundsFolder)\ROUNDS_Data\Managed</ManagedFolder>
-    <BepInFolder>..\Assemblies</BepInFolder>
-    <IndirectBuildTask>true</IndirectBuildTask>
-    <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
-    <LangVersion>8.0</LangVersion>
-  </PropertyGroup>
-
+  <Import Project="..\CommonSettings.props" />
+	
   <ItemGroup>
     <None Remove="Assets\togglemenuui" />
     <None Remove="UnboundLib.csproj.user.dist" />
