@@ -42,6 +42,8 @@
     <LangVersion>7.1</LangVersion>
   </PropertyGroup>
 
+  <Import Project="..\CommonSettings.props" />
+
   <ItemGroup>
     <None Remove="Assets\togglemenuui" />
     <None Remove="UnboundLib.csproj.user.dist" />
