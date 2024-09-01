@@ -47,7 +47,7 @@ namespace UnboundLib.Networking.Lobbies {
         }
         public IEnumerator ConectIfDisconected(string region = "") {
             if(!PhotonNetwork.IsConnectedAndReady) {
-                PhotonNetwork.LocalPlayer.NickName = "PlayerName";
+                PhotonNetwork.LocalPlayer.NickName = SteamFriends.GetPersonaName();
                 PhotonNetwork.ConnectUsingSettings();
                 PhotonNetwork.AuthValues = new AuthenticationValues($"Steam={SteamUser.GetSteamID().m_SteamID}");
                 if(region != "") {
@@ -73,6 +73,15 @@ namespace UnboundLib.Networking.Lobbies {
 
             GameManager.instance.GoToMenu();
 
+        }
+
+
+        public override void OnCreatedRoom() {
+            Debug.Log(Unbound_Lobby.GetLobbyCode());
+        }
+
+        public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer) {
+            Debug.Log($"Player Joined: {newPlayer.NickName}  ({newPlayer.UserId})");
         }
 
     }

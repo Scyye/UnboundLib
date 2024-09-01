@@ -5,6 +5,8 @@ using Unbound.Core;
 using UnboundLib.Networking;
 using UnboundLib.Networking.Lobbies;
 using UnboundLib.Networking.Utils;
+using UnityEngine;
+using UnityEngine.UI;
 
 namespace Unbound.Networking {
 
@@ -38,7 +40,8 @@ namespace Unbound.Networking {
 
             // sync modded clients
             NetworkEventCallbacks.OnJoinedRoomEvent += SyncModClients.RequestSync;
-        }
+
+            }
 
 
         private static void OnJoinedRoomAction() {

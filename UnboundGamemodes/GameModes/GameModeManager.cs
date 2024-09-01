@@ -99,7 +99,7 @@ namespace Unbound.Gamemodes {
                 });
 
                 // finally, restore the main menu button order
-                UnboundCore.Instance.ExecuteAfterFrames(5, () => {
+                UnboundCore.Instance.ExecuteAfterFrames(15, () => {
                     Transform group = MainMenuHandler.instance.transform.Find("Canvas/ListSelector/Main/Group");
                     group.Find("LOCAL")?.SetAsLastSibling();
                     group.Find("Local")?.SetAsLastSibling();
