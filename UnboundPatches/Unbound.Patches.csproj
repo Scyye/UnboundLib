@@ -34,7 +34,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-	  <RoundsFolder>K:\SteamLibrary\steamapps\common\ROUNDS</RoundsFolder>
+	  <RoundsFolder>F:\SteamLibrary\steamapps\common\ROUNDS</RoundsFolder>
 	  <ManagedFolder>$(RoundsFolder)\ROUNDS_Data\Managed</ManagedFolder>
     <BepInFolder>..\Assemblies</BepInFolder>
     <IndirectBuildTask>true</IndirectBuildTask>
@@ -85,6 +85,9 @@
     </Reference>
     <Reference Include="PhotonUnityNetworking.Utilities">
       <HintPath>$(ManagedFolder)\PhotonUnityNetworking.Utilities.dll</HintPath>
+    </Reference>
+    <Reference Include="InControl">
+      <HintPath>$(ManagedFolder)\InControl.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Localization">
       <HintPath>$(ManagedFolder)\Unity.Localization.dll</HintPath>
