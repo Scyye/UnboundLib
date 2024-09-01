@@ -4,6 +4,7 @@ using System.Linq;
 using TMPro;
 using Unbound.Core.Utils;
 using Unbound.Core.Utils.UI;
+using UnboundLib.Networking.Lobbies;
 using UnityEngine;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
@@ -31,6 +32,14 @@ namespace Unbound.Core.Patches {
             ModOptions.instance.CreateModOptions(firstTime ? firstTime : !firstTime);
             Credits.Instance.CreateCreditsMenu(firstTime);
             MainMenuLinks.AddLinks(firstTime);
+
+            var hostButton = GameObject.Find("/Game/UI/UI_MainMenu/Canvas/ListSelector/Online/Group/Invite friend/").GetComponent<Button>();
+            hostButton.onClick.RemoveAllListeners();
+            hostButton.onClick.AddListener(delegate {
+                Unbound_​Lobby.Host();
+                MainMenuHandler.instance.Close();
+                LoadingScreen.instance?.StartLoading();
+            });
 
             firstTime = false;
         }

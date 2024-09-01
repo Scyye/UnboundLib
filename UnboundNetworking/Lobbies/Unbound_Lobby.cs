@@ -1,5 +1,6 @@
 ﻿using Photon.Pun;
 using System.Collections;
+using System;
 using Unbound.Core;
 using Unbound.Networking;
 using UnboundLib.Networking.Extensions;
@@ -17,6 +18,15 @@ namespace UnboundLib.Networking.Lobbies {
             UnboundCore.Instance.StartCoroutine(DoHost());
 
         }
+
+        public static string GetLobbyCode() {
+            if(!isConnectedToMaster)
+                return "";
+            if(!PhotonNetwork.InRoom)
+                return "";
+            return $"{PhotonNetwork.CloudRegion}:{Convert.ToBase64String(BitConverter.GetBytes(long.Parse(PhotonNetwork.CurrentRoom.Name)))}";
+        }
+
         private static IEnumerator DoHost() {
             yield return instance.ConectIfDisconected();
             steamLobby.CreateLobby(UnboundNetworking.MaxPlayers, delegate (string roomName) {
@@ -31,11 +41,14 @@ namespace UnboundLib.Networking.Lobbies {
             UnboundCore.Instance.StartCoroutine(DoJoin(roomCode));
         }
 
-        private static IEnumerator DoJoin(string roomCode) {
+        private static IEnumerator DoJoin(string lobbyCode) {
+            var codes = lobbyCode.Split(':');
             // uhhh cuz like uhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh god told me to :+1:
             TimeHandler.instance.gameStartTime = 1f;
 
-            yield return instance.ConectIfDisconected("us");
+            yield return instance.ConectIfDisconected(codes[0]);
+
+            string roomCode = BitConverter.ToInt64(Convert.FromBase64String(codes[1]), 0).ToString();
             // idk if both of these are needed, but fuck you, it works
             PhotonNetwork.JoinRoom(roomCode);
             steamLobby.JoinedRoom(roomCode);
