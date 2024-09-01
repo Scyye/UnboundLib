@@ -3,9 +3,11 @@ using Landfall.Network;
 using Photon.Pun;
 using Photon.Realtime;
 using Steamworks;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unbound.Networking;
+using UnboundLib.Networking.Utils;
 using UnityEngine;
 using UnityEngine.Localization;
 
@@ -24,6 +26,12 @@ namespace UnboundLib.Networking.Lobbies {
             } else {
                 steamLobby.LeaveLobby();
             }
+        }
+
+        [Flags]
+        public enum PropertyFlags {
+            None = 0,
+            StrictMode = 1 << 0,
         }
 
 
@@ -97,6 +105,11 @@ namespace UnboundLib.Networking.Lobbies {
             roomList.ForEach(r => { Debug.Log(r.Name); });
             if(isJoiningRoom) {
                 if(roomList.Count == 0) return;
+                if(((PropertyFlags)roomList[0].CustomProperties["F"] & PropertyFlags.StrictMode) != 0 && (string)roomList[0].CustomProperties["H"] != SyncModClients.GetCompatablityHash()) {
+                    //throw some kind of error to the player.
+                    return;
+                }
+                    
                 PhotonNetwork.JoinRoom(roomList[0].Name);
                 isJoiningRoom = false;
             }

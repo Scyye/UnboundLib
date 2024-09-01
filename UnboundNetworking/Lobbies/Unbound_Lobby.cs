@@ -34,6 +34,7 @@ namespace UnboundLib.Networking.Lobbies {
             steamLobby.CreateLobby(UnboundNetworking.MaxPlayers, delegate (string roomName) {
                 Debug.Log($"Created steam lobby: {roomName}");
                 var options = RoomOptions.Clone();
+                options.CustomRoomProperties.Add("F", PropertyFlags.None);
                 options.CustomRoomProperties.Add("H", SyncModClients.GetCompatablityHash());
                 options.CustomRoomProperties.Add(NetworkConnectionHandler.ROOM_CODE, CreateLobbyCode(PhotonNetwork.CloudRegion,roomName));
                 PhotonNetwork.CreateRoom(roomName, options, ModdedLobby, null);
