@@ -34,13 +34,14 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
-  <Import Project="..\CommonSettings.props" />
-
-  <ItemGroup>
-    <Compile Remove="Patches\**" />
-    <EmbeddedResource Remove="Patches\**" />
-    <None Remove="Patches\**" />
-  </ItemGroup>
+  <PropertyGroup>
+	  <RoundsFolder>K:\SteamLibrary\steamapps\common\ROUNDS</RoundsFolder>
+	  <ManagedFolder>$(RoundsFolder)\ROUNDS_Data\Managed</ManagedFolder>
+	  <BepInFolder>..\Assemblies</BepInFolder>
+    <IndirectBuildTask>true</IndirectBuildTask>
+    <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
+    <LangVersion>7.1</LangVersion>
+  </PropertyGroup>
 
   <ItemGroup>
     <None Remove="Assets\togglemenuui" />
@@ -150,6 +151,10 @@
       <HintPath>$(ManagedFolder)\UnityEngine.UnityWebRequestTextureModule.dll</HintPath>
     </Reference>
   </ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Patches\" />
+	</ItemGroup>
 
   <Target Name="ReadPackageVersionFromOutputAssembly" DependsOnTargets="Build" Outputs="$(PackageVersion)">
     <GetAssemblyIdentity AssemblyFiles="$(TargetPath)">

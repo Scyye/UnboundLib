@@ -33,7 +33,14 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
-  <Import Project="..\CommonSettings.props" />
+  <PropertyGroup>
+	  <RoundsFolder>K:\SteamLibrary\steamapps\common\ROUNDS</RoundsFolder>
+	  <ManagedFolder>$(RoundsFolder)\ROUNDS_Data\Managed</ManagedFolder>
+    <BepInFolder>..\Assemblies</BepInFolder>
+    <IndirectBuildTask>true</IndirectBuildTask>
+    <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
+    <LangVersion>7.1</LangVersion>
+  </PropertyGroup>
 
   <ItemGroup>
     <None Remove="Assets\togglemenuui" />

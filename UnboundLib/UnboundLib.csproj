@@ -2,9 +2,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{2F32C3B2-635E-40DE-869E-6BC48A85989E}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>Unbound.Patches</RootNamespace>
-    <AssemblyName>UnboundPatches</AssemblyName>
+    <RootNamespace>UnboundLib</RootNamespace>
+    <AssemblyName>UnboundLib</AssemblyName>
     <Authors>RoundsModding</Authors>
     <TargetFramework>net461</TargetFramework>
     <FileAlignment>512</FileAlignment>
@@ -34,9 +35,9 @@
   </PropertyGroup>
 
   <PropertyGroup>
-	  <RoundsFolder>K:\SteamLibrary\steamapps\common\ROUNDS</RoundsFolder>
+	  <RoundsFolder>F:\SteamLibrary\steamapps\common\ROUNDS</RoundsFolder>
 	  <ManagedFolder>$(RoundsFolder)\ROUNDS_Data\Managed</ManagedFolder>
-    <BepInFolder>..\Assemblies</BepInFolder>
+	  <BepInFolder>F:\SteamLibrary\steamapps\common\ROUNDS\BepInEx</BepInFolder>
     <IndirectBuildTask>true</IndirectBuildTask>
     <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
     <LangVersion>7.1</LangVersion>
@@ -52,18 +53,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\UnboundCards\Unbound.Cards.csproj" />
-    <ProjectReference Include="..\UnboundGamemodes\Unbound.Gamemodes.csproj" />
-    <ProjectReference Include="..\UnboundLib\Unbound.Core.csproj" />
-    <ProjectReference Include="..\UnboundNetworking\Unbound.Networking.csproj" />
+    <EmbeddedResource Include="..\AssetsEmbedded\unboundui" Link="Assets\unboundui" />
+    <EmbeddedResource Include="..\AssetsEmbedded\modoptionsui" Link="Assets\modoptionsui" />
+    <EmbeddedResource Include="..\AssetsEmbedded\unboundlinks" Link="Assets\unboundlinks" />
+    <EmbeddedResource Include="Assets\togglemenuui" />
   </ItemGroup>
 
   <ItemGroup>
     <Reference Include="0Harmony">
-      <HintPath>$(BepInFolder)\0Harmony.dll</HintPath>
+      <HintPath>$(BepInFolder)\core\0Harmony.dll</HintPath>
     </Reference>
     <Reference Include="BepInEx">
-      <HintPath>$(BepInFolder)\BepInEx.dll</HintPath>
+      <HintPath>$(BepInFolder)\core\BepInEx.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>$(ManagedFolder)\Assembly-CSharp.dll</HintPath>
@@ -119,9 +120,9 @@
     <Reference Include="Unity.Addressables">
       <HintPath>$(ManagedFolder)\Unity.Addressables.dll</HintPath>
     </Reference>
-    <Reference Include="com.rlabrecque.steamworks.net">
-      <HintPath>$(ManagedFolder)\com.rlabrecque.steamworks.net.dll</HintPath>
-    </Reference>
+	  <Reference Include="com.rlabrecque.steamworks.net">
+		  <HintPath>$(ManagedFolder)\com.rlabrecque.steamworks.net.dll</HintPath>
+	  </Reference>
     <Reference Include="UnityEngine.ParticleSystemModule">
       <HintPath>$(ManagedFolder)\UnityEngine.ParticleSystemModule.dll</HintPath>
     </Reference>
@@ -166,5 +167,4 @@
     </CallTarget>
     <Exec Command="powershell.exe -ExecutionPolicy RemoteSigned -File &quot;$(SolutionDir)publish.ps1&quot; -Version &quot;$(PackageVersion.Remove($(PackageVersion.LastIndexOf('.')), 2))&quot; -Target &quot;$(ConfigurationName)&quot; -TargetPath &quot;$(TargetDir.TrimEnd('\'))&quot; -TargetAssembly &quot;$(TargetFileName)&quot; -RoundsPath &quot;$(RoundsFolder.TrimEnd('\'))&quot; -ProjectPath &quot;$(SolutionDir.TrimEnd('\'))&quot;" />
   </Target>
-
 </Project>

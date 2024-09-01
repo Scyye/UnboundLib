@@ -32,8 +32,15 @@
     <DebugType>portable</DebugType>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
-    
-  <Import Project="..\CommonSettings.props" />
+
+  <PropertyGroup>
+    <RoundsFolder>K:\SteamLibrary\steamapps\common\ROUNDS</RoundsFolder>
+    <ManagedFolder>$(RoundsFolder)\ROUNDS_Data\Managed</ManagedFolder>
+    <BepInFolder>K:\SteamLibrary\steamapps\common\ROUNDS\BepInEx</BepInFolder>
+    <IndirectBuildTask>true</IndirectBuildTask>
+    <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
+    <LangVersion>7.1</LangVersion>
+  </PropertyGroup>
 
   <ItemGroup>
     <None Remove="Assets\togglemenuui" />
@@ -50,10 +57,10 @@
 
   <ItemGroup>
     <Reference Include="0Harmony">
-      <HintPath>$(BepInFolder)\0Harmony.dll</HintPath>
+      <HintPath>..\Assemblies\0Harmony.dll</HintPath>
     </Reference>
     <Reference Include="BepInEx">
-      <HintPath>$(BepInFolder)\BepInEx.dll</HintPath>
+      <HintPath>..\Assemblies\BepInEx.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>$(ManagedFolder)\Assembly-CSharp.dll</HintPath>
