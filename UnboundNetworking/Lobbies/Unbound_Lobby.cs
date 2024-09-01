@@ -7,15 +7,16 @@ using UnboundLib.Networking.Extensions;
 using UnboundLib.Networking.Utils;
 using UnityEngine;
 using static UnboundLib.Networking.Lobbies.ConectionHandler;
+using Steamworks;
 
 namespace UnboundLib.Networking.Lobbies {
     public static class Unbound_Lobby {
 
-        public static void Host() {
+        public static void Host(bool StaticCode = false) {
             //there is litteraly no reason for this, it is NEVER set by anything to anything other then 1 Doing it just to be safe. vaniall does the same.
             TimeHandler.instance.gameStartTime = 1f;
 
-            UnboundCore.Instance.StartCoroutine(DoHost());
+            UnboundCore.Instance.StartCoroutine(DoHost(StaticCode));
 
         }
         public static string GetLobbyCode() {
@@ -23,20 +24,21 @@ namespace UnboundLib.Networking.Lobbies {
                 return "";
             if(!PhotonNetwork.InRoom)
                 return "";
-            return CreateLobbyCode(PhotonNetwork.CloudRegion, PhotonNetwork.CurrentRoom.Name);
+            return (string)PhotonNetwork.CurrentRoom.CustomProperties[NetworkConnectionHandler.ROOM_CODE];
         }
         public static string CreateLobbyCode(string region, string name) {
             return $"{region}:{Convert.ToBase64String(BitConverter.GetBytes(long.Parse(name)))}";
         }
 
-        private static IEnumerator DoHost() {
+        private static IEnumerator DoHost(bool StaticCode) {
             yield return instance.ConectIfDisconected();
             steamLobby.CreateLobby(UnboundNetworking.MaxPlayers, delegate (string roomName) {
                 Debug.Log($"Created steam lobby: {roomName}");
+                var roomCode = StaticCode ? CreateLobbyCode(PhotonNetwork.CloudRegion, SteamUser.GetSteamID().m_SteamID.ToString()) + "!" : CreateLobbyCode(PhotonNetwork.CloudRegion, roomName);
                 var options = RoomOptions.Clone();
                 options.CustomRoomProperties.Add("F", PropertyFlags.None);
                 options.CustomRoomProperties.Add("H", SyncModClients.GetCompatablityHash());
-                options.CustomRoomProperties.Add(NetworkConnectionHandler.ROOM_CODE, CreateLobbyCode(PhotonNetwork.CloudRegion,roomName));
+                options.CustomRoomProperties.Add(NetworkConnectionHandler.ROOM_CODE, roomCode);
                 PhotonNetwork.CreateRoom(roomName, options, ModdedLobby, null);
             });
         }
@@ -51,8 +53,6 @@ namespace UnboundLib.Networking.Lobbies {
             TimeHandler.instance.gameStartTime = 1f;
 
             yield return instance.ConectIfDisconected(codes[0]);
-
-            string roomCode = BitConverter.ToInt64(Convert.FromBase64String(codes[1]), 0).ToString();
             
             MainMenuHandler.instance.Close();
             isJoiningRoom = true;

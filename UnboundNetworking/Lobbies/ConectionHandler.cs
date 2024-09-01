@@ -52,7 +52,8 @@ namespace UnboundLib.Networking.Lobbies {
                     _roomOptions.PublishUserId = true;
                     _roomOptions.CustomRoomPropertiesForLobby = new string[]
                     {
-                        NetworkConnectionHandler.ROOM_CODE
+                        NetworkConnectionHandler.ROOM_CODE,
+                        "H","F",
                     };
                     _roomOptions.CustomRoomProperties = new ExitGames.Client.Photon.Hashtable();
                     //_roomOptions.CleanupCacheOnLeave = false; Might be needed for reconection stuffs.
@@ -106,7 +107,7 @@ namespace UnboundLib.Networking.Lobbies {
             if(isJoiningRoom) {
                 if(roomList.Count == 0) return;
                 if(((PropertyFlags)roomList[0].CustomProperties["F"] & PropertyFlags.StrictMode) != 0 && (string)roomList[0].CustomProperties["H"] != SyncModClients.GetCompatablityHash()) {
-                    //throw some kind of error to the player.
+                    //throw some kind of error to the player. 
                     return;
                 }
                     
