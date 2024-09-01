@@ -18,13 +18,15 @@ namespace UnboundLib.Networking.Lobbies {
             UnboundCore.Instance.StartCoroutine(DoHost());
 
         }
-
         public static string GetLobbyCode() {
             if(!isConnectedToMaster)
                 return "";
             if(!PhotonNetwork.InRoom)
                 return "";
-            return $"{PhotonNetwork.CloudRegion}:{Convert.ToBase64String(BitConverter.GetBytes(long.Parse(PhotonNetwork.CurrentRoom.Name)))}";
+            return CreateLobbyCode(PhotonNetwork.CloudRegion, PhotonNetwork.CurrentRoom.Name);
+        }
+        public static string CreateLobbyCode(string region, string name) {
+            return $"{region}:{Convert.ToBase64String(BitConverter.GetBytes(long.Parse(name)))}";
         }
 
         private static IEnumerator DoHost() {
@@ -33,6 +35,7 @@ namespace UnboundLib.Networking.Lobbies {
                 Debug.Log($"Created steam lobby: {roomName}");
                 var options = RoomOptions.Clone();
                 options.CustomRoomProperties.Add("H", SyncModClients.GetCompatablityHash());
+                options.CustomRoomProperties.Add(NetworkConnectionHandler.ROOM_CODE, CreateLobbyCode(PhotonNetwork.CloudRegion,roomName));
                 PhotonNetwork.CreateRoom(roomName, options, ModdedLobby, null);
             });
         }
@@ -49,9 +52,10 @@ namespace UnboundLib.Networking.Lobbies {
             yield return instance.ConectIfDisconected(codes[0]);
 
             string roomCode = BitConverter.ToInt64(Convert.FromBase64String(codes[1]), 0).ToString();
-            // idk if both of these are needed, but fuck you, it works
-            PhotonNetwork.JoinRoom(roomCode);
-            steamLobby.JoinedRoom(roomCode);
+            
+            MainMenuHandler.instance.Close();
+            isJoiningRoom = true;
+            PhotonNetwork.GetCustomRoomList(ModdedLobby, $"{NetworkConnectionHandler.ROOM_CODE}='{lobbyCode}'");
         }
 
         public static void StartGame(GameObject gamemode) {

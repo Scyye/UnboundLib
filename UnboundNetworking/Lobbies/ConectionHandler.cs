@@ -4,6 +4,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using Steamworks;
 using System.Collections;
+using System.Collections.Generic;
 using Unbound.Networking;
 using UnityEngine;
 using UnityEngine.Localization;
@@ -28,9 +29,11 @@ namespace UnboundLib.Networking.Lobbies {
 
         public static ConectionHandler instance;
         public static bool isConnectedToMaster;
+        internal static bool isJoiningRoom;
         public static ClientSteamLobby steamLobby;
         public static readonly TypedLobby ModdedLobby = new TypedLobby("RoundsModdedLobby", LobbyType.SqlLobby);
         private static RoomOptions _roomOptions;
+        private List<RoomInfo> last_known_rooms = new List<RoomInfo>();
         public static RoomOptions RoomOptions {
             get {
                 if(_roomOptions == null) {
@@ -39,6 +42,10 @@ namespace UnboundLib.Networking.Lobbies {
                     _roomOptions.IsOpen = true;
                     _roomOptions.IsVisible = true;
                     _roomOptions.PublishUserId = true;
+                    _roomOptions.CustomRoomPropertiesForLobby = new string[]
+                    {
+                        NetworkConnectionHandler.ROOM_CODE
+                    };
                     _roomOptions.CustomRoomProperties = new ExitGames.Client.Photon.Hashtable();
                     //_roomOptions.CleanupCacheOnLeave = false; Might be needed for reconection stuffs.
                 }
@@ -82,6 +89,17 @@ namespace UnboundLib.Networking.Lobbies {
 
         public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer) {
             Debug.Log($"Player Joined: {newPlayer.NickName}  ({newPlayer.UserId})");
+        }
+
+        public override void OnRoomListUpdate(List<RoomInfo> roomList) {
+            last_known_rooms = roomList;
+            Debug.Log($"updating rooms: {roomList.Count}");
+            roomList.ForEach(r => { Debug.Log(r.Name); });
+            if(isJoiningRoom) {
+                if(roomList.Count == 0) return;
+                PhotonNetwork.JoinRoom(roomList[0].Name);
+                isJoiningRoom = false;
+            }
         }
 
     }
