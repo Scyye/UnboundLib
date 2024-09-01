@@ -59,6 +59,7 @@ namespace UnboundLib.Networking.Lobbies {
             Debug.Log("Coneting");
             yield return new WaitUntil(() => isConnectedToMaster);
             Debug.Log("Conected!");
+            Debug.Log($"region {PhotonNetwork.CloudRegion}");
         }
         public override void OnConnectedToMaster() {
             isConnectedToMaster = true;
