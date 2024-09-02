@@ -10,7 +10,7 @@ using Unbound.Gamemodes.Utils;
 using UnboundLib.Networking;
 using UnboundLib.Networking.Utils;
 using UnityEngine;
-using static Unbound.Networking.UnboundNetworking;
+using static UnboundLib.Networking.UnboundNetworking;
 using static UnboundLib.Networking.Utils.NetworkEventCallbacks;
 
 namespace Unbound.Gamemodes {

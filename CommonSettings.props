@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
-	<RoundsFolder>C:\Program Files (x86)\Steam\steamapps\common\ROUNDS</RoundsFolder>
+	<RoundsFolder>F:\SteamLibrary\steamapps\common\ROUNDS</RoundsFolder>
 	<ManagedFolder>$(RoundsFolder)\ROUNDS_Data\Managed</ManagedFolder>
 	<IndirectBuildTask>true</IndirectBuildTask>
 	<DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>

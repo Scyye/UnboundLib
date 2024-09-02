@@ -37,8 +37,8 @@ namespace Unbound.Core.Patches {
             hostButton.onClick.RemoveAllListeners();
             hostButton.onClick.AddListener(delegate {
                 Unbound_​Lobby.Host();
-                MainMenuHandler.instance.Close();
-                LoadingScreen.instance?.StartLoading();
+               // MainMenuHandler.instance.Close();
+               // LoadingScreen.instance?.StartLoading();
             });
 
             firstTime = false;

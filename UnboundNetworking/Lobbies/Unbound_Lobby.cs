@@ -2,7 +2,7 @@
 using System.Collections;
 using System;
 using Unbound.Core;
-using Unbound.Networking;
+using UnboundLib.Networking;
 using UnboundLib.Networking.Extensions;
 using UnboundLib.Networking.Utils;
 using UnityEngine;

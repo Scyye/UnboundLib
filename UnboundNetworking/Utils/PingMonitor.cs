@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Unbound.Core;
-using UnboundLib.Networking.RPCs;
+using UnboundLib.Networking;
 using UnityEngine;
 
 namespace UnboundLib.Networking.Utils {

@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Unbound.Patches", "UnboundP
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Unbound.Networking", "UnboundNetworking\Unbound.Networking.csproj", "{FD289B44-2F11-47AB-B591-830720D6BA2A}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoundsWithFriends", "RoundsWithFriends\RoundsWithFriends.csproj", "{9A19103F-16F7-4668-BE54-9A1E7A4F7556}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

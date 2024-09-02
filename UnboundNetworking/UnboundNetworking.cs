@@ -8,7 +8,7 @@ using UnboundLib.Networking.Utils;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Unbound.Networking {
+namespace UnboundLib.Networking {
 
     [BepInDependency("dev.rounds.unbound.core")]
     [BepInPlugin("dev.rounds.unbound.networking", "Unbound Lib Networking", "1.0.0")]

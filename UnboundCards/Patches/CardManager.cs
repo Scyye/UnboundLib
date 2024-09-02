@@ -7,7 +7,6 @@ using System.Collections.Specialized;
 using System.Linq;
 using Unbound.Core;
 using UnboundLib.Networking;
-using UnboundLib.Networking.RPCs;
 using UnityEngine;
 
 namespace Unbound.Cards.Utils {
