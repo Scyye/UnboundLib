@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using InControl;
 using Photon.Pun;
+using UnboundLib.Networking.Lobbies;
 
 namespace Unbound.Core.Patches {
     [HarmonyPatch(typeof(EscapeMenuHandler))]
@@ -20,13 +21,12 @@ namespace Unbound.Core.Patches {
         private static bool Update(EscapeMenuHandler __instance) {
             if(LoadingScreen.instance.IsLoading) {
                 if(Input.GetKeyDown(KeyCode.Escape)) {
-                    GameManager.instance.GoToMenu();
+                    ConectionHandler.instance.NetworkRestart();
                 }
 
                 for(int i = 0; i < InputManager.ActiveDevices.Count; i++) {
                     if(InputManager.ActiveDevices[i].Action2.WasPressed) {
-                        PhotonNetwork.Disconnect();
-                        GameManager.instance.GoToMenu();
+                        ConectionHandler.instance.NetworkRestart();
                     }
                 }
                 return false;
