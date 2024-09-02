@@ -43,7 +43,10 @@ namespace UnboundLib.Networking.Lobbies {
         private static IEnumerator DoHost(bool StaticCode) {
             yield return instance.ConectIfDisconected();
             steamLobby.CreateLobby(UnboundNetworking.MaxPlayers, delegate (string roomName) {
+                CSteamID lobbyID = new CSteamID(ulong.Parse(roomName));
                 Debug.Log($"Created steam lobby: {roomName}");
+                SteamMatchmaking.SetLobbyType(lobbyID, ELobbyType.k_ELobbyTypePublic);
+                SteamMatchmaking.SetLobbyJoinable(lobbyID, true);
                 var roomCode = StaticCode ? $"{PhotonNetwork.CloudRegion}:{Encode((long)SteamUser.GetSteamID().m_SteamID)}!" : $"{PhotonNetwork.CloudRegion}:{Encode(long.Parse(roomName))}";
                 var options = RoomOptions.Clone();
                 options.CustomRoomProperties.Add("F", PropertyFlags.None);
@@ -68,6 +71,16 @@ namespace UnboundLib.Networking.Lobbies {
             isJoiningRoom = true;
             PhotonNetwork.GetCustomRoomList(ModdedLobby, $"{NetworkConnectionHandler.ROOM_CODE}='{lobbyCode}'");
         }
+
+        internal static IEnumerator JoinSpecific(string region, string room) {
+            TimeHandler.instance.gameStartTime = 1f;
+
+            yield return instance.ConectIfDisconected(region);
+
+            PhotonNetwork.JoinRoom(room);
+
+        }
+
 
         public static void StartGame(GameObject gamemode) {
             gamemode.SetActive(true);

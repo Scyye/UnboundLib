@@ -499,7 +499,7 @@ namespace RWF
                 privateRoomGo.transform.localScale = Vector3.one;
 
                 privateRoomGo.AddComponent<PrivateRoomHandler>();
-
+                /*
                 var inviteFriendGo = mainMenuGo.transform.Find("ListSelector").Find("Online").Find("Group").Find("Invite friend").gameObject;
                // GameObject.DestroyImmediate(inviteFriendGo.GetComponent<Button>());
                 var button = inviteFriendGo.GetComponent<Button>();
@@ -508,7 +508,7 @@ namespace RWF
                 {
                     PrivateRoomHandler.instance.Open();
                     //NetworkConnectionHandler.instance.HostPrivate();
-                });
+                });*/
             }
 
             if (!charGo.transform.Find("Creator_Local3"))

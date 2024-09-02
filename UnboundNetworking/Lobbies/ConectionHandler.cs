@@ -6,6 +6,7 @@ using Steamworks;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unbound.Core;
 using UnboundLib.Networking;
 using UnboundLib.Networking.Utils;
 using UnityEngine;
@@ -127,6 +128,24 @@ namespace UnboundLib.Networking.Lobbies {
     public static class DiableMasterDebugCheck {
         public static void Prefix(NetworkData __instance) {
             UnityEngine.Object.DestroyImmediate(__instance);
+        }
+    }
+
+    [HarmonyPatch(typeof(ClientSteamLobby), "OnLobbyEnter")]
+    public static class FixSteamInvites {
+        public static bool Prefix(ClientSteamLobby __instance, LobbyEnter_t param, bool bIOFailure) {
+            if(bIOFailure) {
+                Debug.LogError("BioFail");
+            } else if(param.m_EChatRoomEnterResponse == 1) {
+                Debug.Log("Successfully Entered A steam Lobby");
+                CSteamID cSteamID = new CSteamID(param.m_ulSteamIDLobby);
+                __instance.InvokeMethod("UpdateCurrentLobby",cSteamID);
+                if(SteamManager.Initialized) {
+                    string lobbyData = SteamMatchmaking.GetLobbyData(cSteamID, "RegionKey");
+                    UnboundCore.Instance.StartCoroutine(Unbound_Lobby.JoinSpecific(lobbyData, cSteamID.ToString()));
+                }
+            }
+            return false;
         }
     }
 

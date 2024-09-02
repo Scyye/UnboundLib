@@ -19,6 +19,7 @@ using UnboundLib.Networking;
 using Unbound.Core;
 using Unbound.Gamemodes;
 using Unbound.Core.Utils.UI;
+using UnboundLib.Networking.Lobbies;
 
 namespace RWF
 {
@@ -342,9 +343,7 @@ namespace RWF
             inviteButton.onClick.AddListener(() =>
             {
                 if (PhotonNetwork.CurrentRoom == null) { return; }
-                var field = typeof(NetworkConnectionHandler).GetField("m_SteamLobby", BindingFlags.Static | BindingFlags.NonPublic);
-                var lobby = (ClientSteamLobby) field.GetValue(null);
-                lobby.ShowInviteScreenWhenConnected();
+                ConectionHandler.steamLobby.ShowInviteScreenWhenConnected();
             });
 
             // this.gameModeListObject.AddComponent<RectTransform>();
@@ -532,7 +531,7 @@ namespace RWF
         {
             if (!this.IsOpen)
             {
-                return;
+                Open();
             }
 
             // set text colors to enabled, hide gamemode button if this player is not host
