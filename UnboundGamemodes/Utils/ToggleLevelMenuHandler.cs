@@ -8,6 +8,7 @@ using System.Linq;
 using TMPro;
 using Unbound.Core;
 using Unbound.Core.Utils;
+using UnboundLib.Networking.Lobbies;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -322,7 +323,7 @@ namespace Unbound.Gamemodes.Utils {
             }
             levelsThatNeedToRedrawn.Clear();
             levelsThatHaveBeenRedrawn.Clear();
-            NetworkConnectionHandler.instance.NetworkRestart();
+            ConectionHandler.instance.NetworkRestart();
             isDrawingLevels = false;
 
             foreach(var map in LevelManager.levels.Where(lvl => lvl.Value.selected)) {

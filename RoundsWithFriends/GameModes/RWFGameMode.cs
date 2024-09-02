@@ -12,6 +12,7 @@ using RWF.UI;
 using UnboundLib.Networking;
 using Unbound.Gamemodes;
 using Unbound.Core;
+using UnboundLib.Networking.Lobbies;
 
 namespace RWF.GameModes
 {
@@ -534,7 +535,7 @@ namespace RWF.GameModes
                 SceneManager.LoadScene(SceneManager.GetActiveScene().name);
                 return;
             }
-            NetworkConnectionHandler.instance.NetworkRestart();
+            ConectionHandler.instance.NetworkRestart();
         }
 
         protected virtual void GameOver(int winningTeamID)

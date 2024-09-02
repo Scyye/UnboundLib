@@ -12,6 +12,7 @@ using UnityEngine.Localization;
 using UnityEngine;
 using Unbound.Core.Extensions;
 using Unbound.Core;
+using UnboundLib.Networking.Lobbies;
 
 namespace Unbound.Gamemodes.GameModes {
     public class GM_UnboundArmsRaceTest: MonoBehaviour {
@@ -338,7 +339,7 @@ namespace Unbound.Gamemodes.GameModes {
                 GameManager.instance.GoToMenu();
                 return;
             }
-            NetworkConnectionHandler.instance.NetworkRestart();
+            ConectionHandler.instance.NetworkRestart();
         }
 
         private void GameOver(int winningTeamID) {

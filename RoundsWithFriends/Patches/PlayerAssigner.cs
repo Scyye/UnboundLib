@@ -17,9 +17,7 @@ namespace RWF.Patches
     {
         static bool Prefix() {
             // When playing in a private match, we want to pretty much ignore this function since we handle player joins in PrivateRoomHandler
-            return PhotonNetwork.OfflineMode ||
-                NetworkConnectionHandler.instance.IsSearchingQuickMatch() ||
-                NetworkConnectionHandler.instance.IsSearchingTwitch();
+            return PhotonNetwork.OfflineMode;
         }
 
         static void Postfix(PlayerAssigner __instance, bool ___playersCanJoin)

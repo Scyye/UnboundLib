@@ -399,7 +399,7 @@ namespace RWF
             {
                 // return Canvas to its original position
                 this.gameObject.GetComponentInParent<Canvas>().sortingLayerName = "MostFront";
-                NetworkConnectionHandler.instance.NetworkRestart();
+                ConectionHandler.instance.NetworkRestart();
                 KeybindHints.ClearHints();
             });
 
@@ -595,7 +595,7 @@ namespace RWF
 
         override public void OnMasterClientSwitched(Photon.Realtime.Player newMaster)
         {
-            NetworkConnectionHandler.instance.NetworkRestart();
+            ConectionHandler.instance.NetworkRestart();
             base.OnMasterClientSwitched(newMaster);
         }
 

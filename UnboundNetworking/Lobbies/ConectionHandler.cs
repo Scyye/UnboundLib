@@ -117,6 +117,41 @@ namespace UnboundLib.Networking.Lobbies {
             }
         }
 
+
+
+        public void NetworkRestart() {
+            isConnectedToMaster = false;
+            if(PhotonNetwork.OfflineMode) {
+                GameManager.instance.GoToMenu();
+            } else {
+                StartCoroutine(WaitForRestart());
+            }
+        }
+
+        private IEnumerator WaitForRestart() {
+            if(steamLobby != null) {
+                steamLobby.LeaveLobby();
+            }
+
+            if(PhotonNetwork.InRoom) {
+                PhotonNetwork.LeaveRoom();
+                while(PhotonNetwork.InRoom) {
+                    yield return null;
+                }
+            }
+
+            if(PhotonNetwork.IsConnected) {
+                PhotonNetwork.Disconnect();
+                while(PhotonNetwork.IsConnected) {
+                    yield return null;
+                }
+            }
+
+            EscapeMenuHandler.isEscMenu = false;
+            DevConsole.isTyping = false;
+            GameManager.instance.GoToMenu();
+        }
+
     }
     [HarmonyPatch(typeof(NetworkConnectionHandler), "Awake")]
     public static class DiableVanillaNetworkConnectionHandler {
@@ -126,8 +161,9 @@ namespace UnboundLib.Networking.Lobbies {
     }
     [HarmonyPatch(typeof(NetworkData), "Start")]
     public static class DiableMasterDebugCheck {
-        public static void Prefix(NetworkData __instance) {
+        public static bool Prefix(NetworkData __instance) {
             UnityEngine.Object.DestroyImmediate(__instance);
+            return false;
         }
     }
 
