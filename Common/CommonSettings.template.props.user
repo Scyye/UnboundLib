@@ -1,6 +1,0 @@
-<Project>
-    <!-- Custom Variables -->
-    <PropertyGroup>
-        <RoundsFolder>{RoundsFolder}</RoundsFolder>
-    </PropertyGroup>
-</Project>

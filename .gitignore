@@ -6,10 +6,10 @@
 # User-specific files
 *.rsuser
 *.suo
-*.user
+## *.user
 *.userosscache
 *.sln.docstates
-!*.template.*.user
+
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
