@@ -80,14 +80,6 @@ namespace Unbound.Core {
             LoadAssets();
 
             TranslationStrings.INIT();
-
-            // This block of code prevents the game from crashing when quitting
-            Application.quitting += () => {
-                GameObject[] objects = GameObject.FindObjectsOfType<GameObject>();
-                foreach(GameObject obj in objects) {
-                    GameObject.DestroyImmediate(obj);
-                }
-            };
         }
 
         private void Start() {
