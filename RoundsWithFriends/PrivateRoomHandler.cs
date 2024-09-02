@@ -529,6 +529,7 @@ namespace RWF
 
         override public void OnJoinedRoom()
         {
+            if(PhotonNetwork.OfflineMode) return;
             if (!this.IsOpen)
             {
                 Open();
@@ -555,11 +556,6 @@ namespace RWF
             this.gameObject.GetComponentInParent<Canvas>().sortingLayerName = "UI";
 
             PhotonNetwork.LocalPlayer.SetProperty("players", new LobbyCharacter[RWFMod.instance.MaxCharactersPerClient]);
-
-            if (RWFMod.DEBUG && PhotonNetwork.IsMasterClient)
-            {
-                RWFMod.Log($"\n\n\tRoom join command:\n\tjoin:{PhotonNetwork.CloudRegion}:{PhotonNetwork.CurrentRoom.Name}\n");
-            }
 
             if (PhotonNetwork.IsMasterClient)
             {
