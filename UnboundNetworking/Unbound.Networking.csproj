@@ -1,17 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2F32C3B2-635E-40DE-869E-6BC48A85989E}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <RootNamespace>UnboundLib</RootNamespace>
-    <AssemblyName>UnboundLib</AssemblyName>
-    <Authors>RoundsModding</Authors>
-    <TargetFramework>net461</TargetFramework>
-    <FileAlignment>512</FileAlignment>
-    <Deterministic>true</Deterministic>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <TargetFrameworkProfile />
+    <RootNamespace>UnboundLib.Networking</RootNamespace>
+    <AssemblyName>UnboundNetworking</AssemblyName>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -26,45 +16,28 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DebugSymbols>true</DebugSymbols>
-    <DefineConstants>DEBUG</DefineConstants>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DebugType>portable</DebugType>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	  <DebugSymbols>true</DebugSymbols>
+	  <DebugType>full</DebugType>
+	  <DebugType>embedded</DebugType>
+	  <PathMap>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)'))=./</PathMap>
+	  <Optimize>false</Optimize>
+	  <DefineConstants>DEBUG</DefineConstants>
+	  <OutputPath>bin\Debug\</OutputPath>
+	  <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
-
-  <PropertyGroup>
-	  <RoundsFolder>F:\SteamLibrary\steamapps\common\ROUNDS</RoundsFolder>
-	  <ManagedFolder>$(RoundsFolder)\ROUNDS_Data\Managed</ManagedFolder>
-	  <BepInFolder>F:\SteamLibrary\steamapps\common\ROUNDS\BepInEx</BepInFolder>
-    <IndirectBuildTask>true</IndirectBuildTask>
-    <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
-    <LangVersion>7.1</LangVersion>
-  </PropertyGroup>
+    
+  <Import Project="..\Common\CommonSettings.props" />
 
   <ItemGroup>
-    <None Remove="Assets\togglemenuui" />
-    <None Remove="UnboundLib.csproj.user.dist" />
-    <None Remove="PostBuild.msbuild" />
-    <None Remove="unboundlinks" />
-    <None Include="..\README.md" />
-    <None Include="..\.gitignore" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="..\AssetsEmbedded\unboundui" Link="Assets\unboundui" />
-    <EmbeddedResource Include="..\AssetsEmbedded\modoptionsui" Link="Assets\modoptionsui" />
-    <EmbeddedResource Include="..\AssetsEmbedded\unboundlinks" Link="Assets\unboundlinks" />
-    <EmbeddedResource Include="Assets\togglemenuui" />
+    <ProjectReference Include="..\UnboundLib\Unbound.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Reference Include="0Harmony">
-      <HintPath>$(BepInFolder)\core\0Harmony.dll</HintPath>
+      <HintPath>..\Assemblies\0Harmony.dll</HintPath>
     </Reference>
     <Reference Include="BepInEx">
-      <HintPath>$(BepInFolder)\core\BepInEx.dll</HintPath>
+      <HintPath>..\Assemblies\BepInEx.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>$(ManagedFolder)\Assembly-CSharp.dll</HintPath>
@@ -120,9 +93,9 @@
     <Reference Include="Unity.Addressables">
       <HintPath>$(ManagedFolder)\Unity.Addressables.dll</HintPath>
     </Reference>
-	  <Reference Include="com.rlabrecque.steamworks.net">
-		  <HintPath>$(ManagedFolder)\com.rlabrecque.steamworks.net.dll</HintPath>
-	  </Reference>
+    <Reference Include="com.rlabrecque.steamworks.net">
+      <HintPath>$(ManagedFolder)\com.rlabrecque.steamworks.net.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.ParticleSystemModule">
       <HintPath>$(ManagedFolder)\UnityEngine.ParticleSystemModule.dll</HintPath>
     </Reference>
@@ -159,6 +132,13 @@
     <PropertyGroup>
       <PackageVersion>%(PackAssembly.Version)</PackageVersion>
     </PropertyGroup>
+  </Target>
+
+  <Target Name="PostBuildTaskWin" Condition="'$(OS)' == 'Windows_NT'" DependsOnTargets="Build" AfterTargets="Build">
+    <CallTarget Targets="ReadPackageVersionFromOutputAssembly">
+      <Output TaskParameter="TargetOutputs" PropertyName="PackageVersion" />
+    </CallTarget>
+    <Exec Command="powershell.exe -ExecutionPolicy RemoteSigned -File &quot;$(SolutionDir)publish.ps1&quot; -Version &quot;$(PackageVersion.Remove($(PackageVersion.LastIndexOf('.')), 2))&quot; -Target &quot;$(ConfigurationName)&quot; -TargetPath &quot;$(TargetDir.TrimEnd('\'))&quot; -TargetAssembly &quot;$(TargetFileName)&quot; -RoundsPath &quot;$(RoundsFolder.TrimEnd('\'))&quot; -ProjectPath &quot;UnboundLib&quot;" />
   </Target>
 
   <Target Name="PostBuildTaskWin" Condition="'$(OS)' == 'Windows_NT'" DependsOnTargets="Build" AfterTargets="Build">

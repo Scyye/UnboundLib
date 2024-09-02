@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -8,13 +7,10 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 using Color = UnityEngine.Color;
 
-namespace Unbound.Core.Utils.UI
-{
+namespace Unbound.Core.Utils.UI {
 
-    public class ModOptions
-    {
-        internal struct subMenu
-        {
+    public class ModOptions {
+        internal struct subMenu {
             public string text;
             public UnityAction onClickAction;
             public int fontSize;
@@ -31,26 +27,23 @@ namespace Unbound.Core.Utils.UI
 
         internal static bool showModUi;
         internal static bool showingModOptions;
-        internal static bool inPauseMenu;
+        public static bool inPauseMenu { get; internal set; }
         internal static bool noDeprecatedMods;
 
         public static ModOptions instance = new ModOptions();
         internal static List<subMenu> prioritySubMenus = new List<subMenu>();
         internal static List<subMenu> subMenus = new List<subMenu>();
 
-        private ModOptions()
-        {
+        private ModOptions() {
             // singleton first time setup
 
             instance = this;
         }
 
-        public static bool RegesterPrioritySubMenu(string text, UnityAction onClickAction = null, int fontSize = 60, bool forceUpper = true, Color? color = null, TMP_FontAsset font = null, Material fontMaterial = null, TextAlignmentOptions? alignmentOptions = null)
-        {
-            if (prioritySubMenus.Any(menu => menu.text == text))
+        public static bool RegesterPrioritySubMenu(string text, UnityAction onClickAction = null, int fontSize = 60, bool forceUpper = true, Color? color = null, TMP_FontAsset font = null, Material fontMaterial = null, TextAlignmentOptions? alignmentOptions = null) {
+            if(prioritySubMenus.Any(menu => menu.text == text))
                 return false;
-            prioritySubMenus.Add(new subMenu
-            {
+            prioritySubMenus.Add(new subMenu {
                 text = text,
                 onClickAction = onClickAction,
                 fontSize = fontSize,
@@ -62,12 +55,10 @@ namespace Unbound.Core.Utils.UI
             });
             return true;
         }
-        public static bool RegesterSubMenu(string text, UnityAction onClickAction = null, int fontSize = 60, bool forceUpper = true, Color? color = null, TMP_FontAsset font = null, Material fontMaterial = null, TextAlignmentOptions? alignmentOptions = null)
-        {
-            if (subMenus.Any(menu => menu.text == text))
+        public static bool RegesterSubMenu(string text, UnityAction onClickAction = null, int fontSize = 60, bool forceUpper = true, Color? color = null, TMP_FontAsset font = null, Material fontMaterial = null, TextAlignmentOptions? alignmentOptions = null) {
+            if(subMenus.Any(menu => menu.text == text))
                 return false;
-            subMenus.Add(new subMenu
-            {
+            subMenus.Add(new subMenu {
                 text = text,
                 onClickAction = onClickAction,
                 fontSize = fontSize,
@@ -80,34 +71,27 @@ namespace Unbound.Core.Utils.UI
             return true;
         }
 
-        public static void RegisterGUI(string modName, Action guiAction)
-        {
+        public static void RegisterGUI(string modName, Action guiAction) {
             GUIListeners.Add(modName, new GUIListener(modName, guiAction));
         }
 
         internal void RegisterMenu(string name, UnityAction buttonAction, Action<GameObject> guiAction,
-            GameObject parent = null, bool showInPauseMenu = false)
-        {
-            if (parent == null)
-            {
+            GameObject parent = null, bool showInPauseMenu = false) {
+            if(parent == null) {
                 parent = instance.modOptionsMenu;
             }
 
             modMenus.Add(new ModMenu(name, buttonAction, guiAction, parent, showInPauseMenu));
         }
 
-        internal void CreateModOptions(bool firstTime)
-        {
+        public void CreateModOptions(bool firstTime) {
             // create mod options
-            UnboundCore.Instance.ExecuteAfterSeconds(firstTime ? 0.1f : 0, () =>
-            {
+            UnboundCore.Instance.ExecuteAfterSeconds(firstTime ? 0.1f : 0, () => {
                 CreateModOptionsMenu(MainMenuHandler.instance.transform.Find("Canvas/ListSelector/Main").gameObject, null, false);
-                //CreateModOptionsMenu(UIHandler.instance.transform.Find("Canvas/EscapeMenu/Main").gameObject, UIHandler.instance.transform.Find("Canvas/EscapeMenu").gameObject, true);
             });
         }
 
-        private void CreateModOptionsMenu(GameObject parent, GameObject parentForMenu, bool pauseMenu)
-        {
+        private void CreateModOptionsMenu(GameObject parent, GameObject parentForMenu, bool pauseMenu) {
             // Create mod options menu
             modOptionsMenu = MenuHandler.CreateMenu("MODS", () => {
                 showingModOptions = true;
@@ -117,21 +101,16 @@ namespace Unbound.Core.Utils.UI
                 true, pauseMenu ? 2 : 4);
 
             // Create back actions 
-            if (!pauseMenu)
-            {
+            if(!pauseMenu) {
                 modOptionsMenu.GetComponentInChildren<GoBack>(true).goBackEvent.AddListener(() => { showingModOptions = false; });
-            }
-            else
-            {
+            } else {
                 GameObject.Destroy(modOptionsMenu.GetComponentInChildren<GoBack>(true));
             }
             modOptionsMenu.transform.Find("Group/Back").gameObject.GetComponent<Button>().onClick.AddListener(() => { showingModOptions = false; });
 
-            if (!pauseMenu)
-            {
+            if(!pauseMenu) {
                 // Fix main menu layout
-                void FixMainMenuLayout()
-                {
+                void FixMainMenuLayout() {
                     var mainMenu = MainMenuHandler.instance.transform.Find("Canvas/ListSelector");
                     var logo = mainMenu.Find("Main/Group/Rounds_Logo2_White").gameObject.AddComponent<LayoutElement>();
                     logo.GetComponent<RectTransform>().sizeDelta =
@@ -152,22 +131,16 @@ namespace Unbound.Core.Utils.UI
 
             // Create toggle levels button
 
-            RegesterPrioritySubMenu("Toggle Levels",
-                () => {
-                    ToggleLevelMenuHandler.instance.SetActive(true);
-                });
             prioritySubMenus.Sort((menu1, menu2) => menu1.text.CompareTo(menu2.text));
             subMenus.Sort((menu1, menu2) => menu1.text.CompareTo(menu2.text));
             Debug.Log("Creating submenus");
-            foreach (var subMenu in prioritySubMenus)
-            {
+            foreach(var subMenu in prioritySubMenus) {
                 Debug.Log("Creating submenu: " + subMenu.text);
                 MenuHandler.CreateButton(subMenu.text, modOptionsMenu, subMenu.onClickAction,
                     subMenu.fontSize, subMenu.forceUpper, subMenu.color, subMenu.font, subMenu.fontMaterial, subMenu.alignmentOptions);
             }
-            if(prioritySubMenus.Any() && subMenus.Any())MenuHandler.CreateText("---------------", modOptionsMenu, out _);
-            foreach (var subMenu in subMenus)
-            {
+            if(prioritySubMenus.Any() && subMenus.Any()) MenuHandler.CreateText("---------------", modOptionsMenu, out _);
+            foreach(var subMenu in subMenus) {
                 Debug.Log("Creating submenu: " + subMenu.text);
                 MenuHandler.CreateButton(subMenu.text, modOptionsMenu, subMenu.onClickAction,
                     subMenu.fontSize, subMenu.forceUpper, subMenu.color, subMenu.font, subMenu.fontMaterial, subMenu.alignmentOptions);
@@ -178,9 +151,8 @@ namespace Unbound.Core.Utils.UI
 
 
             // Create menu's for mods with new UI
-            foreach (var menu in modMenus)
-            {
-                if (pauseMenu && !menu.showInPauseMenu) continue;
+            foreach(var menu in modMenus) {
+                if(pauseMenu && !menu.showInPauseMenu) continue;
                 var mmenu = MenuHandler.CreateMenu(menu.menuName,
                     menu.buttonAction,
                     modOptionsMenu,
@@ -189,10 +161,8 @@ namespace Unbound.Core.Utils.UI
                     false,
                     parentForMenu);
 
-                void disableOldMenu()
-                {
-                    if (GUIListeners.ContainsKey(menu.menuName))
-                    {
+                void disableOldMenu() {
+                    if(GUIListeners.ContainsKey(menu.menuName)) {
                         GUIListeners[menu.menuName].guiEnabled = false;
                         showModUi = false;
                     }
@@ -202,27 +172,21 @@ namespace Unbound.Core.Utils.UI
                 mmenu.transform.Find("Group/Back").gameObject.GetComponent<Button>().onClick
                     .AddListener(disableOldMenu);
 
-                try { menu.guiAction.Invoke(mmenu); }
-                catch (Exception e)
-                {
+                try { menu.guiAction.Invoke(mmenu); } catch(Exception e) {
                     UnityEngine.Debug.LogError($"Exception thrown when attempting to build menu '{menu.menuName}', see log below for details.");
                     UnityEngine.Debug.LogException(e);
                 }
             }
 
             // Create menu's for mods that do not use the new UI
-            if (GUIListeners.Count != 0)
-            {
+            if(GUIListeners.Count != 0) {
                 MenuHandler.CreateText(" ", modOptionsMenu, out _);
-                if (pauseMenu) MenuHandler.CreateText("SOME OF THESE MOD SETTINGS BELOW MIGHT BREAK YOUR GAME\n<color=red>YOU HAVE BEEN WARNED</color>", modOptionsMenu, out _, 35, false);
+                if(pauseMenu) MenuHandler.CreateText("SOME OF THESE MOD SETTINGS BELOW MIGHT BREAK YOUR GAME\n<color=red>YOU HAVE BEEN WARNED</color>", modOptionsMenu, out _, 35, false);
             }
 
-            foreach (var modMenu in GUIListeners.Keys)
-            {
-                var menu = MenuHandler.CreateMenu(modMenu, () =>
-                {
-                    foreach (var list in GUIListeners.Values.Where(list => list.guiEnabled))
-                    {
+            foreach(var modMenu in GUIListeners.Keys) {
+                var menu = MenuHandler.CreateMenu(modMenu, () => {
+                    foreach(var list in GUIListeners.Values.Where(list => list.guiEnabled)) {
                         list.guiEnabled = false;
                     }
 
@@ -231,10 +195,8 @@ namespace Unbound.Core.Utils.UI
                 }, modOptionsMenu,
                     75, true, true, parentForMenu);
 
-                void disableOldMenu()
-                {
-                    if (GUIListeners.ContainsKey(menu.name))
-                    {
+                void disableOldMenu() {
+                    if(GUIListeners.ContainsKey(menu.name)) {
                         GUIListeners[menu.name].guiEnabled = false;
                         showModUi = false;
                     }
@@ -248,19 +210,17 @@ namespace Unbound.Core.Utils.UI
             }
 
             // check if there are no deprecated ui's and disable the f1 menu
-            if (GUIListeners.Count == 0) noDeprecatedMods = true;
+            if(GUIListeners.Count == 0) noDeprecatedMods = true;
         }
 
-        internal class ModMenu
-        {
+        internal class ModMenu {
             public string menuName;
             public UnityAction buttonAction;
             public Action<GameObject> guiAction;
             public GameObject parent;
             public bool showInPauseMenu;
 
-            public ModMenu(string menuName, UnityAction buttonAction, Action<GameObject> guiAction, GameObject parent, bool showInPauseMenu = false)
-            {
+            public ModMenu(string menuName, UnityAction buttonAction, Action<GameObject> guiAction, GameObject parent, bool showInPauseMenu = false) {
                 this.menuName = menuName;
                 this.buttonAction = buttonAction;
                 this.guiAction = guiAction;
@@ -269,14 +229,12 @@ namespace Unbound.Core.Utils.UI
             }
         }
 
-        internal class GUIListener
-        {
+        internal class GUIListener {
             public bool guiEnabled;
             public string modName;
             public Action guiAction;
 
-            public GUIListener(string modName, Action guiAction)
-            {
+            public GUIListener(string modName, Action guiAction) {
                 this.modName = modName;
                 this.guiAction = guiAction;
             }

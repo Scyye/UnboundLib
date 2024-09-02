@@ -5,13 +5,10 @@ using System.Reflection.Emit;
 using Unbound.Core;
 using Unbound.Core.Extensions;
 
-namespace Unbound.Patches
-{
+namespace Unbound.Patches {
     [HarmonyPatch(typeof(SetTeamColorSpecific), "Start")]
-    class SetTeamColorSpecific_Patch_Start
-    {
-        static void Prefix(SetTeamColorSpecific __instance)
-        {
+    class SetTeamColorSpecific_Patch_Start {
+        static void Prefix(SetTeamColorSpecific __instance) {
             float alpha = __instance.colors[0].a;
 
             __instance.colors = PlayerManager.instance.players
@@ -20,26 +17,20 @@ namespace Unbound.Patches
                 .Select(id => PlayerSkinBank.GetPlayerSkinColors(id).color)
                 .ToArray();
 
-            for (int i = 0; i < __instance.colors.Length; i++)
-            {
+            for(int i = 0; i < __instance.colors.Length; i++) {
                 __instance.colors[i].a = alpha;
             }
         }
 
-        static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
-        {
+        static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions) {
             var f_playerID = typeof(Player).GetFieldInfo("playerID");
             var m_colorID = typeof(PlayerExtensions).GetMethodInfo(nameof(PlayerExtensions.colorID));
 
-            foreach (var ins in instructions)
-            {
-                if (ins.LoadsField(f_playerID))
-                {
+            foreach(var ins in instructions) {
+                if(ins.LoadsField(f_playerID)) {
                     // we want colorID instead of teamID
                     yield return new CodeInstruction(OpCodes.Call, m_colorID); // call the colorID method, which pops the player instance off the stack and leaves the result [colorID, ...]
-                }
-                else
-                {
+                } else {
                     yield return ins;
                 }
             }

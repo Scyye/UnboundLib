@@ -2,36 +2,27 @@
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
-namespace Unbound.Core.Extensions
-{
+namespace Unbound.Core.Extensions {
     [Serializable]
-    public class PlayerAdditionalData
-    {
+    public class PlayerAdditionalData {
         public int colorID;
 
-        public PlayerAdditionalData()
-        {
+        public PlayerAdditionalData() {
             this.colorID = -1;
         }
     }
-    public static class PlayerExtensions
-    {
+    public static class PlayerExtensions {
         public static readonly ConditionalWeakTable<Player, PlayerAdditionalData> data =
             new ConditionalWeakTable<Player, PlayerAdditionalData>();
 
-        public static PlayerAdditionalData GetAdditionalData(this Player player)
-        {
+        public static PlayerAdditionalData GetAdditionalData(this Player player) {
             return data.GetOrCreateValue(player);
         }
 
-        public static void AddData(this Player player, PlayerAdditionalData value)
-        {
-            try
-            {
+        public static void AddData(this Player player, PlayerAdditionalData value) {
+            try {
                 data.Add(player, value);
-            }
-            catch (Exception)
-            {
+            } catch(Exception) {
                 // ignored
             }
         }
@@ -66,8 +57,7 @@ namespace Unbound.Core.Extensions
             }
         };
 
-        public static void AssignColorID(this Player instance, int colorID)
-        {
+        public static void AssignColorID(this Player instance, int colorID) {
             instance.GetAdditionalData().colorID = colorID;
 
             // color the player's various objects
@@ -83,21 +73,17 @@ namespace Unbound.Core.Extensions
 
             PlayerSkinHandler skinHandler = instance.GetComponentInChildren<PlayerSkinHandler>(true);
             skinHandler.SetFieldValue("skins", skinHandler.GetComponentsInChildren<PlayerSkinParticle>(true));
-            try
-            {
-                foreach (PlayerSkinParticle skin in (PlayerSkinParticle[]) skinHandler.GetFieldValue("skins"))
-                {
+            try {
+                foreach(PlayerSkinParticle skin in (PlayerSkinParticle[])skinHandler.GetFieldValue("skins")) {
                     skin.SetFieldValue("startColor1", backgroundColor);
                     skin.SetFieldValue("startColor2", color);
-                    ParticleSystem.MainModule main = (ParticleSystem.MainModule) skin.GetFieldValue("main");
+                    ParticleSystem.MainModule main = (ParticleSystem.MainModule)skin.GetFieldValue("main");
                     ParticleSystem.MinMaxGradient startColor = main.startColor;
                     startColor.colorMin = backgroundColor;
                     startColor.colorMax = color;
                     main.startColor = startColor;
                 }
-            }
-            catch
-            {
+            } catch {
                 // ignored
             }
         }

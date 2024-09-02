@@ -1,48 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.EventSystems;
 
-namespace Unbound.Core.Utils.UI
-{
+namespace Unbound.Core.Utils.UI {
 
-    public class Credits
-    {
+    public class Credits {
 
         internal Dictionary<string, ModCredits> modCredits = new Dictionary<string, ModCredits>();
         private Dictionary<string, GameObject> creditsMenus = new Dictionary<string, GameObject>();
 
         public static Credits Instance = new Credits();
 
-        private static readonly ModCredits roundsCredits = new ModCredits("ROUNDS", new string[] { "Landfall Games (Publisher)", "Wilhelm Nulynd (Game design, programming and art)", "Karl Flodin (Music)", "Pontus Ullbors (Card and Face Art)", "Natalia Martinsson (Face Art)", "Sonigon (Sound design)"}, "Landfall.se", "https://landfall.se/rounds");
+        private static readonly ModCredits roundsCredits = new ModCredits("ROUNDS", new string[] { "Landfall Games (Publisher)", "Wilhelm Nulynd (Game design, programming and art)", "Karl Flodin (Music)", "Pontus Ullbors (Card and Face Art)", "Natalia Martinsson (Face Art)", "Sonigon (Sound design)" }, "Landfall.se", "https://landfall.se/rounds");
 
         private GameObject CreditsMenu;
         private GameObject RoundsCredits;
         private GameObject UnboundCredits;
 
-        private Credits()
-        {
+        private Credits() {
             // singleton first time setup
             Instance = this;
 
         }
-        internal void RegisterModCredits(ModCredits modCredits)
-        {
+        internal void RegisterModCredits(ModCredits modCredits) {
             this.modCredits[modCredits.modName] = modCredits;
         }
-        internal void CreateCreditsMenu(bool firstTime)
-        {
-            UnboundCore.Instance.ExecuteAfterSeconds(firstTime ? 0.1f : 0f, () =>
-            {
+        public void CreateCreditsMenu(bool firstTime) {
+            UnboundCore.Instance.ExecuteAfterSeconds(firstTime ? 0.1f : 0f, () => {
                 // Create credits menu
-                CreditsMenu = MenuHandler.CreateMenu("CREDITS", null, MainMenuHandler.instance.transform.Find("Canvas/ListSelector/Main").gameObject, 60, true, false, null,true, 5);
+                CreditsMenu = MenuHandler.CreateMenu("CREDITS", null, MainMenuHandler.instance.transform.Find("Canvas/ListSelector/Main").gameObject, 60, true, false, null, true, 5);
 
                 // Fix main menu layout
-                void fixMainMenuLayout()
-                {
+                void fixMainMenuLayout() {
                     var mainMenu = MainMenuHandler.instance.transform.Find("Canvas/ListSelector");
                     var logo = mainMenu.Find("Main/Group/Rounds_Logo2_White").gameObject.AddComponent<LayoutElement>();
                     logo.GetComponent<RectTransform>().sizeDelta = new Vector2(logo.GetComponent<RectTransform>().sizeDelta.x, 80);
@@ -66,8 +56,7 @@ namespace Unbound.Core.Utils.UI
                 MenuHandler.CreateText(" ", CreditsMenu, out TextMeshProUGUI _, 30);
 
                 // Create credits for mods that have registered them
-                foreach (string modName in modCredits.Keys)
-                {
+                foreach(string modName in modCredits.Keys) {
                     creditsMenus[modName] = MenuHandler.CreateMenu(modName, null, CreditsMenu, 30);
                 }
 
@@ -84,32 +73,26 @@ namespace Unbound.Core.Utils.UI
                 // UNBOUND
                 AddModCredits(UnboundCore.modCredits, UnboundCredits);
 
-                foreach (string modName in modCredits.Keys)
-                {
+                foreach(string modName in modCredits.Keys) {
                     AddModCredits(modCredits[modName], creditsMenus[modName]);
                 }
 
             });
         }
-        internal void AddModCredits(ModCredits credits, GameObject parentMenu)
-        {
+        internal void AddModCredits(ModCredits credits, GameObject parentMenu) {
             MenuHandler.CreateText(credits.modName, parentMenu, out TextMeshProUGUI _, 60);
             MenuHandler.CreateText(" \nby\n ", parentMenu, out TextMeshProUGUI _, 30);
-            if (credits.credits != null)
-            {
-                foreach (string line in credits.credits)
-                {
+            if(credits.credits != null) {
+                foreach(string line in credits.credits) {
                     MenuHandler.CreateText(line, parentMenu, out TextMeshProUGUI _, 30);
                 }
             }
-            if (credits.linkTexts.Length > 0) { MenuHandler.CreateText(" \n ", parentMenu, out TextMeshProUGUI _, 60); }
-            for (int i = 0; i < credits.linkTexts.Length; i++)
-            {
+            if(credits.linkTexts.Length > 0) { MenuHandler.CreateText(" \n ", parentMenu, out TextMeshProUGUI _, 60); }
+            for(int i = 0; i < credits.linkTexts.Length; i++) {
                 string linkText = credits.linkTexts[i];
                 string linkURL = "";
-                if (i < credits.linkURLs.Length) { linkURL = credits.linkURLs[i]; }
-                if (linkText != "") 
-                {
+                if(i < credits.linkURLs.Length) { linkURL = credits.linkURLs[i]; }
+                if(linkText != "") {
                     MenuHandler.CreateText("<link=\"" + linkURL + "\">" + linkText.ToUpper() + "</link>", parentMenu, out TextMeshProUGUI _, 30, false).AddComponent<OpenHyperlinks>();
                 }
             }
@@ -117,22 +100,19 @@ namespace Unbound.Core.Utils.UI
         }
     }
 
-    public class ModCredits
-    {
+    public class ModCredits {
         public string modName;
         public string[] credits = null;
         public string[] linkTexts;
         public string[] linkURLs;
 
-        public ModCredits(string modName = "", string[] credits = null,  string[] linkTexts = null, string[] linkURLs = null)
-        {
+        public ModCredits(string modName = "", string[] credits = null, string[] linkTexts = null, string[] linkURLs = null) {
             this.modName = modName;
             this.credits = credits;
             this.linkTexts = linkTexts ?? new[] { "" };
             this.linkURLs = linkURLs ?? new[] { "" };
         }
-        public ModCredits(string modName = "", string[] credits = null, string linkText = "", string linkURL = "")
-        {
+        public ModCredits(string modName = "", string[] credits = null, string linkText = "", string linkURL = "") {
             this.modName = modName;
             this.credits = credits;
             linkTexts = new[] { linkText };

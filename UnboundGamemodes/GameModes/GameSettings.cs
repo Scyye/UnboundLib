@@ -1,56 +1,51 @@
 ﻿using System;
-using System.IO;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
-namespace Unbound.Gamemodes
-{
+namespace Unbound.Gamemodes {
     /// <summary>
     ///     A Photon serializable wrapper for arbitrary game settings.
     /// </summary>
-    public class GameSettings : IReadOnlyDictionary<string, object>
-    {
+    public class GameSettings:IReadOnlyDictionary<string, object> {
         public static byte[] Serialize(object settings) {
-            using (MemoryStream ms = new MemoryStream()) {
+            using(MemoryStream ms = new MemoryStream()) {
                 var formatter = new BinaryFormatter();
-                formatter.Serialize(ms, ((GameSettings) settings).values);
+                formatter.Serialize(ms, ((GameSettings)settings).values);
                 return ms.ToArray();
             }
         }
 
         public static GameSettings Deserialize(byte[] data) {
             var result = new GameSettings();
-            using (MemoryStream ms = new MemoryStream(data)) {
+            using(MemoryStream ms = new MemoryStream(data)) {
                 var formatter = new BinaryFormatter();
-                result.values = (Dictionary<string, object>) formatter.Deserialize(ms);
+                result.values = (Dictionary<string, object>)formatter.Deserialize(ms);
             }
             return result;
         }
 
         private Dictionary<string, object> values;
 
-        public GameSettings()
-        { 
+        public GameSettings() {
             values = new Dictionary<string, object>();
         }
 
-        public GameSettings(GameSettings settingsToCopy)
-        {
+        public GameSettings(GameSettings settingsToCopy) {
             values = new Dictionary<string, object>();
 
-            foreach (var entry in settingsToCopy)
-            {
+            foreach(var entry in settingsToCopy) {
                 values.Add(entry.Key, entry.Value);
             }
         }
 
         public void Add(string name, object initialValue = default) {
-            if (initialValue != null && !initialValue.GetType().IsSerializable) {
+            if(initialValue != null && !initialValue.GetType().IsSerializable) {
                 throw new ArgumentException($"Setting \"{name}\" must be serializable");
             }
 
-            if (values.ContainsKey(name)) {
+            if(values.ContainsKey(name)) {
                 throw new ArgumentException($"Setting \"{name}\" already exists");
             }
 
@@ -61,13 +56,11 @@ namespace Unbound.Gamemodes
             return values.ContainsKey(name);
         }
 
-        public bool TryGetValue(string name, out object value)
-        {
+        public bool TryGetValue(string name, out object value) {
             return values.TryGetValue(name, out value);
         }
 
-        public IEnumerator<KeyValuePair<string, object>> GetEnumerator()
-        {
+        public IEnumerator<KeyValuePair<string, object>> GetEnumerator() {
             return values.GetEnumerator();
         }
 

@@ -1,0 +1,26 @@
+<Project>
+  <Import Project="..\Common\CommonSettings.props.user" />
+
+  <PropertyGroup>
+	<ManagedFolder>$(RoundsFolder)\ROUNDS_Data\Managed</ManagedFolder>
+	<IndirectBuildTask>true</IndirectBuildTask>
+	<DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
+	<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <OutputType>Library</OutputType>
+    <Authors>RoundsModding</Authors>
+    <TargetFramework>net461</TargetFramework>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+	<LangVersion>7.1</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\Common\CommonSettings.props" />
+    <None Include="..\Common\CommonSettings.props.user" />
+    <None Include="..\Common\CommonSettings.template.props.user" />
+	<None Include="..\README.md" />
+	<None Include="..\.gitignore" />
+  </ItemGroup>
+</Project>

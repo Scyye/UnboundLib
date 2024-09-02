@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Unbound.Gamemodes
-{
+namespace Unbound.Gamemodes {
     /// <summary>
     ///     A GameModeHandler is the interface between a mod and a game mode component. The game mode component, for example GM_ArmsRace,
     ///     will implement the bulk of the gameplay logic. A GameModeHandler will store game settings that the game mode should respect,
@@ -11,8 +10,7 @@ namespace Unbound.Gamemodes
     ///     Game settings and hooks should allow mods to modify basic aspects of gameplay with little effort without needing to know the
     ///     internals of said game mode, and so a lot of responsibility is placed on game modes to provide sufficient setting and hook support.
     /// </summary>
-    public interface IGameModeHandler
-    {
+    public interface IGameModeHandler {
         MonoBehaviour GameMode { get; }
 
         GameSettings Settings { get; }
@@ -90,8 +88,7 @@ namespace Unbound.Gamemodes
         void ResetGame();
     }
 
-    public interface IGameModeHandler<T> : IGameModeHandler where T : MonoBehaviour
-    {
+    public interface IGameModeHandler<T>:IGameModeHandler where T : MonoBehaviour {
         new T GameMode { get; }
     }
 }

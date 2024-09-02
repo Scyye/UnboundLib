@@ -1,9 +1,7 @@
 ﻿using Unbound.Core;
 
-namespace Unbound.Gamemodes
-{
-    public class SandboxHandler : GameModeHandler<GM_Test>
-    {
+namespace Unbound.Gamemodes {
+    public class SandboxHandler:GameModeHandler<GM_Test> {
         public override string Name => "Sandbox";
         public override bool AllowTeams => true;
         public override UISettings UISettings => new UISettings("A sandbox mode where you can play around, test out builds, and fight bots.");
@@ -14,38 +12,31 @@ namespace Unbound.Gamemodes
             Settings = new GameSettings();
         }
 
-        public override void PlayerJoined(Player player)
-        {
+        public override void PlayerJoined(Player player) {
             GameMode.InvokeMethod("PlayerWasAdded", player);
         }
 
-        public override void PlayerDied(Player killedPlayer, int playersAlive)
-        {
+        public override void PlayerDied(Player killedPlayer, int playersAlive) {
             GameMode.InvokeMethod("PlayerDied", killedPlayer, playersAlive);
         }
 
-        public override TeamScore GetTeamScore(int teamID)
-        {
+        public override TeamScore GetTeamScore(int teamID) {
             return new TeamScore(0, 0);
         }
 
         public override void SetTeamScore(int teamID, TeamScore score) { }
 
-        public override void SetActive(bool active)
-        {
-            if (!active)
-            {
+        public override void SetActive(bool active) {
+            if(!active) {
                 GameMode.gameObject.SetActive(active);
             }
         }
 
-        public override void StartGame()
-        {
+        public override void StartGame() {
             GameMode.gameObject.SetActive(true);
         }
 
-        public override void ResetGame()
-        {
+        public override void ResetGame() {
             PlayerManager.instance.InvokeMethod("ResetCharacters");
         }
     }

@@ -1,15 +1,11 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UI.ProceduralImage;
-using System.Collections.Generic;
 
-namespace Unbound.Core.Extensions
-{
-    public static class CardBarHandlerExtensions
-    {
-        public static void Rebuild(this CardBarHandler instance)
-        {
-            while (instance.transform.childCount > 3)
-            {
+namespace Unbound.Core.Extensions {
+    public static class CardBarHandlerExtensions {
+        public static void Rebuild(this CardBarHandler instance) {
+            while(instance.transform.childCount > 3) {
 
                 Object.DestroyImmediate(instance.transform.GetChild(3).gameObject);
             }
@@ -20,8 +16,7 @@ namespace Unbound.Core.Extensions
             const int deltaY = -50;
             var cardBars = new List<CardBar>();
 
-            for (int i = 0; i < numPlayers; i++)
-            {
+            for(int i = 0; i < numPlayers; i++) {
                 var newBarGo = Object.Instantiate(barGo, instance.transform);
                 newBarGo.SetActive(true);
                 newBarGo.name = "Bar" + (i + 1);

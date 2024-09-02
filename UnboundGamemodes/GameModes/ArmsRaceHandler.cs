@@ -2,12 +2,9 @@
 using Unbound.Core;
 using Unbound.Core.Extensions;
 
-namespace Unbound.Gamemodes
-{
-    public class ArmsRaceHandler : GameModeHandler<GM_ArmsRace>
-    {
-        public override string Name
-        {
+namespace Unbound.Gamemodes {
+    public class ArmsRaceHandler:GameModeHandler<GM_ArmsRace> {
+        public override string Name {
             get { return "Versus"; }
         }
 
@@ -16,8 +13,7 @@ namespace Unbound.Gamemodes
 
         public override UISettings UISettings => new UISettings("Classic ROUNDS 1v1.");
 
-        public ArmsRaceHandler() : base(GameModeManager.ArmsRaceID)
-        {
+        public ArmsRaceHandler() : base(GameModeManager.ArmsRaceID) {
             Settings = new GameSettings()
             {
                 { "pointsToWinRound", 2 },
@@ -25,25 +21,20 @@ namespace Unbound.Gamemodes
             };
         }
 
-        public override void SetActive(bool active)
-        {
+        public override void SetActive(bool active) {
             GameMode.gameObject.SetActive(active);
         }
 
-        public override void PlayerJoined(Player player)
-        {
+        public override void PlayerJoined(Player player) {
             GameMode.PlayerJoined(player);
         }
 
-        public override void PlayerDied(Player killedPlayer, int playersAlive)
-        {
+        public override void PlayerDied(Player killedPlayer, int playersAlive) {
             GameMode.PlayerDied(killedPlayer, playersAlive);
         }
 
-        public override TeamScore GetTeamScore(int teamID)
-        {
-            if (teamID != 0 && teamID != 1)
-            {
+        public override TeamScore GetTeamScore(int teamID) {
+            if(teamID != 0 && teamID != 1) {
                 return new TeamScore(0, 0);
             }
 
@@ -52,63 +43,52 @@ namespace Unbound.Gamemodes
                 : new TeamScore(GM_ArmsRace.instance.p2Points, GM_ArmsRace.instance.p2Rounds);
         }
 
-        public override void SetTeamScore(int teamID, TeamScore score)
-        {
-            if (teamID == 0)
-            {
+        public override void SetTeamScore(int teamID, TeamScore score) {
+            if(teamID == 0) {
                 GameMode.p1Points = score.points;
                 GameMode.p1Rounds = score.rounds;
             }
-            if (teamID == 1)
-            {
+            if(teamID == 1) {
                 GameMode.p2Points = score.points;
                 GameMode.p2Rounds = score.rounds;
             }
         }
 
-        public override void StartGame()
-        {
+        public override void StartGame() {
             GameMode.StartGame();
         }
 
-        public override int[] GetGameWinners()
-        {
+        public override int[] GetGameWinners() {
             List<int> winners = new List<int>() { };
-            if (GameMode.p1Rounds >= GameMode.roundsToWinGame) { winners.Add(0); }
-            if (GameMode.p2Rounds >= GameMode.roundsToWinGame) { winners.Add(1); }
+            if(GameMode.p1Rounds >= GameMode.roundsToWinGame) { winners.Add(0); }
+            if(GameMode.p2Rounds >= GameMode.roundsToWinGame) { winners.Add(1); }
             return winners.ToArray();
         }
 
-        public override int[] GetRoundWinners()
-        {
+        public override int[] GetRoundWinners() {
             return GameMode.GetAdditionalData().previousRoundWinners;
         }
 
-        public override int[] GetPointWinners()
-        {
+        public override int[] GetPointWinners() {
             return GameMode.GetAdditionalData().previousPointWinners;
         }
 
-        public override void ResetGame()
-        {
+        public override void ResetGame() {
             PlayerManager.instance.InvokeMethod("ResetCharacters");
             GM_ArmsRace.instance.InvokeMethod("ResetMatch");
         }
 
-        public override void ChangeSetting(string name, object value)
-        {
+        public override void ChangeSetting(string name, object value) {
             base.ChangeSetting(name, value);
 
-            if (name == "roundsToWinGame")
-            {
-                int roundsToWinGame = (int) value;
+            if(name == "roundsToWinGame") {
+                int roundsToWinGame = (int)value;
                 GameMode.roundsToWinGame = roundsToWinGame;
                 UIHandler.instance.InvokeMethod("SetNumberOfRounds", roundsToWinGame);
             }
 
-            if (name == "pointsToWinRound")
-            {
-                GameMode.SetFieldValue("pointsToWinRound", (int) value);
+            if(name == "pointsToWinRound") {
+                GameMode.SetFieldValue("pointsToWinRound", (int)value);
             }
         }
     }

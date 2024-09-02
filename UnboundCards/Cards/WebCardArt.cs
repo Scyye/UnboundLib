@@ -1,27 +1,18 @@
-﻿using System;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine.UI;
-using UnityEngine;
-using System.Collections;
-using UnityEngine.Networking;
 using Unbound.Core;
+using UnityEngine;
+using UnityEngine.Networking;
+using UnityEngine.UI;
 
-namespace Unbound.Cards
-{
-    public class DeckSmithUtil : MonoBehaviour
-    {
+namespace Unbound.Cards {
+    public class DeckSmithUtil:MonoBehaviour {
         internal static Dictionary<string, Texture2D> cachedTextures = new Dictionary<string, Texture2D>();
 
         private static DeckSmithUtil _instance;
-        public static DeckSmithUtil Instance
-        {
-            get
-            {
-                if (_instance == null)
-                {
+        public static DeckSmithUtil Instance {
+            get {
+                if(_instance == null) {
                     var go = new GameObject("DeckSmith Singleton");
                     _instance = go.AddComponent<DeckSmithUtil>();
                 }
@@ -29,21 +20,18 @@ namespace Unbound.Cards
             }
         }
 
-        public class TextureFuture
-        {
+        public class TextureFuture {
             public delegate void OnCompleteDelegate(Texture2D texture);
             public event OnCompleteDelegate OnComplete;
 
             public bool Ready { get; set; }
 
-            internal void LoadTexture(Texture2D texture)
-            {
+            internal void LoadTexture(Texture2D texture) {
                 OnComplete?.Invoke(texture);
             }
         }
 
-        public static GameObject GetArtFromUrl(string url)
-        {
+        public static GameObject GetArtFromUrl(string url) {
             var future = new TextureFuture();
 
             var go = new GameObject("Web Card Art");
@@ -54,23 +42,17 @@ namespace Unbound.Cards
             return go;
         }
 
-        internal static IEnumerator GetTexture(string url, TextureFuture future)
-        {
+        internal static IEnumerator GetTexture(string url, TextureFuture future) {
             yield return new WaitUntil(() => future.Ready);
 
-            if (cachedTextures.TryGetValue(url, out var t))
-            {
+            if(cachedTextures.TryGetValue(url, out var t)) {
                 future.LoadTexture(t);
                 yield break;
-            }
-            else
-            {
-                using (var uwr = UnityWebRequestTexture.GetTexture(url))
-                {
+            } else {
+                using(var uwr = UnityWebRequestTexture.GetTexture(url)) {
                     yield return uwr.SendWebRequest();
 
-                    if (uwr.isNetworkError || uwr.isHttpError)
-                    {
+                    if(uwr.isNetworkError || uwr.isHttpError) {
                         Debug.Log(uwr.error);
                         yield break;
                     }
@@ -81,7 +63,7 @@ namespace Unbound.Cards
             }
         }
     }
-    public class WebCardArt : MonoBehaviour {
+    public class WebCardArt:MonoBehaviour {
         internal DeckSmithUtil.TextureFuture TextureFuture { get; set; }
 
         private RawImage renderer;
@@ -99,7 +81,7 @@ namespace Unbound.Cards
         }
 
         void Update() {
-            if (GetComponent<RectTransform>() is RectTransform rt) {
+            if(GetComponent<RectTransform>() is RectTransform rt) {
                 rt.anchorMin = Vector2.zero;
                 rt.anchorMax = Vector2.one;
                 rt.pivot = Vector2.one / 2f;

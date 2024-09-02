@@ -5,46 +5,37 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
-
-using UnityEngine;
 using Unbound.Core.Extensions;
 using Unbound.Gamemodes;
+using UnityEngine;
 
-namespace Unbound.Core.Patches
-{
-    internal static class ArmsRacePatchUtils
-    {
-        internal static Type GetMethodNestedType(string method)
-        {
+namespace Unbound.Core.Patches {
+    internal static class ArmsRacePatchUtils {
+        internal static Type GetMethodNestedType(string method) {
             var nestedTypes = typeof(GM_ArmsRace).GetNestedTypes(BindingFlags.Instance | BindingFlags.NonPublic);
             return nestedTypes.FirstOrDefault(type => type.Name.Contains(method));
         }
 
-        internal static IEnumerator TriggerPlayerPickStart()
-        {
+        internal static IEnumerator TriggerPlayerPickStart() {
             yield return GameModeManager.TriggerHook(GameModeHooks.HookPlayerPickStart);
         }
 
-        internal static IEnumerator TriggerPlayerPickEnd()
-        {
+        internal static IEnumerator TriggerPlayerPickEnd() {
             yield return GameModeManager.TriggerHook(GameModeHooks.HookPlayerPickEnd);
         }
 
-        internal static IEnumerator TriggerPickStart()
-        {
+        internal static IEnumerator TriggerPickStart() {
             yield return GameModeManager.TriggerHook(GameModeHooks.HookPickStart);
         }
 
-        internal static IEnumerator TriggerPickEnd()
-        {
+        internal static IEnumerator TriggerPickEnd() {
             yield return GameModeManager.TriggerHook(GameModeHooks.HookPickEnd);
         }
     }
 
     [HarmonyPatch(typeof(GM_ArmsRace), "Start")]
 
-    public class GM_ArmsRace_Patch_Start
-    {
+    public class GM_ArmsRace_Patch_Start {
         /*
         static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
@@ -85,35 +76,27 @@ namespace Unbound.Core.Patches
     }
 
     [HarmonyPatch(typeof(GM_ArmsRace), "StartGame")]
-    class GM_ArmsRace_Patch_StartGame
-    {
-        static void Postfix(GM_ArmsRace __instance)
-        {
+    class GM_ArmsRace_Patch_StartGame {
+        static void Postfix(GM_ArmsRace __instance) {
             __instance.GetAdditionalData().previousPointWinners = new int[] { };
             __instance.GetAdditionalData().previousRoundWinners = new int[] { };
         }
 
-        static IEnumerator DoStartGame(GM_ArmsRace __instance)
-        {
-            return (IEnumerator) __instance.InvokeMethod("DoStartGame");
+        static IEnumerator DoStartGame(GM_ArmsRace __instance) {
+            return (IEnumerator)__instance.InvokeMethod("DoStartGame");
         }
 
         /* Patch to reset previousRound/PointWinners when starting a new game. The compiler does something
          * weird with GM_ArmsRace.DoStartGame in some builds and isn't called without this transpiler.
          */
-        static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
-        {
+        static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions) {
             var m_doStartOrig = AccessTools.Method(typeof(GM_ArmsRace), "DoStartGame");
             var m_doStart = AccessTools.Method(typeof(GM_ArmsRace_Patch_StartGame), nameof(DoStartGame));
 
-            foreach (var ins in instructions)
-            {
-                if (ins.Calls(m_doStartOrig))
-                {
+            foreach(var ins in instructions) {
+                if(ins.Calls(m_doStartOrig)) {
                     yield return new CodeInstruction(OpCodes.Call, m_doStart);
-                }
-                else
-                {
+                } else {
                     yield return ins;
                 }
             }
@@ -121,10 +104,8 @@ namespace Unbound.Core.Patches
     }
 
     [HarmonyPatch(typeof(GM_ArmsRace), "DoStartGame")]
-    class GM_ArmsRace_Patch_DoStartGame
-    {
-        static IEnumerator Postfix(IEnumerator e)
-        {
+    class GM_ArmsRace_Patch_DoStartGame {
+        static IEnumerator Postfix(IEnumerator e) {
             // rebuild the cardbar first
 
             CardBarHandler.instance.Rebuild();
@@ -132,8 +113,7 @@ namespace Unbound.Core.Patches
             yield return GameModeManager.TriggerHook(GameModeHooks.HookGameStart);
 
             // We need to iterate through yields like this to get the postfix in the correct place
-            while (e.MoveNext())
-            {
+            while(e.MoveNext()) {
                 yield return e.Current;
             }
 
@@ -144,15 +124,12 @@ namespace Unbound.Core.Patches
     }
 
     [HarmonyPatch]
-    class GM_ArmsRace_TranspilerPatch_DoStartGame
-    {
-        internal static MethodBase TargetMethod()
-        {
+    class GM_ArmsRace_TranspilerPatch_DoStartGame {
+        internal static MethodBase TargetMethod() {
             return AccessTools.Method(ArmsRacePatchUtils.GetMethodNestedType("DoStartGame"), "MoveNext");
         }
 
-        static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen)
-        {
+        static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen) {
             var list = instructions.ToList();
             var newInstructions = new List<CodeInstruction>();
 
@@ -167,10 +144,8 @@ namespace Unbound.Core.Patches
             var m_triggerPlayerPickStart = ExtensionMethods.GetMethodInfo(typeof(ArmsRacePatchUtils), "TriggerPlayerPickStart");
             var m_triggerPlayerPickEnd = ExtensionMethods.GetMethodInfo(typeof(ArmsRacePatchUtils), "TriggerPlayerPickEnd");
 
-            for (int i = 0; i < list.Count; i++)
-            {
-                if (list[i].LoadsField(f_pickPhase))
-                {
+            for(int i = 0; i < list.Count; i++) {
+                if(list[i].LoadsField(f_pickPhase)) {
                     newInstructions.Add(list[i]);
                     newInstructions.Add(list[i + 1]);
                     newInstructions.Add(new CodeInstruction(OpCodes.Ldarg_0));
@@ -180,15 +155,13 @@ namespace Unbound.Core.Patches
                     continue;
                 }
 
-                if (list[i].LoadsField(f_cardChoiceVisualsInstance) && list[i + 4].Calls(m_cardChoiceVisualsShow))
-                {
+                if(list[i].LoadsField(f_cardChoiceVisualsInstance) && list[i + 4].Calls(m_cardChoiceVisualsShow)) {
                     newInstructions.Add(new CodeInstruction(OpCodes.Ldarg_0));
                     newInstructions.Add(new CodeInstruction(OpCodes.Call, m_triggerPlayerPickStart));
                     gen.AddYieldReturn(newInstructions);
                 }
 
-                if (list[i].Calls(m_cardChoiceInstancePick))
-                {
+                if(list[i].Calls(m_cardChoiceInstancePick)) {
                     newInstructions.AddRange(list.GetRange(i, 10));
                     newInstructions.Add(new CodeInstruction(OpCodes.Ldarg_0));
                     newInstructions.Add(new CodeInstruction(OpCodes.Call, m_triggerPlayerPickEnd));
@@ -197,8 +170,7 @@ namespace Unbound.Core.Patches
                     continue;
                 }
 
-                if (list[i].Calls(m_cardChoiceVisualsHide))
-                {
+                if(list[i].Calls(m_cardChoiceVisualsHide)) {
                     newInstructions.Add(list[i]);
                     newInstructions.Add(new CodeInstruction(OpCodes.Ldarg_0));
                     newInstructions.Add(new CodeInstruction(OpCodes.Call, m_triggerPickEnd));
@@ -214,21 +186,17 @@ namespace Unbound.Core.Patches
     }
 
     [HarmonyPatch]
-    class GM_ArmsRace_TranspilerPatch_RoundTransition
-    {
-        internal static MethodBase TargetMethod()
-        {
+    class GM_ArmsRace_TranspilerPatch_RoundTransition {
+        internal static MethodBase TargetMethod() {
             return AccessTools.Method(ArmsRacePatchUtils.GetMethodNestedType("RoundTransition"), "MoveNext");
         }
 
-        static void ResetPoints()
-        {
+        static void ResetPoints() {
             GM_ArmsRace.instance.p1Points = 0;
             GM_ArmsRace.instance.p2Points = 0;
         }
 
-        static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen)
-        {
+        static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen) {
             var list = instructions.ToList();
             var newInstructions = new List<CodeInstruction>();
 
@@ -245,20 +213,17 @@ namespace Unbound.Core.Patches
             var m_triggerPlayerPickStart = ExtensionMethods.GetMethodInfo(typeof(ArmsRacePatchUtils), "TriggerPlayerPickStart");
             var m_triggerPlayerPickEnd = ExtensionMethods.GetMethodInfo(typeof(ArmsRacePatchUtils), "TriggerPlayerPickEnd");
 
-            for (int i = 0; i < list.Count; i++)
-            {
-                if (list[i].Calls(m_winSequence) &&
+            for(int i = 0; i < list.Count; i++) {
+                if(list[i].Calls(m_winSequence) &&
                     list[i + 1].Calls(m_startCoroutine) &&
-                    list[i + 2].opcode == OpCodes.Pop)
-                {
+                    list[i + 2].opcode == OpCodes.Pop) {
                     newInstructions.AddRange(list.GetRange(i, 3));
                     newInstructions.Add(CodeInstruction.Call(typeof(GM_ArmsRace_TranspilerPatch_RoundTransition), "ResetPoints"));
                     i += 2;
                     continue;
                 }
 
-                if (list[i].LoadsField(f_pickPhase))
-                {
+                if(list[i].LoadsField(f_pickPhase)) {
                     newInstructions.Add(list[i]);
                     newInstructions.Add(list[i + 1]);
                     newInstructions.Add(new CodeInstruction(OpCodes.Ldarg_0));
@@ -268,10 +233,9 @@ namespace Unbound.Core.Patches
                     continue;
                 }
 
-                if (list[i].opcode == OpCodes.Ldarg_0 &&
+                if(list[i].opcode == OpCodes.Ldarg_0 &&
                     list[i + 1].LoadsField(f_cardChoiceInstance) &&
-                    list[i + 10].Calls(m_cardChoiceInstancePick))
-                {
+                    list[i + 10].Calls(m_cardChoiceInstancePick)) {
                     newInstructions.Add(new CodeInstruction(OpCodes.Ldarg_0));
                     newInstructions.Add(new CodeInstruction(OpCodes.Call, m_triggerPlayerPickStart));
                     gen.AddYieldReturn(newInstructions);
@@ -286,10 +250,9 @@ namespace Unbound.Core.Patches
                     continue;
                 }
 
-                if (list[i].LoadsField(f_playerManagerInstance) &&
+                if(list[i].LoadsField(f_playerManagerInstance) &&
                     list[i + 1].opcode == OpCodes.Ldc_I4_1 &&
-                    list[i + 2].Calls(m_showPlayers))
-                {
+                    list[i + 2].Calls(m_showPlayers)) {
                     newInstructions.Add(new CodeInstruction(OpCodes.Ldarg_0));
                     newInstructions.Add(new CodeInstruction(OpCodes.Call, m_triggerPickEnd));
                     gen.AddYieldReturn(newInstructions);
@@ -303,15 +266,12 @@ namespace Unbound.Core.Patches
     }
 
     [HarmonyPatch(typeof(GM_ArmsRace), "PointTransition")]
-    class GM_ArmsRace_Patch_PointTransition
-    {
-        static IEnumerator Postfix(IEnumerator e)
-        {
+    class GM_ArmsRace_Patch_PointTransition {
+        static IEnumerator Postfix(IEnumerator e) {
             yield return GameModeManager.TriggerHook(GameModeHooks.HookPointEnd);
 
             // We need to iterate through yields like this to get the postfix in the correct place
-            while (e.MoveNext())
-            {
+            while(e.MoveNext()) {
                 yield return e.Current;
             }
 
@@ -321,23 +281,19 @@ namespace Unbound.Core.Patches
     }
 
     [HarmonyPatch(typeof(GM_ArmsRace), "RoundTransition")]
-    class GM_ArmsRace_Patch_RoundTransition
-    {
-        static IEnumerator Postfix(IEnumerator e, GM_ArmsRace __instance, int winningTeamID)
-        {
+    class GM_ArmsRace_Patch_RoundTransition {
+        static IEnumerator Postfix(IEnumerator e, GM_ArmsRace __instance, int winningTeamID) {
             yield return GameModeManager.TriggerHook(GameModeHooks.HookPointEnd);
             yield return GameModeManager.TriggerHook(GameModeHooks.HookRoundEnd);
 
             // Check game over after round end trigger to allow more control in triggers
-            if (__instance.p1Rounds >= __instance.roundsToWinGame || __instance.p2Rounds >= __instance.roundsToWinGame)
-            {
+            if(__instance.p1Rounds >= __instance.roundsToWinGame || __instance.p2Rounds >= __instance.roundsToWinGame) {
                 __instance.InvokeMethod("GameOver", winningTeamID);
                 yield break;
             }
 
             // We need to iterate through yields like this to get the postfix in the correct place
-            while (e.MoveNext())
-            {
+            while(e.MoveNext()) {
                 yield return e.Current;
             }
 
@@ -348,37 +304,29 @@ namespace Unbound.Core.Patches
     }
 
     [HarmonyPatch(typeof(GM_ArmsRace), "GameOverTransition")]
-    class GM_ArmsRace_Patch_GameOverTransition
-    {
-        static IEnumerator Postfix(IEnumerator e)
-        {
+    class GM_ArmsRace_Patch_GameOverTransition {
+        static IEnumerator Postfix(IEnumerator e) {
             // We're really adding a prefix, but we get access to the IEnumerator in the postfix
             yield return GameModeManager.TriggerHook(GameModeHooks.HookGameEnd);
 
-            while (e.MoveNext())
-            {
+            while(e.MoveNext()) {
                 yield return e.Current;
             }
         }
     }
     [HarmonyPatch(typeof(GM_ArmsRace), "PointOver")]
-    class GM_ArmsRace_Patch_PointOver
-    {
-        static void Postfix(GM_ArmsRace __instance, int winningTeamID)
-        {
+    class GM_ArmsRace_Patch_PointOver {
+        static void Postfix(GM_ArmsRace __instance, int winningTeamID) {
             __instance.GetAdditionalData().previousPointWinners = new int[] { winningTeamID };
         }
     }
     [HarmonyPatch(typeof(GM_ArmsRace), "RoundOver")]
-    class GM_ArmsRace_Patch_RoundOver
-    {
-        static void Postfix(GM_ArmsRace __instance, int winningTeamID)
-        {
+    class GM_ArmsRace_Patch_RoundOver {
+        static void Postfix(GM_ArmsRace __instance, int winningTeamID) {
             __instance.GetAdditionalData().previousRoundWinners = new int[] { winningTeamID };
         }
 
-        static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen)
-        {
+        static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen) {
             // Do not set p1Points and p2Points to zero in RoundOver. We want to do it only after we've displayed them in RoundTransition.
             var list = instructions.ToList();
             var newInstructions = new List<CodeInstruction>();
@@ -386,10 +334,8 @@ namespace Unbound.Core.Patches
             var f_p1Points = ExtensionMethods.GetFieldInfo(typeof(GM_ArmsRace), "p1Points");
             var f_p2Points = ExtensionMethods.GetFieldInfo(typeof(GM_ArmsRace), "p2Points");
 
-            for (int i = 0; i < list.Count; i++)
-            {
-                if (i < list.Count - 2 && (list[i + 2].StoresField(f_p1Points) || list[i + 2].StoresField(f_p2Points)))
-                {
+            for(int i = 0; i < list.Count; i++) {
+                if(i < list.Count - 2 && (list[i + 2].StoresField(f_p1Points) || list[i + 2].StoresField(f_p2Points))) {
                     i += 2;
                     continue;
                 }
@@ -402,19 +348,15 @@ namespace Unbound.Core.Patches
     }
 
     [HarmonyPatch(typeof(GM_ArmsRace), "RPCA_NextRound")]
-    class GM_ArmsRace_Patch_RPCA_NextRound
-    {
-        static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen)
-        {
+    class GM_ArmsRace_Patch_RPCA_NextRound {
+        static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen) {
             // Do not call GameOver in RPCA_NextRound. We move game over check to RoundTransition to handle triggers better.
             var list = instructions.ToList();
             var newInstructions = new List<CodeInstruction>();
             var mGameOver = ExtensionMethods.GetMethodInfo(typeof(GM_ArmsRace), "GameOver");
 
-            for (int i = 0; i < list.Count; i++)
-            {
-                if (list[i].opcode == OpCodes.Ldarg_2 && list[i + 1].Calls(mGameOver))
-                {
+            for(int i = 0; i < list.Count; i++) {
+                if(list[i].opcode == OpCodes.Ldarg_2 && list[i + 1].Calls(mGameOver)) {
                     newInstructions.Add(list[i]);
                     newInstructions.Add(new CodeInstruction(OpCodes.Ldarg_1));
                     newInstructions.Add(CodeInstruction.Call(typeof(GM_ArmsRace), "RoundOver"));

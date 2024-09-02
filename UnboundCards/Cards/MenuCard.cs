@@ -1,25 +1,20 @@
 ﻿using UnityEngine;
 
-namespace Unbound.Cards
-{
-    internal class MenuCard : MonoBehaviour
-    {
+namespace Unbound.Cards {
+    internal class MenuCard:MonoBehaviour {
         private ScaleShake scaleShake;
 
-        private void Start()
-        {
+        private void Start() {
             scaleShake = GetComponentInChildren<ScaleShake>();
         }
 
-        private void Update()
-        {
-            if (scaleShake == null)
-            {
+        private void Update() {
+            if(scaleShake == null) {
                 scaleShake = GetComponentInChildren<ScaleShake>();
                 return;
             }
 
-            if (scaleShake.targetScale <= 1f) return;
+            if(scaleShake.targetScale <= 1f) return;
             scaleShake.targetScale = 1f;
         }
     }

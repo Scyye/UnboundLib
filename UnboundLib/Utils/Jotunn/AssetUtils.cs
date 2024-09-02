@@ -24,17 +24,15 @@ SOFTWARE.
 
 using System;
 using System.IO;
-using UnityEngine;
-using System.Reflection;
 using System.Linq;
+using System.Reflection;
+using UnityEngine;
 
-namespace Jotunn.Utils
-{
+namespace Jotunn.Utils {
     /// <summary>
     ///     Util functions related to loading assets at runtime.
     /// </summary>
-    public static class AssetUtils
-    {
+    public static class AssetUtils {
         /// <summary>
         ///     Path separator for AssetBundles
         /// </summary>
@@ -46,23 +44,19 @@ namespace Jotunn.Utils
         /// <param name="texturePath">Texture path relative to "plugins" BepInEx folder</param>
         /// <param name="relativePath">Is the given path relative</param>
         /// <returns>Texture2D loaded, or null if invalid path</returns>
-        public static Texture2D LoadTexture(string texturePath, bool relativePath = true)
-        {
+        public static Texture2D LoadTexture(string texturePath, bool relativePath = true) {
             string path = texturePath;
 
-            if (relativePath)
-            {
+            if(relativePath) {
                 path = Path.Combine(BepInEx.Paths.PluginPath, texturePath);
             }
 
-            if (!File.Exists(path))
-            {
+            if(!File.Exists(path)) {
                 return null;
             }
 
             // Ensure it's a texture
-            if (!path.EndsWith(".png") && !path.EndsWith(".jpg"))
-            {
+            if(!path.EndsWith(".png") && !path.EndsWith(".jpg")) {
                 throw new Exception("LoadTexture can only load png or jpg textures");
             }
 
@@ -77,29 +71,25 @@ namespace Jotunn.Utils
         /// </summary>
         /// <param name="spritePath">Texture path relative to "plugins" BepInEx folder</param>
         /// <returns>Texture2D loaded, or null if invalid path</returns>
-        public static Sprite LoadSpriteFromFile(string spritePath)
-        {
+        public static Sprite LoadSpriteFromFile(string spritePath) {
             var tex = LoadTexture(spritePath);
 
-            if (tex != null)
-            {
+            if(tex != null) {
                 return Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(), 100);
             }
 
             return null;
         }
-        
+
         /// <summary>
         ///     Loads an asset bundle at runtime.
         /// </summary>
         /// <param name="bundlePath">Asset bundle path relative to "plugins" BepInEx folder</param>
         /// <returns>AssetBundle loaded, or null if invalid path</returns>
-        public static AssetBundle LoadAssetBundle(string bundlePath)
-        {
+        public static AssetBundle LoadAssetBundle(string bundlePath) {
             string path = Path.Combine(BepInEx.Paths.PluginPath, bundlePath);
 
-            if (!File.Exists(path))
-            {
+            if(!File.Exists(path)) {
                 return null;
             }
 
@@ -112,28 +102,23 @@ namespace Jotunn.Utils
         /// <param name="bundleName">Name of the bundle</param>
         /// <param name="resourceAssembly">Executing assembly</param>
         /// <returns></returns>
-        public static AssetBundle LoadAssetBundleFromResources(string bundleName, Assembly resourceAssembly)
-        {
-            if (resourceAssembly == null)
-            {
+        public static AssetBundle LoadAssetBundleFromResources(string bundleName, Assembly resourceAssembly) {
+            if(resourceAssembly == null) {
                 throw new ArgumentNullException("Parameter resourceAssembly can not be null.");
             }
 
             string resourceName = null;
-            try
-            {
+            try {
                 resourceName = resourceAssembly.GetManifestResourceNames().Single(str => str.EndsWith(bundleName));
-            } catch (Exception) { }
+            } catch(Exception) { }
 
-            if (resourceName == null)
-            {
+            if(resourceName == null) {
                 Debug.LogError($"AssetBundle {bundleName} not found in assembly manifest");
                 return null;
             }
 
             AssetBundle ret;
-            using (var stream = resourceAssembly.GetManifestResourceStream(resourceName))
-            {
+            using(var stream = resourceAssembly.GetManifestResourceStream(resourceName)) {
                 ret = AssetBundle.LoadFromStream(stream);
             }
 
@@ -145,36 +130,31 @@ namespace Jotunn.Utils
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        public static string LoadText(string path)
-        {
+        public static string LoadText(string path) {
             string absPath = Path.Combine(BepInEx.Paths.PluginPath, path);
 
-            if (!File.Exists(absPath))
-            {
+            if(!File.Exists(absPath)) {
                 Debug.LogError($"Error, failed to load contents from non-existant path: ${absPath}");
                 return null;
             }
 
             return File.ReadAllText(absPath);
         }
-        
+
         /// <summary>
         ///     Loads a <see cref="Sprite"/> from a file path or an asset bundle (separated by <see cref="AssetBundlePathSeparator"/>)
         /// </summary>
         /// <param name="assetPath"></param>
         /// <returns></returns>
-        public static Sprite LoadSprite(string assetPath)
-        {
+        public static Sprite LoadSprite(string assetPath) {
             string path = Path.Combine(BepInEx.Paths.PluginPath, assetPath);
 
-            if (!File.Exists(path))
-            {
+            if(!File.Exists(path)) {
                 return null;
             }
 
             // Check if asset is from a bundle or from a path
-            if (path.Contains(AssetBundlePathSeparator.ToString()))
-            {
+            if(path.Contains(AssetBundlePathSeparator.ToString())) {
                 string[] parts = path.Split(AssetBundlePathSeparator);
                 string bundlePath = parts[0];
                 string assetName = parts[1];
@@ -188,9 +168,8 @@ namespace Jotunn.Utils
 
             // Load texture and create sprite
             Texture2D texture = LoadTexture(path, false);
-            
-            if (!texture)
-            {
+
+            if(!texture) {
                 return null;
             }
 

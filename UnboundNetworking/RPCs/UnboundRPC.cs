@@ -1,10 +1,8 @@
 ﻿using System;
 
-namespace Unbound.Core.Networking
-{
+namespace UnboundLib.Networking.RPCs {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
-    public class UnboundRPC : Attribute
-    {
+    public class UnboundRPC:Attribute {
         public string EventID { get; set; }
     }
 }
