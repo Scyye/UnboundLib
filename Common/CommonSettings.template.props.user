@@ -1,0 +1,11 @@
+<Project>
+    <!-- Custom Variables -->
+    <PropertyGroup>
+        <!-- Duplicate this file and rename it to:"CommonSettings.props.user" -->
+        <!-- Replace with your local path e.g. -->
+        <!-- <RoundsFolder>C:\Program Files (x86)\Steam\steamapps\common\ROUNDS</RoundsFolder> -->
+        <!-- do not change the "CommonSettings.template.props.user" file -->
+        <!-- only change the "CommonSettings.props.user" file that you duplicated and renamed -->
+        <RoundsFolder>{RoundsFolder}</RoundsFolder>
+    </PropertyGroup>
+</Project>

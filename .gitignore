@@ -9,8 +9,8 @@
 *.user
 *.userosscache
 *.sln.docstates
-# It has chosen violence so it shall pay the price
-/Common/CommonSettings.props.user
+# Add Template User Files
+!*.template.*.user
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs

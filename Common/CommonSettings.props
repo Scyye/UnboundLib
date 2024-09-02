@@ -19,6 +19,7 @@
   <ItemGroup>
     <None Include="..\Common\CommonSettings.props" />
     <None Include="..\Common\CommonSettings.props.user" />
+    <None Include="..\Common\CommonSettings.template.props.user" />
 	<None Include="..\README.md" />
 	<None Include="..\.gitignore" />
   </ItemGroup>
