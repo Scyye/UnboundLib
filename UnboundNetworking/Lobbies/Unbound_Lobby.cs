@@ -12,12 +12,25 @@ using Steamworks;
 namespace UnboundLib.Networking.Lobbies {
     public static class Unbound_Lobby {
 
+        static char[] encodeing = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz*-@#$%^&()[]{}<>+=".ToCharArray();
+
         public static void Host(bool StaticCode = false) {
             //there is litteraly no reason for this, it is NEVER set by anything to anything other then 1 Doing it just to be safe. vaniall does the same.
             TimeHandler.instance.gameStartTime = 1f;
 
             UnboundCore.Instance.StartCoroutine(DoHost(StaticCode));
 
+        }
+
+        public static string Encode(long code) {
+            var unit = encodeing.Length;
+            string endcoded = "";
+            while (code > 0) {
+                var part = code % unit;
+                endcoded += encodeing[part];
+                code = (code - part) / unit;
+            }
+            return endcoded;
         }
         public static string GetLobbyCode() {
             if(!isConnectedToMaster)
@@ -26,15 +39,12 @@ namespace UnboundLib.Networking.Lobbies {
                 return "";
             return (string)PhotonNetwork.CurrentRoom.CustomProperties[NetworkConnectionHandler.ROOM_CODE];
         }
-        public static string CreateLobbyCode(string region, string name) {
-            return $"{region}:{Convert.ToBase64String(BitConverter.GetBytes(long.Parse(name)))}";
-        }
 
         private static IEnumerator DoHost(bool StaticCode) {
             yield return instance.ConectIfDisconected();
             steamLobby.CreateLobby(UnboundNetworking.MaxPlayers, delegate (string roomName) {
                 Debug.Log($"Created steam lobby: {roomName}");
-                var roomCode = StaticCode ? CreateLobbyCode(PhotonNetwork.CloudRegion, SteamUser.GetSteamID().m_SteamID.ToString()) + "!" : CreateLobbyCode(PhotonNetwork.CloudRegion, roomName);
+                var roomCode = StaticCode ? $"{PhotonNetwork.CloudRegion}:{Encode((long)SteamUser.GetSteamID().m_SteamID)}!" : $"{PhotonNetwork.CloudRegion}:{Encode(long.Parse(roomName))}";
                 var options = RoomOptions.Clone();
                 options.CustomRoomProperties.Add("F", PropertyFlags.None);
                 options.CustomRoomProperties.Add("H", SyncModClients.GetCompatablityHash());
