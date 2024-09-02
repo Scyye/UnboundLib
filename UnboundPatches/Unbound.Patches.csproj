@@ -47,15 +47,6 @@
   <Import Project="..\CommonSettings.props" />
 
   <ItemGroup>
-    <None Remove="Assets\togglemenuui" />
-    <None Remove="UnboundLib.csproj.user.dist" />
-    <None Remove="PostBuild.msbuild" />
-    <None Remove="unboundlinks" />
-    <None Include="..\README.md" />
-    <None Include="..\.gitignore" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\UnboundCards\Unbound.Cards.csproj" />
     <ProjectReference Include="..\UnboundGamemodes\Unbound.Gamemodes.csproj" />
     <ProjectReference Include="..\UnboundLib\Unbound.Core.csproj" />
