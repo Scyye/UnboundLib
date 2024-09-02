@@ -35,7 +35,7 @@
 	  <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
-  <Import Project="..\CommonSettings.props" />
+  <Import Project="..\Common\CommonSettings.props" />
 	
   <ItemGroup>
     <ProjectReference Include="..\UnboundLib\Unbound.Core.csproj" />
