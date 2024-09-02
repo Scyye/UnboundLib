@@ -1,0 +1,78 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "RoundsModding",
+  "classifications": [ "Rounds", "Mod", "BepInEx" ],
+  "identity": "UnboundLib",
+  "name": "UnboundLib",
+  "shortName": [ "" ],
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  },
+  "BepInExPluginLocation": {
+    "type": "parameter",
+    "description": "The file path of the plugin or profile directory to copy to for quick testing. If left blank, the mod will not be copied.",
+    "datatype": "text",
+    "defaultValue": ""
+  },
+
+  "BepInExPluginLocationReplacer": {
+    "type": "generated",
+    "generator": "regex",
+    "datatype": "text",
+    "parameters": {
+      "source": "BepInExPluginLocation",
+      "steps": [
+        {
+          "regex": "/.*[^/]$",
+          "replacement": "$&/"
+        },
+        {
+          "regex": "\\\\.*[^\\\\]$",
+          "replacement": "$&\\"
+        }
+      ]
+    },
+    "replaces": "{RoundsFolder}"
+  },
+  "sources": [
+    {
+      "exclude": [
+        "**/[Bb]in/**",
+        "**/[Oo]bj/**",
+        ".template.config/**/*",
+        "**/*.filelist",
+        "**/*.lock.json",
+        "**/*.cmd",
+        "**/*.sh",
+        "**/*.user"
+      ],
+      "modifiers": [
+        {
+          "condition": "BepInExPluginLocation != \"\"",
+          "include": [
+            "**.user"
+          ]
+        },
+        {
+          "condition": "UseNetcodePatcher",
+          "include": [
+            "install-netcode-patcher.*"
+          ]
+        },
+        {
+          "condition": "OS != \"Windows_NT\"",
+          "exclude": [
+            "**.cmd"
+          ]
+        },
+        {
+          "condition": "OS == \"Windows_NT\"",
+          "exclude": [
+            "**.sh"
+          ]
+        }
+      ]
+    }
+  ]
+}

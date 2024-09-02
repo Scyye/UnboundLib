@@ -1,6 +1,6 @@
 <Project>
     <!-- Custom Variables -->
     <PropertyGroup>
-        <RoundsFolder>..\..\..\steamapps\common\ROUNDS</RoundsFolder>
+        <RoundsFolder>{RoundsFolder}</RoundsFolder>
     </PropertyGroup>
 </Project>
