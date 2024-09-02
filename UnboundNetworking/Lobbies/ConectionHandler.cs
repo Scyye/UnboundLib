@@ -149,7 +149,6 @@ namespace UnboundLib.Networking.Lobbies {
 
             EscapeMenuHandler.isEscMenu = false;
             DevConsole.isTyping = false;
-            GameManager.instance.GoToMenu();
         }
 
     }
