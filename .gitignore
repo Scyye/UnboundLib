@@ -9,6 +9,8 @@
 *.user
 *.userosscache
 *.sln.docstates
+# It has chosen violence so it shall pay the price
+/Common/CommonSettings.props.user
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
@@ -386,4 +388,3 @@ FodyWeavers.xsd
 # JetBrains Rider
 .idea/
 *.sln.iml
-/Common/CommonSettings.props.user
