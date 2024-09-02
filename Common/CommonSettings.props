@@ -4,6 +4,14 @@
 	<ManagedFolder>$(RoundsFolder)\ROUNDS_Data\Managed</ManagedFolder>
 	<IndirectBuildTask>true</IndirectBuildTask>
 	<DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
+	<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <OutputType>Library</OutputType>
+    <Authors>RoundsModding</Authors>
+    <TargetFramework>net461</TargetFramework>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 	<LangVersion>7.1</LangVersion>
   </PropertyGroup>
 

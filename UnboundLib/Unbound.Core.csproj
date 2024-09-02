@@ -1,17 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2F32C3B2-635E-40DE-869E-6BC48A85989E}</ProjectGuid>
-    <OutputType>Library</OutputType>
     <RootNamespace>Unbound.Core</RootNamespace>
     <AssemblyName>UnboundLib</AssemblyName>
-    <Authors>RoundsModding</Authors>
-    <TargetFramework>net461</TargetFramework>
-    <FileAlignment>512</FileAlignment>
-    <Deterministic>true</Deterministic>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <TargetFrameworkProfile />
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
