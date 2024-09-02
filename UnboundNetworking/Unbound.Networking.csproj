@@ -1,16 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <OutputType>Library</OutputType>
     <RootNamespace>UnboundLib.Networking</RootNamespace>
     <AssemblyName>UnboundNetworking</AssemblyName>
-    <Authors>RoundsModding</Authors>
-    <TargetFramework>net461</TargetFramework>
-    <FileAlignment>512</FileAlignment>
-    <Deterministic>true</Deterministic>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <TargetFrameworkProfile />
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -35,7 +26,7 @@
 	  <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
     
-  <Import Project="..\CommonSettings.props" />
+  <Import Project="..\Common\CommonSettings.props" />
 
   <ItemGroup>
     <ProjectReference Include="..\UnboundLib\Unbound.Core.csproj" />
@@ -157,4 +148,3 @@
     <Exec Command="powershell.exe -ExecutionPolicy RemoteSigned -File &quot;$(SolutionDir)publish.ps1&quot; -Version &quot;$(PackageVersion.Remove($(PackageVersion.LastIndexOf('.')), 2))&quot; -Target &quot;$(ConfigurationName)&quot; -TargetPath &quot;$(TargetDir.TrimEnd('\'))&quot; -TargetAssembly &quot;$(TargetFileName)&quot; -RoundsPath &quot;$(RoundsFolder.TrimEnd('\'))&quot; -ProjectPath &quot;$(SolutionDir.TrimEnd('\'))&quot;" />
   </Target>
 </Project>
- 
