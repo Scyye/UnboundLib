@@ -1,7 +1,0 @@
-<Project>
-    <!-- Custom Variables -->
-    <PropertyGroup>
-        <!-- Replace with your local path-->
-        <RoundsFolder>C:\Program Files (x86)\Steam\steamapps\common\ROUNDS</RoundsFolder>
-    </PropertyGroup>
-</Project>
