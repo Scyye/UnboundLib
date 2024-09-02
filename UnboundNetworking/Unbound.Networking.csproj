@@ -43,10 +43,10 @@
 
   <ItemGroup>
     <Reference Include="0Harmony">
-      <HintPath>$(BepInFolder)\0Harmony.dll</HintPath>
+      <HintPath>..\Assemblies\0Harmony.dll</HintPath>
     </Reference>
     <Reference Include="BepInEx">
-      <HintPath>$(BepInFolder)\BepInEx.dll</HintPath>
+      <HintPath>..\Assemblies\BepInEx.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>$(ManagedFolder)\Assembly-CSharp.dll</HintPath>
