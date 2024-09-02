@@ -25,14 +25,16 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DebugSymbols>true</DebugSymbols>
-    <DefineConstants>DEBUG</DefineConstants>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DebugType>portable</DebugType>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	  <DebugSymbols>true</DebugSymbols>
+	  <DebugType>full</DebugType>
+	  <DebugType>embedded</DebugType>
+	  <PathMap>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)'))=./</PathMap>
+	  <Optimize>false</Optimize>
+	  <DefineConstants>DEBUG</DefineConstants>
+	  <OutputPath>bin\Debug\</OutputPath>
+	  <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
-
+	
   <PropertyGroup>
 	  <RoundsFolder>F:\SteamLibrary\steamapps\common\ROUNDS</RoundsFolder>
 	  <ManagedFolder>$(RoundsFolder)\ROUNDS_Data\Managed</ManagedFolder>
@@ -42,14 +44,7 @@
     <LangVersion>7.1</LangVersion>
   </PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="Assets\togglemenuui" />
-    <None Remove="UnboundLib.csproj.user.dist" />
-    <None Remove="PostBuild.msbuild" />
-    <None Remove="unboundlinks" />
-    <None Include="..\README.md" />
-    <None Include="..\.gitignore" />
-  </ItemGroup>
+  <Import Project="..\CommonSettings.props" />
 
   <ItemGroup>
     <ProjectReference Include="..\UnboundCards\Unbound.Cards.csproj" />
@@ -60,10 +55,10 @@
 
   <ItemGroup>
     <Reference Include="0Harmony">
-      <HintPath>$(BepInFolder)\0Harmony.dll</HintPath>
+      <HintPath>..\Assemblies\0Harmony.dll</HintPath>
     </Reference>
     <Reference Include="BepInEx">
-      <HintPath>$(BepInFolder)\BepInEx.dll</HintPath>
+      <HintPath>..\Assemblies\BepInEx.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>$(ManagedFolder)\Assembly-CSharp.dll</HintPath>

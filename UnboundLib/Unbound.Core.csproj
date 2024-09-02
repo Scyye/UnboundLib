@@ -26,31 +26,17 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DebugSymbols>true</DebugSymbols>
-    <DefineConstants>DEBUG</DefineConstants>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DebugType>portable</DebugType>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	  <DebugSymbols>true</DebugSymbols>
+	  <DebugType>full</DebugType>
+	  <DebugType>embedded</DebugType>
+	  <PathMap>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)'))=./</PathMap>
+	  <Optimize>false</Optimize>
+	  <DefineConstants>DEBUG</DefineConstants>
+	  <OutputPath>bin\Debug\</OutputPath>
+	  <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
-  <PropertyGroup>
-	  <RoundsFolder>K:\SteamLibrary\steamapps\common\ROUNDS</RoundsFolder>
-	  <ManagedFolder>$(RoundsFolder)\ROUNDS_Data\Managed</ManagedFolder>
-	  <BepInFolder>..\Assemblies</BepInFolder>
-    <IndirectBuildTask>true</IndirectBuildTask>
-    <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
-    <LangVersion>7.1</LangVersion>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="Assets\togglemenuui" />
-    <None Remove="UnboundLib.csproj.user.dist" />
-    <None Remove="PostBuild.msbuild" />
-    <None Remove="unboundlinks" />
-    <None Include="..\README.md" />
-    <None Include="..\.gitignore" />
-  </ItemGroup>
+  <Import Project="..\CommonSettings.props" />
 
   <ItemGroup>
     <EmbeddedResource Include="..\AssetsEmbedded\unboundui" Link="Assets\unboundui" />
@@ -61,10 +47,10 @@
 
 	<ItemGroup>
     <Reference Include="0Harmony">
-      <HintPath>$(BepInFolder)\0Harmony.dll</HintPath>
+      <HintPath>..\Assemblies\0Harmony.dll</HintPath>
     </Reference>
     <Reference Include="BepInEx">
-      <HintPath>$(BepInFolder)\BepInEx.dll</HintPath>
+      <HintPath>..\Assemblies\BepInEx.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>$(ManagedFolder)\Assembly-CSharp.dll</HintPath>
@@ -151,10 +137,6 @@
       <HintPath>$(ManagedFolder)\UnityEngine.UnityWebRequestTextureModule.dll</HintPath>
     </Reference>
   </ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Patches\" />
-	</ItemGroup>
 
   <Target Name="ReadPackageVersionFromOutputAssembly" DependsOnTargets="Build" Outputs="$(PackageVersion)">
     <GetAssemblyIdentity AssemblyFiles="$(TargetPath)">
