@@ -2,6 +2,7 @@
 using Landfall.Network;
 using Photon.Pun;
 using Photon.Realtime;
+using SoundImplementation;
 using Steamworks;
 using System;
 using System.Collections;
@@ -92,6 +93,13 @@ namespace UnboundLib.Networking.Lobbies {
 
         }
 
+        public override void OnJoinedRoom() {
+            LoadingScreen.instance.StopAllCoroutines();
+            LoadingScreen.instance.searchingSystem.Stop();
+            LoadingScreen.instance.hostRoomSystem.Stop();
+            SoundPlayerStatic.Instance.PlayMatchFound();
+            LoadingScreen.instance.SetFieldValue("m_isLoading", false);
+        }
 
         public override void OnCreatedRoom() {
             Debug.Log(Unbound_Lobby.GetLobbyCode());
