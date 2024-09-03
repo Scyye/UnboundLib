@@ -97,6 +97,7 @@ namespace UnboundLib.Networking.Lobbies {
             LoadingScreen.instance.StopAllCoroutines();
             LoadingScreen.instance.searchingSystem.Stop();
             LoadingScreen.instance.hostRoomSystem.Stop();
+            LoadingScreen.instance.m_cancelText.SetActive(false);
             SoundPlayerStatic.Instance.PlayMatchFound();
             LoadingScreen.instance.SetFieldValue("m_isLoading", false);
         }

@@ -4,7 +4,7 @@ using RWF.UI;
 
 namespace RWF.Patches
 {
-    [HarmonyPatch(typeof(ListMenuPage),"Close")]
+    [HarmonyPatch(typeof(ListMenuPage),"Hide")]
     class ListMenuPage_Patch_Close
     {
         // patch to clear any keybind hints on screen when exiting a menu

@@ -79,14 +79,14 @@ namespace Unbound.Core.Utils.UI {
             uGUI.fontSize = setFontSize ? size : 50;
             if(buttonAction == null) {
                 buttonAction = () => {
-                    obj.GetComponent<ListMenuPage>().Open();
-                    goBackObject.Close();
+                    obj.GetComponent<ListMenuPage>().Show();
+                    goBackObject.Hide();
                     obj.GetComponentInChildren<ScrollRect>().verticalNormalizedPosition = 1;
                 };
             } else {
                 buttonAction += () => {
-                    obj.GetComponent<ListMenuPage>().Open();
-                    goBackObject.Close();
+                    obj.GetComponent<ListMenuPage>().Show();
+                    goBackObject.Hide();
                     obj.GetComponentInChildren<ScrollRect>().verticalNormalizedPosition = 1;
                 };
             }
@@ -101,7 +101,7 @@ namespace Unbound.Core.Utils.UI {
         }
 
         private static UnityAction ClickBack(ListMenuPage backObject) {
-            return backObject.Open;
+            return backObject.Show;
         }
 
         // Creates a UI text

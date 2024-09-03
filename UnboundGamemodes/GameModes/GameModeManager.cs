@@ -88,7 +88,7 @@ namespace Unbound.Gamemodes {
                 // do not destroy local button since RWF relies on it
                 MainMenuHandler.instance.transform.Find("Canvas/ListSelector/Main/Group/Local").gameObject.SetActive(false);
 
-                var newVersusGo = MenuHandler.CreateButton("VERSUS", newLocalMenu, () => { characterSelectGo_.GetComponent<ListMenuPage>().Open(); SetGameMode(ArmsRaceID); });
+                var newVersusGo = MenuHandler.CreateButton("VERSUS", newLocalMenu, () => { characterSelectGo_.GetComponent<ListMenuPage>().Show(); SetGameMode(ArmsRaceID); });
                 newVersusGo.name = "Versus";
                 var newSandboxGo = MenuHandler.CreateButton("SANDBOX", newLocalMenu, () => { MainMenuHandler.instance.Close(); SetGameMode(SandBoxID); CurrentHandler.StartGame(); });
                 newSandboxGo.name = "Test";
@@ -150,7 +150,7 @@ namespace Unbound.Gamemodes {
             foreach(var id in handlers.Keys.Where(k => !handlers[k].OnlineOnly && handlers[k].AllowTeams).OrderByDescending(k => handlers[k].Name.ToLower()).Where(k => k != SandBoxID && k != ArmsRaceID)) {
                 // create a copy of the string to give to the anonymous function
                 string id_ = string.Copy(id);
-                var gamemodeButtonGo = MenuHandler.CreateButton(handlers[id].Name.ToUpper(), gameModeGo.gameObject, () => { characterSelectGo.GetComponent<ListMenuPage>().Open(); SetGameMode(id_); });
+                var gamemodeButtonGo = MenuHandler.CreateButton(handlers[id].Name.ToUpper(), gameModeGo.gameObject, () => { characterSelectGo.GetComponent<ListMenuPage>().Show(); SetGameMode(id_); });
                 gamemodeButtonGo.name = id;
                 gamemodeButtonGo.transform.SetAsFirstSibling();
             }
@@ -161,7 +161,7 @@ namespace Unbound.Gamemodes {
             foreach(var id in handlers.Keys.Where(k => !handlers[k].OnlineOnly && !handlers[k].AllowTeams).OrderByDescending(k => handlers[k].Name.ToLower()).Where(k => k != SandBoxID && k != ArmsRaceID)) {
                 // create a copy of the string to give to the anonymous function
                 string id_ = string.Copy(id);
-                var gamemodeButtonGo = MenuHandler.CreateButton(handlers[id].Name.ToUpper(), gameModeGo.gameObject, () => { characterSelectGo.GetComponent<ListMenuPage>().Open(); SetGameMode(id_); });
+                var gamemodeButtonGo = MenuHandler.CreateButton(handlers[id].Name.ToUpper(), gameModeGo.gameObject, () => { characterSelectGo.GetComponent<ListMenuPage>().Show(); SetGameMode(id_); });
                 gamemodeButtonGo.name = id;
                 gamemodeButtonGo.transform.SetAsFirstSibling();
             }

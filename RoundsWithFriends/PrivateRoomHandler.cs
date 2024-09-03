@@ -860,7 +860,7 @@ namespace RWF
 
         private IEnumerator CreatePlayerCoroutine(LobbyCharacter lobbyCharacter)
         {
-            this.MainPage.Close();
+            this.MainPage.Hide();
             MainMenuHandler.instance.Close();
 
             RWFMod.instance.SetSoundEnabled("PlayerAdded", false);
