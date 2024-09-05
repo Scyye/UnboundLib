@@ -240,8 +240,7 @@ namespace RWF
             GameModeManager.AddHook(GameModeHooks.HookPickStart, this.SetPlayerFaces);
             GameModeManager.AddHook(GameModeHooks.HookGameStart, gm => PlayerSpotlight.CancelFadeHook(true));
             GameModeManager.AddHook(GameModeHooks.HookBattleStart, gm => PlayerSpotlight.BattleStartFailsafe());
-
-            this.gameObject.AddComponent<RoundEndHandler>();
+            GameModeManager.AddHook(GameModeHooks.HookRoundEnd, RoundEndHandler.OnRoundEnd);
 
             if (RWFMod.DEBUG)
             {

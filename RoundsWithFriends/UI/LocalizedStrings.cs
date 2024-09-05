@@ -20,10 +20,15 @@ namespace RWF.UI
             {
                 en_US = "WAITING FOR {hostName}"
             },true)
+            .UpdateSrting("WaittingForHostFallbackText", new TableRefHelper.TranslationData()
+            {
+                en_US = "WAITING FOR HOST"
+            })
             .Build(TableRefHelper.stringTableDefault);
 
         public static LocalizedString LetsGoText { get { return translationTable.GenerateString(TableRefHelper.stringTableDefault, "LetsGoText"); } }
         public static LocalizedString WaittingForHostText { get { return translationTable.GenerateString(TableRefHelper.stringTableDefault, "WaittingForHostText"); } }
+        public static LocalizedString WaittingForHostFallbackText { get { return translationTable.GenerateString(TableRefHelper.stringTableDefault, "WaittingForHostFallbackText"); } }
 
     }
 }

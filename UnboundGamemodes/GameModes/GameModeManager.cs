@@ -277,6 +277,7 @@ namespace Unbound.Gamemodes {
         }
 
         private static void AddHook(string key, GameModeHooks.HookRegistration hookReg) {
+            UnityEngine.Debug.Log($"adding hook: {key} , {hookReg}");
             if(hookReg?.Hook == null) {
                 return;
             }
